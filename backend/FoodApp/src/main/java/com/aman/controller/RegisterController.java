@@ -33,15 +33,31 @@ public class RegisterController {
     public ResponseEntity<java.util.Map<String, String>> checkLogin(@RequestBody Register reg) {
         Register r = rservice.findByUname(reg.getUname());
         
-        if (r != null && passwordEncoder.matches(reg.getPass(), r.getPass())) {
-            String token = jwtUtils.generateToken(r.getUname());
-            java.util.Map<String, String> response = new java.util.HashMap<>();
-            response.put("token", token);
-            response.put("username", r.getUname());
-            response.put("role", r.getUname().equalsIgnoreCase("admin") ? "admin" : "user");
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        if (r != null) {
+            boolean isMatch = false;
+            
+            // 1. Try standard BCrypt match
+            if (passwordEncoder.matches(reg.getPass(), r.getPass())) {
+                isMatch = true;
+            } 
+            // 2. Fallback for LEACY PLAIN-TEXT passwords
+            else if (reg.getPass().equals(r.getPass())) {
+                // If it matches plain-text, hash it NOW and update the database
+                r.setPass(reg.getPass()); // Set plain for the service to hash
+                rservice.addData(r);     // Service will hash and save
+                isMatch = true;
+            }
+
+            if (isMatch) {
+                String token = jwtUtils.generateToken(r.getUname());
+                java.util.Map<String, String> response = new java.util.HashMap<>();
+                response.put("token", token);
+                response.put("username", r.getUname());
+                response.put("role", r.getUname().equalsIgnoreCase("admin") ? "admin" : "user");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
         }
+        
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }
