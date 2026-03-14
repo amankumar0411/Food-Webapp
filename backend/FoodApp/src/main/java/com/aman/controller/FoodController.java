@@ -24,7 +24,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/food")
 @CrossOrigin(origins = {
         "http://localhost:3000",
-        "https://foodapp-aec.vercel.app/"
+        "https://foodapp-tw.vercel.app/"
 })
 public class FoodController {
 	@Autowired

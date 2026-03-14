@@ -11,7 +11,7 @@ import com.aman.service.RegisterService;
 @RequestMapping("/register")
 @CrossOrigin(origins = {
         "http://localhost:3000",
-        "https://foodapp-aec.vercel.app/"
+        "https://foodapp-tw.vercel.app/"
 })
 public class RegisterController {
 

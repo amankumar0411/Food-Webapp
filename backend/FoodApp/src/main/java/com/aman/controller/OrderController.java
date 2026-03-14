@@ -20,7 +20,7 @@ import java.util.Map;
 @RequestMapping("/orders")
 @CrossOrigin(origins = {
         "http://localhost:3000",
-        "https://foodapp-aec.vercel.app/"
+        "https://foodapp-tw.vercel.app/"
 })
 public class OrderController {
 
