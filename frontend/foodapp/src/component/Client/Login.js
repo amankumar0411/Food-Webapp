@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import axiosInstance from '../../api/axiosInstance';
-import Particles from '../common/Particles';
-import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
-function Login() {
+function Login({ syncAuth }) {
+    const navigate = useNavigate();
     let [creds, setCreds] = useState({ uname: "", pass: "" });
 
     const performLogin = () => {
+        console.log("Login attempt for:", creds.uname);
         const loadingToast = toast.loading("Verifying credentials...");
+        
         axiosInstance.post("/register/login", creds)
             .then((res) => {
+                console.log("Login success:", res.data);
                 toast.dismiss(loadingToast);
                 const { token, username, role } = res.data;
                 
@@ -18,21 +19,24 @@ function Login() {
                 localStorage.setItem("user", username);
                 localStorage.setItem("role", role);
                 
+                if (syncAuth) syncAuth(); // Sync App.js state
+                
                 toast.success(`Welcome back, ${username}!`);
                 
-                // ROLE-BASED REDIRECT
+                // DYNAMIC REDIRECT
                 if (role.toLowerCase() === "admin") {
-                    window.location.href = "/foodlist"; 
+                    navigate("/foodlist"); 
                 } else {
-                    window.location.href = "/"; 
+                    navigate("/"); 
                 }
             })
             .catch((err) => {
+                console.error("Login Error:", err);
                 toast.dismiss(loadingToast);
                 if(err.response && err.response.status === 401) {
                     toast.error("Invalid Username or Password");
                 } else {
-                    toast.error("Server Error. Please try again later.");
+                    toast.error("Could not connect to server. Ensure Backend is running.");
                 }
             });
     };

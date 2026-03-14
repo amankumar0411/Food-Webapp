@@ -22,10 +22,20 @@ import Home from './component/Client/Home';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
-  const auth = localStorage.getItem("user");
-  const isAdmin = auth && auth.toLowerCase() === "admin";
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // REACTIVE AUTH STATE
+  const [auth, setAuth] = useState(localStorage.getItem("user"));
+  const [role, setRole] = useState(localStorage.getItem("role"));
+
+  const isAdmin = auth && role && role.toLowerCase() === "admin";
+
+  // Function to sync auth state from other components
+  const syncAuth = () => {
+    setAuth(localStorage.getItem("user"));
+    setRole(localStorage.getItem("role"));
+  };
 
   // Selective background logic: Grainient on inner pages (excluding home)
   const isHomePage = location.pathname === "/" || location.pathname === "/home";
@@ -106,7 +116,7 @@ function App() {
           {/* PUBLIC ROUTES */}
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login syncAuth={syncAuth} />} />
           <Route path="/register" element={<Register />} />
 
           {/* 2. ADMIN-ONLY ROUTES */}
