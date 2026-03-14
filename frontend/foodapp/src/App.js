@@ -1,0 +1,140 @@
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import "bootstrap/dist/css/bootstrap.css";
+import Grainient from './component/common/Grainient';
+
+// ADMIN COMPONENTS
+import Nav from './component/Admin/Nav';
+import Addfood from './component/Admin/Addfood';
+import Foodlist from './component/Admin/Foodlist';
+import UpdateFood from './component/Admin/UpdateFood';
+import DeleteFood from './component/Admin/DeleteFood';
+import Contact from './component/Admin/Contact';
+
+// CLIENT COMPONENTS
+import NavClient from './component/Client/NavClient';
+import FoodListClient from './component/Client/FoodListClient';
+import AddOrder from './component/Client/AddOrder';
+import Billing from './component/Client/Billing';
+import Register from './component/Client/Register';
+import Login from './component/Client/Login';
+import Home from './component/Client/Home';
+
+function App() {
+  const auth = localStorage.getItem("user");
+  const isAdmin = auth && auth.toLowerCase() === "admin";
+  const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Selective background logic: Grainient on inner pages (excluding home)
+  const isHomePage = location.pathname === "/" || location.pathname === "/home";
+  const showGrainient = auth && !isHomePage;
+
+  // THEME STATE LOGIC (Default to Light Mode, Check LocalStorage)
+  const [isDarkTheme, setIsDarkTheme] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  useEffect(() => {
+    if (isDarkTheme) {
+      document.body.setAttribute('data-theme', 'dark');
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.body.removeAttribute('data-theme');
+      localStorage.setItem("theme", "light");
+    }
+
+    // LOCK SCROLL ON HOME PAGE
+    if (isHomePage) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+      document.documentElement.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+      document.documentElement.style.overflow = 'auto';
+    };
+  }, [isDarkTheme, isHomePage]);
+
+  const toggleTheme = () => setIsDarkTheme(!isDarkTheme);
+
+  return (
+    <div className="App" style={{ minHeight: '100vh', width: '100%', position: 'relative' }}>
+      
+      {/* 1. DYNAMIC SUBTLE GRAINIENT (Inner pages only) */}
+      {showGrainient && (
+        <div style={{ 
+          position: 'fixed', 
+          top: 0, 
+          left: 0, 
+          width: '100vw', 
+          height: '100vh', 
+          zIndex: -1,
+          pointerEvents: 'none',
+          opacity: 0.4 // Even more subtle for white background
+        }}>
+          <Grainient
+            color1="#FF9FFC"
+            color2="#5227FF"
+            color3="#ffffff" // Blend with white
+            timeSpeed={0.05}
+            warpStrength={0.5}
+            grainAmount={0.03}
+          />
+        </div>
+      )}
+
+      {/* 2. DYNAMIC NAVIGATION SELECTION */}
+      {auth && (isAdmin ?
+        <Nav toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} /> :
+        <NavClient toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} />
+      )}
+
+      <div className="container-fluid main-content-area" style={{ 
+        paddingTop: auth ? (isHomePage ? '0' : '180px') : '0', 
+        paddingLeft: isHomePage ? '0' : '15px',
+        paddingRight: isHomePage ? '0' : '15px',
+        position: 'relative', 
+        zIndex: 1, 
+        minHeight: isHomePage ? '100vh' : 'auto' 
+      }}>
+        <Routes>
+          {/* PUBLIC ROUTES */}
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* 2. ADMIN-ONLY ROUTES */}
+          {isAdmin && (
+            <>
+              <Route path="/addfood" element={<Addfood />} />
+              <Route path="/foodlist" element={<Foodlist searchQuery={searchQuery} />} />
+              <Route path="/updatefood" element={<UpdateFood />} />
+              <Route path="/deletefood" element={<DeleteFood />} />
+              <Route path="/contact" element={<Contact />} />
+            </>
+          )}
+
+          {/* 3. CLIENT-ONLY ROUTES */}
+          {(auth && !isAdmin) && (
+            <>
+              <Route path="/foodlistclient" element={<FoodListClient searchQuery={searchQuery} />} />
+              <Route path="/addorder" element={<AddOrder />} />
+              <Route path="/billing" element={<Billing />} />
+            </>
+          )}
+
+          {/* Fallback to Home */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </div>
+    </div>
+  );
+}
+
+export default App;
