@@ -10,11 +10,11 @@ import jakarta.validation.constraints.Size;
 @Entity
 public class Register {
 	@Id
-	@Column(length = 10)
+	@Column(length = 20)
 	@NotBlank(message="USERNAME CAN'T BLANK")
 private String uname;
-	@Column(length = 10,nullable = false)
-	@Size(min=6,max=10,message="PASSWORD IN BETWEEN 6 TO 10 CHARECTER")
+	@Column(length = 100,nullable = false)
+	@Size(min=6,max=100,message="PASSWORD MUST BE AT LEAST 6 CHARACTERS")
 private String pass;
 	@Column(length = 25)
 	@NotBlank(message="NAME CAN'T BLANK")

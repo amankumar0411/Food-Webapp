@@ -25,7 +25,6 @@ public class RegisterController {
 
     @PostMapping("/add")
     public ResponseEntity<String> registerUser(@RequestBody Register reg) {
-        reg.setPass(passwordEncoder.encode(reg.getPass()));
         rservice.addData(reg);
         return new ResponseEntity<>("USER REGISTERED SUCCESSFULLY", HttpStatus.CREATED);
     }
