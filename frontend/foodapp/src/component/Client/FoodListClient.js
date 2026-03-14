@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react'
+import axiosInstance from '../../api/axiosInstance'
 import toast from 'react-hot-toast';
 
 function FoodlistClient({ searchQuery }) {

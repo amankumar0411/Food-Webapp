@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import Particles from '../common/Particles';
 import toast from 'react-hot-toast';
@@ -105,7 +106,6 @@ function Login() {
                 >
                     Continue
                 </button>
-                <p className="text-danger mt-3 text-center font-weight-bold">{msg}</p>
                 <p style={{ textAlign: 'center', marginTop: '15px', fontSize: '14px', color: 'var(--text-muted)' }}>
                     Don't have an account? <a href="/register" style={{ color: 'var(--primary-color)', fontWeight: '600', textDecoration: 'none' }}>Sign up</a>
                 </p>

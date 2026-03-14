@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react'
 import axiosInstance from '../../api/axiosInstance';
-import { useState } from 'react'
 function Foodlist({ searchQuery }) {
        let[food,setFood]=useState([]);
     useEffect(()=>{ 
