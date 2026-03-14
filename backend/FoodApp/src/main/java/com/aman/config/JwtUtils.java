@@ -10,12 +10,21 @@ import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
+import jakarta.annotation.PostConstruct;
+
 @Component
 public class JwtUtils {
 
-    // IMPORTANT: In production, move this to an environment variable!
-    private String secret = "SecureAndReliableSecretKeyForFoodAppDevelopmentPhase2";
-    private Key key = Keys.hmacShaKeyFor(secret.getBytes());
+    @Value("${jwt.secret}")
+    private String secret;
+    
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     public String generateToken(String username) {
         return Jwts.builder()
