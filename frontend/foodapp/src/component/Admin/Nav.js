@@ -14,7 +14,6 @@ function Nav({ toggleTheme, isDark, searchQuery, setSearchQuery, isHomePage }) {
         { label: "Delete Food", href: "/deletefood" },
       ],
     },
-    { label: "Contact", href: "/contact" },
   ];
 
   return (

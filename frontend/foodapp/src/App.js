@@ -10,8 +10,6 @@ import Addfood from './component/Admin/Addfood';
 import Foodlist from './component/Admin/Foodlist';
 import UpdateFood from './component/Admin/UpdateFood';
 import DeleteFood from './component/Admin/DeleteFood';
-import Contact from './component/Admin/Contact';
-
 // CLIENT COMPONENTS
 import NavClient from './component/Client/NavClient';
 import FoodListClient from './component/Client/FoodListClient';
@@ -116,7 +114,6 @@ function App() {
               <Route path="/foodlist" element={<Foodlist searchQuery={searchQuery} />} />
               <Route path="/updatefood" element={<UpdateFood />} />
               <Route path="/deletefood" element={<DeleteFood />} />
-              <Route path="/contact" element={<Contact />} />
             </>
           )}
 
