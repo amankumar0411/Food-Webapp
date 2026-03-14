@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 import Particles from '../common/Particles';
 
 function Login() {
@@ -7,22 +6,29 @@ function Login() {
     let [msg, setMsg] = useState("");
 
     const performLogin = () => {
-        axios.post("https://foodapp-api1.onrender.com/register/login", creds)
+        axiosInstance.post("/register/login", creds)
             .then((res) => {
-                if (res.data === "LOGIN SUCCESSFUL") {
-                    localStorage.setItem("user", creds.uname);
-                    
-                    // ROLE-BASED REDIRECT
-                    if (creds.uname.toLowerCase() === "admin") {
-                        window.location.href = "/foodlist"; // Redirect to Admin side
-                    } else {
-                        window.location.href = "/"; // Redirect to Client side
-                    }
+                const { token, username, role } = res.data;
+                
+                // STORE SECURE TOKEN AND USER DATA
+                localStorage.setItem("token", token);
+                localStorage.setItem("user", username);
+                localStorage.setItem("role", role);
+                
+                // ROLE-BASED REDIRECT
+                if (role.toLowerCase() === "admin") {
+                    window.location.href = "/foodlist"; 
                 } else {
-                    setMsg(res.data);
+                    window.location.href = "/"; 
                 }
             })
-            .catch(() => setMsg("INVALID CREDENTIALS"));
+            .catch((err) => {
+                if(err.response && err.response.status === 401) {
+                    setMsg("INVALID CREDENTIALS");
+                } else {
+                    setMsg("SERVER ERROR. PLEASE TRY LATER.");
+                }
+            });
     };
 
     return (

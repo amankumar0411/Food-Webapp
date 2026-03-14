@@ -1,5 +1,4 @@
-import React from 'react'
-import axios from 'axios'
+import axiosInstance from '../../api/axiosInstance';
 import { useState } from 'react'
 
 function DeleteFood() {
@@ -16,7 +15,7 @@ function DeleteFood() {
             alert("Please enter a Food ID to delete");
             return;
         }
-        axios.delete(`https://foodapp-api1.onrender.com/food/del/${fid}`)
+        axiosInstance.delete(`/food/del/${fid}`)
             .then((res) => {
 
                 setMsg(res.data);

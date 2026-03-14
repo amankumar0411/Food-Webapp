@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Particles from '../common/Particles';
+import axiosInstance from '../../api/axiosInstance';
 
 function Register() {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ function Register() {
     let [msg, setMsg] = useState("");
 
     const addData = () => {
-        axios.post("https://foodapp-api1.onrender.com/register/add", user)
+        axiosInstance.post("/register/add", user)
             .then((res) => {
                 alert("Registration Successful! Please Login.");
                 navigate('/login');

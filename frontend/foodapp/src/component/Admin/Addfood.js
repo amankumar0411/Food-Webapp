@@ -1,5 +1,4 @@
-import React from 'react'
-import axios from 'axios'
+import axiosInstance from '../../api/axiosInstance';
 import { useState } from 'react'
 
 function Addfood() {
@@ -20,7 +19,7 @@ function Addfood() {
     }
 
     const addData = () => {
-        axios.post("https://foodapp-api1.onrender.com/food/add", food)
+        axiosInstance.post("/food/add", food)
             .then((res) => {
 
                 setMsg(res.data);

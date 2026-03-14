@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 function AddOrder() {
@@ -13,7 +12,7 @@ function AddOrder() {
     // Fetch user's cart items from the database (Using the same query as Billing)
     useEffect(() => {
         if (currentUserName) {
-            axios.get(`https://foodapp-api1.onrender.com/orders/user/details/${currentUserName}`)
+            axiosInstance.get(`/orders/user/details/${currentUserName}`)
                 .then(res => {
                     // Initialize all fetched items with the database's native quantity, mapped safely
                     const initializedCart = res.data.map(item => ({
@@ -46,7 +45,7 @@ function AddOrder() {
     const handleRemoveItem = async (index, oid) => {
         try {
             // Delete from database
-            await axios.delete(`https://foodapp-api1.onrender.com/orders/delete/${oid}`);
+            await axiosInstance.delete(`/orders/delete/${oid}`);
             
             // Remove from React State dynamically
             const updatedCart = [...cartItems];
@@ -74,7 +73,7 @@ function AddOrder() {
             // Wait for ALL update requests to finish synchronously
             await Promise.all(
                 cartItems.map(item => 
-                    axios.put(`https://foodapp-api1.onrender.com/orders/update/${item.oid || item.OID}/${item.currentQty}`)
+                    axiosInstance.put(`/orders/update/${item.oid || item.OID}/${item.currentQty}`)
                 )
             );
             

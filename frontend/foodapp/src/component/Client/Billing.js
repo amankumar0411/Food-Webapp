@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 function Billing() {
@@ -15,8 +14,7 @@ function Billing() {
 
     useEffect(() => {
         if (uname) {
-            // This URL must match your OrderController @GetMapping("/user/details/{uname}")
-            axios.get(`https://foodapp-api1.onrender.com/orders/user/details/${uname}`)
+            axiosInstance.get(`/orders/user/details/${uname}`)
                 .then((res) => {
 
                     setInvoices(res.data);
@@ -45,7 +43,7 @@ function Billing() {
             // Wipe the cart out of the database to mimic order fulfillment
             await Promise.all(
                 invoices.map(item => 
-                    axios.delete(`https://foodapp-api1.onrender.com/orders/delete/${item.oid || item.OID}`)
+                    axiosInstance.delete(`/orders/delete/${item.oid || item.OID}`)
                 )
             );
             

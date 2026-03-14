@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import axios from 'axios'
+import axiosInstance from '../../api/axiosInstance'
 import { useState } from 'react'
 
 function FoodlistClient({ searchQuery }) {
@@ -13,7 +12,7 @@ function FoodlistClient({ searchQuery }) {
     const currentUser = localStorage.getItem("user");
 
     useEffect(() => {
-        axios.get("https://foodapp-api1.onrender.com/food/fetch")
+        axiosInstance.get("/food/fetch")
             .then((res) => {
 
                 setFood(res.data);

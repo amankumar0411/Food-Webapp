@@ -1,5 +1,6 @@
 package com.aman.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +13,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -21,11 +25,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) // Disable CSRF for frontend compatibility
+            .sessionManagement(session -> session.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // Allow all requests for now (migration phase)
+                .requestMatchers("/register/**").permitAll() // Keep login/register public
+                .requestMatchers("/food/fetch/**").permitAll() // Allow viewing foods
+                .anyRequest().authenticated() // Protect everything else
             )
+            .addFilterBefore(jwtFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
             .headers(headers -> headers
-                .frameOptions(frame -> frame.sameOrigin()) // Allow H2 console if needed
+                .frameOptions(frame -> frame.sameOrigin())
             );
         
         return http.build();

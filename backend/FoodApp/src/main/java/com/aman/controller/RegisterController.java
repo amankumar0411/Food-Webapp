@@ -21,6 +21,9 @@ public class RegisterController {
     @Autowired
     private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private com.aman.config.JwtUtils jwtUtils;
+
     @PostMapping("/add")
     public ResponseEntity<String> registerUser(@RequestBody Register reg) {
         rservice.addData(reg);
@@ -28,13 +31,18 @@ public class RegisterController {
     }
 
     @PostMapping("/login") 
-    public ResponseEntity<String> checkLogin(@RequestBody Register reg) {
+    public ResponseEntity<java.util.Map<String, String>> checkLogin(@RequestBody Register reg) {
         Register r = rservice.findByUname(reg.getUname());
         
         if (r != null && passwordEncoder.matches(reg.getPass(), r.getPass())) {
-            return new ResponseEntity<>("LOGIN SUCCESSFUL", HttpStatus.OK);
+            String token = jwtUtils.generateToken(r.getUname());
+            java.util.Map<String, String> response = new java.util.HashMap<>();
+            response.put("token", token);
+            response.put("username", r.getUname());
+            response.put("role", r.getUname().equalsIgnoreCase("admin") ? "admin" : "user");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("LOGIN FAILURE", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 }
