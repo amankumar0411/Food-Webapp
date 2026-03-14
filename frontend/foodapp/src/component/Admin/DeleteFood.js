@@ -1,30 +1,27 @@
-import axiosInstance from '../../api/axiosInstance';
-import { useState } from 'react'
+import toast from 'react-hot-toast';
 
 function DeleteFood() {
     let [fid, setfid] = useState("");
-    let [msg, setMsg] = useState("");
 
     const refreshData = () => {
-        setMsg("");
         setfid("");
     }
 
     const deleteData = () => {
         if (!fid) {
-            alert("Please enter a Food ID to delete");
+            toast.error("Please enter a Food ID to delete");
             return;
         }
+        const loadingToast = toast.loading("Deleting food item...");
         axiosInstance.delete(`/food/del/${fid}`)
             .then((res) => {
-
-                setMsg(res.data);
-                // Optional: Clear the input after successful deletion
-                setfid(""); 
+                toast.dismiss(loadingToast);
+                toast.success(res.data || "Food deleted successfully!");
+                refreshData(); 
             })
             .catch((error) => {
-
-                alert("SOMETHING WENT WRONG WHILE DELETING DATA");
+                toast.dismiss(loadingToast);
+                toast.error("Failed to delete food. Please try again.");
             })
     }
 
@@ -50,7 +47,6 @@ function DeleteFood() {
             <button className='btn btn-outline-secondary' onClick={refreshData}>
                 REFRESH
             </button>
-            <h2 className='mt-3'>{msg}</h2>
                 </div>
             </div>
         </div>

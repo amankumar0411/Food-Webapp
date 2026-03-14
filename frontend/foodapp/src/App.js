@@ -19,6 +19,8 @@ import Register from './component/Client/Register';
 import Login from './component/Client/Login';
 import Home from './component/Client/Home';
 
+import { Toaster } from 'react-hot-toast';
+
 function App() {
   const auth = localStorage.getItem("user");
   const isAdmin = auth && auth.toLowerCase() === "admin";
@@ -62,7 +64,7 @@ function App() {
 
   return (
     <div className="App" style={{ minHeight: '100vh', width: '100%', position: 'relative' }}>
-      
+      <Toaster position="top-right" reverseOrder={false} />
       {/* 1. DYNAMIC SUBTLE GRAINIENT (Inner pages only) */}
       {showGrainient && (
         <div style={{ 

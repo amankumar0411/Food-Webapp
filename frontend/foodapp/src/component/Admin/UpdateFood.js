@@ -1,5 +1,6 @@
 import axiosInstance from '../../api/axiosInstance';
 import { useState } from 'react'
+import toast from 'react-hot-toast';
 
 function UpdateFood() {
     let [food, setFood] = useState({
@@ -7,10 +8,8 @@ function UpdateFood() {
         fname: "",
         price: ""
     })
-    let [msg, setMsg] = useState("");
 
     const refreshData = () => {
-        setMsg("");
         setFood({
             fid: "",
             fname: "",
@@ -19,14 +18,20 @@ function UpdateFood() {
     }
 
     const updateData = () => {
+        if (!food.fid) {
+            toast.error("Please enter a Food ID to update");
+            return;
+        }
+        const loadingToast = toast.loading("Updating food item...");
         axiosInstance.put(`/food/upd/${food.fid}`, food)
             .then((res) => {
-
-                setMsg(res.data);
+                toast.dismiss(loadingToast);
+                toast.success(res.data || "Food updated successfully!");
+                refreshData();
             })
             .catch((error) => {
-
-                alert("SOMETHING WENT WRONG WHILE UPDATING DATA");
+                toast.dismiss(loadingToast);
+                toast.error("Failed to update food. Please try again.");
             })
     }
 
@@ -65,8 +70,6 @@ function UpdateFood() {
             
             <button className='btn btn-outline-success' onClick={updateData}>UPDATE</button> &nbsp;&nbsp;
             <button className='btn btn-outline-secondary' onClick={refreshData}>REFRESH</button>
-            
-            <h2 className="mt-3">{msg}</h2>
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 import axiosInstance from '../../api/axiosInstance';
 import { useState } from 'react'
+import toast from 'react-hot-toast';
 
 function Addfood() {
     let [food, setfood] = useState({
@@ -7,10 +8,8 @@ function Addfood() {
         fname: "",
         price: ""
     })
-    let [msg, setMsg] = useState("");
 
     const refreshData = () => {
-        setMsg("");
         setfood({
             fid: "",
             fname: "",
@@ -19,14 +18,16 @@ function Addfood() {
     }
 
     const addData = () => {
+        const loadingToast = toast.loading("Adding food item...");
         axiosInstance.post("/food/add", food)
             .then((res) => {
-
-                setMsg(res.data);
+                toast.dismiss(loadingToast);
+                toast.success(res.data || "Food added successfully!");
+                refreshData();
             })
             .catch((error) => {
-
-                alert("SOMETHING WENT WRONG FOR STORING DATA");
+                toast.dismiss(loadingToast);
+                toast.error("Failed to add food. Please try again.");
             })
     }
 
@@ -75,8 +76,6 @@ function Addfood() {
             <button className='btn btn-outline-primary' onClick={addData}>ADD</button> 
             &nbsp;&nbsp;
             <button className='btn btn-outline-secondary' onClick={refreshData}>REFRESH</button>
-            
-            <h2>{msg}</h2>
                 </div>
             </div>
         </div>

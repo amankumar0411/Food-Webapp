@@ -1,5 +1,4 @@
-import axiosInstance from '../../api/axiosInstance';
-import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 function AddOrder() {
     const navigate = useNavigate();
@@ -7,7 +6,6 @@ function AddOrder() {
     
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [msg, setMsg] = useState("");
 
     // Fetch user's cart items from the database (Using the same query as Billing)
     useEffect(() => {
@@ -25,7 +23,7 @@ function AddOrder() {
                 })
                 .catch(err => {
                     console.error("Error fetching cart data:", err);
-                    setMsg("Failed to load your cart. Check if Backend is running.");
+                    toast.error("Failed to load your cart.");
                     setLoading(false);
                 });
         }
@@ -43,46 +41,47 @@ function AddOrder() {
 
     // Remove item from cart (Swiggy Style UI + Backend Delete)
     const handleRemoveItem = async (index, oid) => {
+        const loadingToast = toast.loading("Removing item...");
         try {
-            // Delete from database
             await axiosInstance.delete(`/orders/delete/${oid}`);
+            toast.dismiss(loadingToast);
             
-            // Remove from React State dynamically
             const updatedCart = [...cartItems];
             updatedCart.splice(index, 1);
             setCartItems(updatedCart);
             
-            setMsg("Item removed from cart 🗑️");
-            setTimeout(() => setMsg(""), 3000);
+            toast.success("Item removed from cart 🗑️");
         } catch (error) {
+            toast.dismiss(loadingToast);
             console.error("Error deleting item:", error);
-            setMsg("Failed to remove item. Please try again.");
+            toast.error("Failed to remove item.");
         }
     };
 
     // Push final quantities to backend line-by-line, then Pay
     const handleCheckout = async () => {
         if (cartItems.length === 0) {
-            setMsg("Your cart is empty!");
+            toast.error("Your cart is empty!");
             return;
         }
 
-        setMsg("Saving cart and redirecting to payment...");
+        const loadingToast = toast.loading("Saving cart and redirecting to payment...");
 
         try {
-            // Wait for ALL update requests to finish synchronously
             await Promise.all(
                 cartItems.map(item => 
                     axiosInstance.put(`/orders/update/${item.oid || item.OID}/${item.currentQty}`)
                 )
             );
             
-            setMsg("Cart synchronized! Redirecting...");
-            setTimeout(() => navigate("/billing"), 1500);
+            toast.dismiss(loadingToast);
+            toast.success("Cart synchronized! Redirecting...");
+            setTimeout(() => navigate("/billing"), 1000);
 
         } catch (error) {
+            toast.dismiss(loadingToast);
             console.error("Error updating cart quantities", error);
-            setMsg("Error synchronizing cart quantities before branch. Please try again.");
+            toast.error("Error synchronizing cart. Please try again.");
         }
     };
 
@@ -189,7 +188,7 @@ function AddOrder() {
                     </div>
                 )}
                 
-                {msg && <p className={`mt-3 text-center fw-bold ${msg.includes("empty") || msg.includes("Error") ? "text-danger" : "text-success"}`}>{msg}</p>}
+                {/* Status messages handled by toast */}
             </div>
         </div>
     );

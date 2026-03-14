@@ -27,9 +27,10 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Disable CSRF for frontend compatibility
             .sessionManagement(session -> session.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/register/**").permitAll() // Keep login/register public
-                .requestMatchers("/food/fetch/**").permitAll() // Allow viewing foods
-                .anyRequest().authenticated() // Protect everything else
+                .requestMatchers("/register/**").permitAll() 
+                .requestMatchers("/food/fetch/**").permitAll() 
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .anyRequest().authenticated() 
             )
             .addFilterBefore(jwtFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
             .headers(headers -> headers

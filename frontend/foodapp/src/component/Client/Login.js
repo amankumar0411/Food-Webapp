@@ -1,19 +1,23 @@
 import axiosInstance from '../../api/axiosInstance';
 import Particles from '../common/Particles';
+import toast from 'react-hot-toast';
 
 function Login() {
     let [creds, setCreds] = useState({ uname: "", pass: "" });
-    let [msg, setMsg] = useState("");
 
     const performLogin = () => {
+        const loadingToast = toast.loading("Verifying credentials...");
         axiosInstance.post("/register/login", creds)
             .then((res) => {
+                toast.dismiss(loadingToast);
                 const { token, username, role } = res.data;
                 
                 // STORE SECURE TOKEN AND USER DATA
                 localStorage.setItem("token", token);
                 localStorage.setItem("user", username);
                 localStorage.setItem("role", role);
+                
+                toast.success(`Welcome back, ${username}!`);
                 
                 // ROLE-BASED REDIRECT
                 if (role.toLowerCase() === "admin") {
@@ -23,10 +27,11 @@ function Login() {
                 }
             })
             .catch((err) => {
+                toast.dismiss(loadingToast);
                 if(err.response && err.response.status === 401) {
-                    setMsg("INVALID CREDENTIALS");
+                    toast.error("Invalid Username or Password");
                 } else {
-                    setMsg("SERVER ERROR. PLEASE TRY LATER.");
+                    toast.error("Server Error. Please try again later.");
                 }
             });
     };

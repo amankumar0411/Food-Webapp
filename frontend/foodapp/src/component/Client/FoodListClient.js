@@ -1,9 +1,7 @@
-import axiosInstance from '../../api/axiosInstance'
-import { useState } from 'react'
+import toast from 'react-hot-toast';
 
 function FoodlistClient({ searchQuery }) {
     let [food, setFood] = useState([]);
-    let [msg, setMsg] = useState("");
 
     // Modal States
     let [selectedItem, setSelectedItem] = useState(null);
@@ -32,7 +30,7 @@ function FoodlistClient({ searchQuery }) {
 
     const openModal = (food) => {
         if (!currentUser) {
-            alert("Please login to add items to your cart");
+            toast.error("Please login to add items to your cart");
             return;
         }
         setSelectedItem(food);
@@ -48,15 +46,16 @@ function FoodlistClient({ searchQuery }) {
             uname: currentUser
         };
 
-        axios.post("https://foodapp-api1.onrender.com/orders/add", cartItem)
+        const loadingToast = toast.loading(`Adding ${selectedItem.fname} to cart...`);
+        axiosInstance.post("/orders/add", cartItem)
             .then((res) => {
-                setMsg(`Added ${modalQty}x ${selectedItem.fname} to cart!`);
+                toast.dismiss(loadingToast);
+                toast.success(`Added ${modalQty}x ${selectedItem.fname} to cart!`);
                 setSelectedItem(null); // Close modal
-                setTimeout(() => setMsg(""), 3000); 
             })
             .catch((error) => {
-
-                setMsg("Failed to add item to cart.");
+                toast.dismiss(loadingToast);
+                toast.error("Failed to add item to cart.");
             });
     };
 
@@ -66,8 +65,7 @@ function FoodlistClient({ searchQuery }) {
                 EXPLORE DELICIOUS FOODS
             </h2>
             
-            {/* Success/Error Message */}
-            {msg && <div className="alert alert-success text-center w-50 mx-auto mt-3" role="alert">{msg}</div>}
+            {/* Success/Error messages handled by toast */}
 
             {
                 filteredFood.length > 0 ?

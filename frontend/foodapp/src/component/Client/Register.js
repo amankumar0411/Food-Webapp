@@ -2,26 +2,29 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Particles from '../common/Particles';
 import axiosInstance from '../../api/axiosInstance';
+import toast from 'react-hot-toast';
 
 function Register() {
     const navigate = useNavigate();
-    let [user, setUser] = useState({
-        uname: "",
-        pass: "",
-        nm: "",
-        email: "",
-        phno: ""
+    let [user, setUser] = useState({ 
+        uname: "", 
+        pass: "", 
+        nm: "", 
+        email: "", 
+        phno: "" 
     });
-    let [msg, setMsg] = useState("");
 
     const addData = () => {
+        const loadingToast = toast.loading("Creating your account...");
         axiosInstance.post("/register/add", user)
             .then((res) => {
-                alert("Registration Successful! Please Login.");
+                toast.dismiss(loadingToast);
+                toast.success("Registration Successful! Please Login.");
                 navigate('/login');
             })
-            .catch((error) => {
-                setMsg(error.response?.data || "REGISTRATION FAILED");
+            .catch(() => {
+                toast.dismiss(loadingToast);
+                toast.error("Registration Failed. Please check your details.");
             });
     };
 
@@ -134,7 +137,6 @@ function Register() {
                 <p style={{ fontSize: '11px', color: 'var(--label-color)', marginTop: '15px' }}>
                     By creating an account, I accept the Terms & Conditions & Privacy Policy
                 </p>
-                <p className="text-danger text-center mt-2">{msg}</p>
             </div>
         </div>
     );

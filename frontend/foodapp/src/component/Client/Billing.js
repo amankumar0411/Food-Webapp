@@ -1,5 +1,7 @@
 import axiosInstance from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useState, useEffect } from 'react'; // Added useState and useEffect imports
 
 function Billing() {
     const navigate = useNavigate();
@@ -35,28 +37,29 @@ function Billing() {
     // Mock Zomato Payment Gateway & Cart Clearance
     const handlePayment = async () => {
         setPaymentStatus("processing");
+        const loadingToast = toast.loading("Connecting to payment gateway...");
         
         try {
-            // Fake 2-second delay to simulate gateway communication
             await new Promise(resolve => setTimeout(resolve, 2000));
             
-            // Wipe the cart out of the database to mimic order fulfillment
             await Promise.all(
                 invoices.map(item => 
                     axiosInstance.delete(`/orders/delete/${item.oid || item.OID}`)
                 )
             );
             
+            toast.dismiss(loadingToast);
+            toast.success("Payment Received! Order Placed.");
             setPaymentStatus("success");
             
-            // Redirect home after displaying success securely
             setTimeout(() => {
                 setIsPaying(false);
                 navigate('/');
             }, 2500);
             
         } catch (error) {
-
+            toast.dismiss(loadingToast);
+            toast.error("Payment synchronization failed. Contact support.");
             setPaymentStatus("error");
             setTimeout(() => setPaymentStatus("confirm"), 3000);
         }
