@@ -18,6 +18,9 @@ public class RegisterController {
     @Autowired
     private RegisterService rservice;
 
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     @PostMapping("/add")
     public ResponseEntity<String> registerUser(@RequestBody Register reg) {
         rservice.addData(reg);
@@ -26,9 +29,9 @@ public class RegisterController {
 
     @PostMapping("/login") 
     public ResponseEntity<String> checkLogin(@RequestBody Register reg) {
-        Register r = rservice.checkLogin(reg.getUname(), reg.getPass());
+        Register r = rservice.findByUname(reg.getUname());
         
-        if (r != null) {
+        if (r != null && passwordEncoder.matches(reg.getPass(), r.getPass())) {
             return new ResponseEntity<>("LOGIN SUCCESSFUL", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("LOGIN FAILURE", HttpStatus.UNAUTHORIZED);
