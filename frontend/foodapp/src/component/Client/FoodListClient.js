@@ -84,7 +84,7 @@ function FoodlistClient({ searchQuery }) {
   const enriched = food.map(item => ({
     ...item,
     category: detectCategory(item.fname),
-    image:    CATEGORY_IMAGES[detectCategory(item.fname)],
+    image:    item.imageUrl || CATEGORY_IMAGES[detectCategory(item.fname)],
     rating:   getStaticRating(item.fid),
     best:     isBestseller(item.fid),
     desc:     CAT_DESC[detectCategory(item.fname)] || '',

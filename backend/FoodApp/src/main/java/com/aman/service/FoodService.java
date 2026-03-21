@@ -38,6 +38,7 @@ public class FoodService {
             // Update only the specific fields
             f.setFname(fs.getFname());
             f.setPrice(fs.getPrice());
+            if (fs.getImageUrl() != null) f.setImageUrl(fs.getImageUrl());
             
             // Save the updated record back to the database
             frepo.save(f);
