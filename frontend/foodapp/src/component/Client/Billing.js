@@ -41,9 +41,24 @@ function Billing() {
         
         try {
             await new Promise(resolve => setTimeout(resolve, 2000));
-            
+
+            // 1. Build order_dtls payload — one entry per cart line
+            const orderDtlsPayload = invoices.map(item => ({
+                uname:      uname,
+                fid:        item.fid   || item.FID,
+                fname:      item.fname || item.FNAME,
+                qty:        Number(item.qty   || item.QTY)    || 1,
+                unitPrice:  Number(item.fprice || item.FPRICE) || 0,
+                totalPrice: Number(item.totalprice || item.TOTALPRICE) || 0,
+                grandTotal: grandTotal,
+            }));
+
+            // 2. Persist to order_dtls table
+            await axiosInstance.post("/order-dtls/save", orderDtlsPayload);
+
+            // 3. Clear cart (delete from order_table)
             await Promise.all(
-                invoices.map(item => 
+                invoices.map(item =>
                     axiosInstance.delete(`/orders/delete/${item.oid || item.OID}`)
                 )
             );

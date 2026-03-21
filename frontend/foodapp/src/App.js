@@ -11,6 +11,7 @@ import Foodlist from './component/Admin/Foodlist';
 import UpdateFood from './component/Admin/UpdateFood';
 import DeleteFood from './component/Admin/DeleteFood';
 import AdminOrders from './component/Admin/AdminOrders';
+import AdminOrderDtls from './component/Admin/AdminOrderDtls';
 // CLIENT COMPONENTS
 import NavClient from './component/Client/NavClient';
 import FoodListClient from './component/Client/FoodListClient';
@@ -128,6 +129,7 @@ function App() {
               <Route path="/updatefood" element={<UpdateFood />} />
               <Route path="/deletefood" element={<DeleteFood />} />
               <Route path="/adminorders" element={<AdminOrders />} />
+              <Route path="/adminorderdtls" element={<AdminOrderDtls />} />
             </>
           )}
 
