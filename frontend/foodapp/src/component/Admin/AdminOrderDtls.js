@@ -3,6 +3,18 @@ import axiosInstance from '../../api/axiosInstance';
 
 const POLL_INTERVAL = 15000;
 
+// Safely convert LocalDateTime — Spring may serialize as string OR as [y,m,d,h,min,s] array
+function safeDate(val) {
+  if (!val) return null;
+  if (typeof val === 'string') return new Date(val);
+  // Array format: [year, month(1-based), day, hour, min, sec]
+  if (Array.isArray(val)) {
+    const [y, mo, d, h = 0, mi = 0, s = 0] = val;
+    return new Date(y, mo - 1, d, h, mi, s);
+  }
+  return new Date(val);
+}
+
 function AdminOrderDtls() {
   const [records, setRecords]       = useState([]);
   const [loading, setLoading]       = useState(true);
@@ -49,9 +61,10 @@ function AdminOrderDtls() {
     return matchUser && matchSearch;
   });
 
-  const totalRevenue = records.reduce((s, r) => s + Number(r.totalPrice || 0), 0);
-  const todayCount   = records.filter(r => r.paymentDate && new Date(r.paymentDate).toDateString() === new Date().toDateString()).length;
-  const uniquePayments = new Set(records.map(r => r.uname + '_' + (r.paymentDate ? r.paymentDate.substring(0, 16) : ''))).size;
+  const totalRevenue   = records.reduce((s, r) => s + Number(r.totalPrice || 0), 0);
+  const todayStr        = new Date().toDateString();
+  const todayCount      = records.filter(r => { const d = safeDate(r.paymentDate); return d && d.toDateString() === todayStr; }).length;
+  const uniquePayments  = new Set(records.map(r => { const d = safeDate(r.paymentDate); return r.uname + '_' + (d ? d.toISOString().substring(0, 16) : ''); })).size;
 
   return (
     <div style={{ padding: '30px 20px', maxWidth: 1300, margin: '0 auto' }}>
@@ -162,7 +175,7 @@ function AdminOrderDtls() {
                           </span>
                         </td>
                         <td style={{ padding: '12px 14px', color: '#888', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
-                          {r.paymentDate ? new Date(r.paymentDate).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '—'}
+                          {(() => { const d = safeDate(r.paymentDate); return d ? d.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '—'; })()}
                         </td>
                       </tr>
                     );
