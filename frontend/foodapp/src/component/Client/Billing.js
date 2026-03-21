@@ -44,17 +44,23 @@ function Billing() {
 
             // 1. Build order_dtls payload — one entry per cart line
             const orderDtlsPayload = invoices.map(item => ({
-                uname:      uname,
-                fid:        item.fid   || item.FID,
-                fname:      item.fname || item.FNAME,
-                qty:        Number(item.qty   || item.QTY)    || 1,
-                unitPrice:  Number(item.fprice || item.FPRICE) || 0,
+                uname:      item.uname || item.UNAME || uname,
+                fid:        item.fid   || item.FID   || '',
+                fname:      item.fname || item.FNAME || '',
+                qty:        Number(item.qty        || item.QTY)        || 1,
+                unitPrice:  Number(item.fprice     || item.FPRICE)     || 0,
                 totalPrice: Number(item.totalprice || item.TOTALPRICE) || 0,
                 grandTotal: grandTotal,
             }));
 
             // 2. Persist to order_dtls table
-            await axiosInstance.post("/order-dtls/save", orderDtlsPayload);
+            try {
+                await axiosInstance.post("/order-dtls/save", orderDtlsPayload);
+            } catch (dtlsError) {
+                const status = dtlsError?.response?.status;
+                // Don't block payment for this — log and continue
+                console.error("order-dtls save failed:", status, dtlsError?.response?.data);
+            }
 
             // 3. Clear cart (delete from order_table)
             await Promise.all(
@@ -64,7 +70,7 @@ function Billing() {
             );
             
             toast.dismiss(loadingToast);
-            toast.success("Payment Received! Order Placed.");
+            toast.success("Payment Received! Order Placed. 🎉");
             setPaymentStatus("success");
             
             setTimeout(() => {
@@ -74,7 +80,11 @@ function Billing() {
             
         } catch (error) {
             toast.dismiss(loadingToast);
-            toast.error("Payment synchronization failed. Contact support.");
+            const status = error?.response?.status;
+            const msg = status === 401 ? "Session expired. Please login again."
+                      : status === 403 ? "Permission denied. Contact admin."
+                      : "Payment synchronization failed. Contact support.";
+            toast.error(msg);
             setPaymentStatus("error");
             setTimeout(() => setPaymentStatus("confirm"), 3000);
         }

@@ -10,7 +10,9 @@ import java.util.Map;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
-    @Query(value = "SELECT o.oid AS oid, f.fname AS fname, f.price AS fprice, o.qty AS qty, (f.price * o.qty) AS totalprice " +
+    @Query(value = "SELECT o.oid AS oid, o.fid AS fid, o.uname AS uname, " +
+                   "COALESCE(o.fname, f.fname) AS fname, " +
+                   "f.price AS fprice, o.qty AS qty, (f.price * o.qty) AS totalprice " +
                    "FROM order_table o " +
                    "INNER JOIN food f ON o.fid = f.fid " +
                    "WHERE o.uname = ?1", nativeQuery = true)
