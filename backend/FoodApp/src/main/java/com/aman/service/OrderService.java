@@ -32,4 +32,8 @@ public class OrderService {
     public void deleteData(Integer oid) {
         orepo.deleteById(oid);
     }
+
+    public List<com.aman.model.Order> getAllOrders() {
+        return orepo.findAll();
+    }
 }

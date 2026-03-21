@@ -1,16 +1,12 @@
 package com.aman.controller;
 
+import com.aman.model.Food;
 import com.aman.model.Order;
+import com.aman.repository.FoodRepository;
 import com.aman.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +18,19 @@ public class OrderController {
     @Autowired
     private OrderService oservice;
 
+    @Autowired
+    private FoodRepository frepo;
+
     @PostMapping("/add")
     public Order addOrder(@RequestBody Order order) {
-        order.setOdt(LocalDateTime.now()); // Set current time
+        // Enrich order with food name and total price
+        Food food = frepo.findById(order.getFid()).orElse(null);
+        if (food != null) {
+            order.setFname(food.getFname());
+            double total = food.getPrice() * (order.getQty() != null ? order.getQty() : 1);
+            order.setTotalPrice(total);
+        }
+        order.setOdt(LocalDateTime.now());
         oservice.addData(order);
         return order;
     }
@@ -32,6 +38,12 @@ public class OrderController {
     @GetMapping("/user/details/{uname}")
     public List<Map<String, Object>> getDetails(@PathVariable String uname) {
         return oservice.getBill(uname);
+    }
+
+    // Admin: Get ALL orders across all users
+    @GetMapping("/all")
+    public List<Order> getAllOrders() {
+        return oservice.getAllOrders();
     }
 
     @PutMapping("/update/{oid}/{qty}")
