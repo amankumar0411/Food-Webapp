@@ -51,7 +51,7 @@ public class OrderDtls {
     public String getPaymentDate() { return paymentDate; }
     public void setPaymentDate(LocalDateTime paymentDate) {
         this.paymentDate = paymentDate != null
-            ? paymentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))
+            ? paymentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))
             : null;
     }
 
