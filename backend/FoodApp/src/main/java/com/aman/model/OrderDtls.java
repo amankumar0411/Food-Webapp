@@ -2,7 +2,7 @@ package com.aman.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "order_dtls")
@@ -19,8 +19,7 @@ public class OrderDtls {
     private Double unitPrice;      // Price per item at time of payment
     private Double totalPrice;     // qty × unitPrice
     private Double grandTotal;     // Sum of all items in the same payment session
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime paymentDate;
+    private String paymentDate;   // Stored as ISO string e.g. "2024-03-22T22:10:30"
     private String paymentStatus;  // e.g. "PAID"
 
     public OrderDtls() {}
@@ -49,8 +48,12 @@ public class OrderDtls {
     public Double getGrandTotal() { return grandTotal; }
     public void setGrandTotal(Double grandTotal) { this.grandTotal = grandTotal; }
 
-    public LocalDateTime getPaymentDate() { return paymentDate; }
-    public void setPaymentDate(LocalDateTime paymentDate) { this.paymentDate = paymentDate; }
+    public String getPaymentDate() { return paymentDate; }
+    public void setPaymentDate(LocalDateTime paymentDate) {
+        this.paymentDate = paymentDate != null
+            ? paymentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))
+            : null;
+    }
 
     public String getPaymentStatus() { return paymentStatus; }
     public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
