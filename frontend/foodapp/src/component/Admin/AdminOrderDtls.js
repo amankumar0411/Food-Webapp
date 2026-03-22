@@ -71,10 +71,10 @@ function AdminOrderDtls() {
     return matchUser && matchSearch;
   });
 
-  const totalRevenue   = records.reduce((s, r) => s + Number(r.totalPrice || 0), 0);
+  const totalRevenue   = records.reduce((s, r) => s + Number(r.totalPrice || r.total_price || 0), 0);
   const todayStr        = new Date().toDateString();
-  const todayCount      = records.filter(r => { const d = safeDate(r.paymentDate); return d && d.toDateString() === todayStr; }).length;
-  const uniquePayments  = new Set(records.map(r => { const d = safeDate(r.paymentDate); return r.uname + '_' + (d ? d.toISOString().substring(0, 16) : ''); })).size;
+  const todayCount      = records.filter(r => { const d = safeDate(r.paymentDate || r.payment_date); return d && d.toDateString() === todayStr; }).length;
+  const uniquePayments  = new Set(records.map(r => { const d = safeDate(r.paymentDate || r.payment_date); return (r.uname || r.UNAME) + '_' + (d ? d.toISOString().substring(0, 16) : ''); })).size;
 
   return (
     <div style={{ padding: '30px 20px', maxWidth: 1300, margin: '0 auto' }}>
@@ -165,34 +165,42 @@ function AdminOrderDtls() {
                 </thead>
                 <tbody>
                   {filtered.map((r, i) => {
-                    const isNew = newIds.has(r.id);
+                    const isNew = newIds.has(r.id || r.ID);
+                    const uPrice = r.unitPrice  || r.unit_price  || r.UNIT_PRICE;
+                    const tPrice = r.totalPrice || r.total_price || r.TOTAL_PRICE;
+                    const gTotal = r.grandTotal || r.grand_total || r.GRAND_TOTAL;
+                    const pStatus = r.paymentStatus || r.payment_status || r.PAYMENT_STATUS;
+                    const pDate   = r.paymentDate   || r.payment_date   || r.PAYMENT_DATE;
+                    const foodId  = r.fid || r.FID;
+                    const userName = r.uname || r.UNAME;
+
                     return (
-                      <tr key={r.id}
+                      <tr key={r.id || r.ID || i}
                         style={{ borderBottom: '1px solid var(--border-color, #f0f0f0)', background: isNew ? 'rgba(33,164,71,0.1)' : i % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.013)', transition: 'background 0.4s' }}
                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(226,55,68,0.05)'}
                         onMouseLeave={e => e.currentTarget.style.background = isNew ? 'rgba(33,164,71,0.1)' : (i % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.013)')}
                       >
                         <td style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--primary-color, #e23744)' }}>
-                          #{r.id} {isNew && <span style={{ fontSize: '0.65rem', background: '#21a447', color: '#fff', padding: '2px 5px', borderRadius: 8, marginLeft: 4 }}>NEW</span>}
+                          #{r.id || r.ID} {isNew && <span style={{ fontSize: '0.65rem', background: '#21a447', color: '#fff', padding: '2px 5px', borderRadius: 8, marginLeft: 4 }}>NEW</span>}
                         </td>
                         <td style={{ padding: '12px 14px' }}>
-                          <span style={{ background: 'rgba(33,164,71,0.1)', color: '#21a447', padding: '3px 9px', borderRadius: 20, fontWeight: 600, fontSize: '0.8rem' }}>{r.uname}</span>
+                          <span style={{ background: 'rgba(33,164,71,0.1)', color: '#21a447', padding: '3px 9px', borderRadius: 20, fontWeight: 600, fontSize: '0.8rem' }}>{userName}</span>
                         </td>
                         <td style={{ padding: '12px 14px' }}>
-                          <span style={{ background: 'rgba(82,39,255,0.1)', color: '#5227FF', padding: '3px 7px', borderRadius: 6, fontWeight: 700, fontSize: '0.8rem' }}>{r.fid}</span>
+                          <span style={{ background: 'rgba(82,39,255,0.1)', color: '#5227FF', padding: '3px 7px', borderRadius: 6, fontWeight: 700, fontSize: '0.8rem' }}>{foodId}</span>
                         </td>
-                        <td style={{ padding: '12px 14px', fontWeight: 600, color: 'var(--text-color)' }}>{r.fname}</td>
-                        <td style={{ padding: '12px 14px', fontWeight: 700, textAlign: 'center', color: 'var(--text-color)' }}>×{r.qty}</td>
-                        <td style={{ padding: '12px 14px', color: 'var(--text-muted, #888)' }}>₹{r.unitPrice != null ? Number(r.unitPrice).toFixed(2) : '—'}</td>
-                        <td style={{ padding: '12px 14px', fontWeight: 700, color: '#e23744' }}>₹{r.totalPrice != null ? Number(r.totalPrice).toFixed(2) : '—'}</td>
-                        <td style={{ padding: '12px 14px', fontWeight: 800, color: '#5227FF' }}>₹{r.grandTotal != null ? Number(r.grandTotal).toFixed(2) : '—'}</td>
+                        <td style={{ padding: '12px 14px', fontWeight: 600, color: 'var(--text-color)' }}>{r.fname || r.FNAME}</td>
+                        <td style={{ padding: '12px 14px', fontWeight: 700, textAlign: 'center', color: 'var(--text-color)' }}>×{r.qty || r.QTY}</td>
+                        <td style={{ padding: '12px 14px', color: 'var(--text-muted, #888)' }}>₹{uPrice != null ? Number(uPrice).toFixed(2) : '—'}</td>
+                        <td style={{ padding: '12px 14px', fontWeight: 700, color: '#e23744' }}>₹{tPrice != null ? Number(tPrice).toFixed(2) : '—'}</td>
+                        <td style={{ padding: '12px 14px', fontWeight: 800, color: '#5227FF' }}>₹{gTotal != null ? Number(gTotal).toFixed(2) : '—'}</td>
                         <td style={{ padding: '12px 14px' }}>
                           <span style={{ background: 'rgba(33,164,71,0.15)', color: '#21a447', padding: '3px 10px', borderRadius: 20, fontWeight: 700, fontSize: '0.78rem' }}>
-                            ✓ {r.paymentStatus || 'PAID'}
+                            ✓ {pStatus || 'PAID'}
                           </span>
                         </td>
                         <td style={{ padding: '12px 14px', color: '#888', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
-                          {(() => { const d = safeDate(r.paymentDate); return d ? d.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '—'; })()}
+                          {(() => { const d = safeDate(pDate); return d ? d.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '—'; })()}
                         </td>
                       </tr>
                     );
@@ -203,7 +211,8 @@ function AdminOrderDtls() {
                     <td colSpan={6} style={{ padding: '12px 14px', fontWeight: 800, color: 'var(--text-color)', textAlign: 'right' }}>
                       TOTAL REVENUE ({filtered.length} items):
                     </td>
-                    <td style={{ padding: '12px 14px', fontWeight: 900, fontSize: '1.05rem', color: '#e23744' }}>₹{filtered.reduce((s,r)=>s+Number(r.totalPrice||0),0).toFixed(2)}</td>
+                    <td style={{ padding: '12px 14px', fontWeight: 900, fontSize: '1.05rem', color: '#e23744' }}>₹{filtered.reduce((s,r)=>s+Number(r.totalPrice || r.total_price || 0),0).toFixed(2)}</td>
+
                     <td colSpan={3} />
                   </tr>
                 </tfoot>
