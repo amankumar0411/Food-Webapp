@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/order-dtls")
@@ -32,13 +33,13 @@ public class OrderDtlsController {
 
     /** Customer: view their own paid order history */
     @GetMapping("/user/{uname}")
-    public List<OrderDtls> getByUser(@PathVariable String uname) {
+    public List<Map<String, Object>> getByUser(@PathVariable String uname) {
         return service.getByUser(uname);
     }
 
     /** Admin: view ALL paid orders */
     @GetMapping("/all")
-    public List<OrderDtls> getAll() {
+    public List<Map<String, Object>> getAll() {
         return service.getAll();
     }
 }

@@ -5,6 +5,7 @@ import com.aman.repository.OrderDtlsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderDtlsService {
@@ -16,11 +17,11 @@ public class OrderDtlsService {
         repo.saveAll(items);
     }
 
-    public List<OrderDtls> getByUser(String uname) {
-        return repo.findByUnameOrderByPaymentDateDesc(uname);
+    public List<Map<String, Object>> getByUser(String uname) {
+        return repo.findByUnameNative(uname);
     }
 
-    public List<OrderDtls> getAll() {
-        return repo.findAllByOrderByPaymentDateDesc();
+    public List<Map<String, Object>> getAll() {
+        return repo.findAllNative();
     }
 }
