@@ -18,6 +18,7 @@ function safeDate(val) {
 function AdminOrderDtls() {
   const [records, setRecords]       = useState([]);
   const [loading, setLoading]       = useState(true);
+  const [error, setError]           = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [search, setSearch]         = useState('');
   const [filterUser, setFilterUser] = useState('All');
@@ -37,10 +38,19 @@ function AdminOrderDtls() {
         }
         prevIds.current = incoming;
         setRecords(data);
+        setError(null);
         setLastUpdated(new Date());
         if (!silent) setLoading(false);
       })
-      .catch(() => { if (!silent) setLoading(false); });
+      .catch((err) => {
+        const status = err?.response?.status;
+        const msg = status === 401 ? 'Session expired — please log in again.'
+                  : status === 403 ? 'Access denied.'
+                  : status === 500 ? 'Server error (500) — check backend logs.'
+                  : `Failed to load order details (${status || 'network error'}).`;
+        setError(msg);
+        if (!silent) setLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -127,6 +137,13 @@ function AdminOrderDtls() {
         <div style={{ textAlign: 'center', padding: '60px 0' }}>
           <div className="spinner-border" style={{ color: 'var(--primary-color, #e23744)', width: 40, height: 40 }} role="status" />
           <p style={{ marginTop: 14, color: '#888' }}>Loading order details...</p>
+        </div>
+      ) : error ? (
+        <div style={{ textAlign: 'center', padding: '60px 20px', color: '#e23744' }}>
+          <div style={{ fontSize: '3rem' }}>⚠️</div>
+          <h4 style={{ marginTop: 12 }}>Could not load order details</h4>
+          <p style={{ fontSize: '0.9rem', color: '#888' }}>{error}</p>
+          <button onClick={() => fetchRecords(false)} style={{ marginTop: 10, padding: '8px 20px', borderRadius: 10, background: 'var(--primary-color, #e23744)', color: '#fff', border: 'none', fontWeight: 700, cursor: 'pointer' }}>Retry</button>
         </div>
       ) : (
         <div style={{ background: 'var(--card-bg)', borderRadius: 18, overflow: 'hidden', border: '1px solid var(--border-color, #eee)', boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
