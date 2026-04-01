@@ -18,6 +18,9 @@ public class JwtUtils {
 
     @Value("${jwt.secret}")
     private String secret;
+
+    @Value("${jwt.expiration.ms:7200000}")   // default 2 hours
+    private long expirationMs;
     
     private Key key;
 
@@ -39,7 +42,7 @@ public class JwtUtils {
                 .setSubject(username)
                 .claim("role", role)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24)) // 24h
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }

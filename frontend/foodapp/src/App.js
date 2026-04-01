@@ -23,10 +23,36 @@ import Home from './component/Client/Home';
 
 import { Toaster } from 'react-hot-toast';
 
+/**
+ * Medium #11 — localStorage is XSS-accessible (tradeoff vs httpOnly cookies).
+ * We mitigate this by eagerly purging expired tokens on every page load.
+ * Decodes the JWT payload without a library (base64url → JSON).
+ */
+function isTokenExpired(token) {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return Date.now() / 1000 > payload.exp; // exp is in seconds
+  } catch {
+    return true; // malformed token → treat as expired
+  }
+}
+
+function clearAuthStorage() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  localStorage.removeItem('role');
+}
+
 function App() {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
-  
+
+  // Medium #11 — purge stale token before reading auth state
+  const storedToken = localStorage.getItem('token');
+  if (storedToken && isTokenExpired(storedToken)) {
+    clearAuthStorage();
+  }
+
   // REACTIVE AUTH STATE
   const [auth, setAuth] = useState(localStorage.getItem("user"));
   const [role, setRole] = useState(localStorage.getItem("role"));
