@@ -1,5 +1,6 @@
 package com.aman.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -13,9 +14,12 @@ public class Register {
 	@Column(length = 20)
 	@NotBlank(message="USERNAME CAN'T BLANK")
 private String uname;
-	@Column(length = 100,nullable = false)
-	@Size(min=6,max=100,message="PASSWORD MUST BE AT LEAST 6 CHARACTERS")
+	@Column(length = 100, nullable = false)
+	@Size(min=6, max=100, message="PASSWORD MUST BE AT LEAST 6 CHARACTERS")
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 private String pass;
+	@Column(length = 10, nullable = false)
+private String role = "user";
 	@Column(length = 25)
 	@NotBlank(message="NAME CAN'T BLANK")
 private String nm;
@@ -66,9 +70,16 @@ public String getPhno() {
 public void setPhno(String phno) {
 	this.phno = phno;
 }
+public String getRole() {
+	return role;
+}
+public void setRole(String role) {
+	this.role = role;
+}
 @Override
 public String toString() {
-	return "Register [uname=" + uname + ", pass=" + pass + ", nm=" + nm + ", email=" + email + ", phno=" + phno + "]";
+	// SECURITY: password hash intentionally redacted from logs
+	return "Register [uname=" + uname + ", pass=[PROTECTED], nm=" + nm + ", email=" + email + ", phno=" + phno + ", role=" + role + "]";
 }
 
 }

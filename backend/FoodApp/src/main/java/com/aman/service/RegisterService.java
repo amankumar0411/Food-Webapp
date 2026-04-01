@@ -16,12 +16,27 @@ public class RegisterService {
     private PasswordEncoder passwordEncoder;
 
 	public void addData(Register r) {
-        // HASH PASSWORD BEFORE SAVING
+        // Always hash the password before saving
         r.setPass(passwordEncoder.encode(r.getPass()));
+        // SECURITY: ignore any role supplied in the request; always register as "user"
+        r.setRole("user");
 		rrepo.save(r);
 	}
 
     public Register findByUname(String uname) {
         return rrepo.findByUname(uname);
+    }
+
+    /**
+     * Authenticates a user by username + raw password.
+     * Returns the persisted Register object on success, or null on failure.
+     * SECURITY: no plain-text fallback — BCrypt only.
+     */
+    public Register authenticate(String uname, String rawPass) {
+        Register r = rrepo.findByUname(uname);
+        if (r != null && passwordEncoder.matches(rawPass, r.getPass())) {
+            return r;
+        }
+        return null;
     }
 }

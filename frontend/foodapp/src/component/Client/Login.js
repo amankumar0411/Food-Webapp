@@ -9,12 +9,10 @@ function Login({ syncAuth }) {
     let [creds, setCreds] = useState({ uname: "", pass: "" });
 
     const performLogin = () => {
-        console.log("Login attempt for:", creds.uname);
         const loadingToast = toast.loading("Verifying credentials...");
         
         axiosInstance.post("/register/login", creds)
             .then((res) => {
-                console.log("Login success:", res.data);
                 toast.dismiss(loadingToast);
                 const { token, username, role } = res.data;
                 
@@ -35,7 +33,6 @@ function Login({ syncAuth }) {
                 }
             })
             .catch((err) => {
-                console.error("Login Error:", err);
                 toast.dismiss(loadingToast);
                 if(err.response && err.response.status === 401) {
                     toast.error("Invalid Username or Password");

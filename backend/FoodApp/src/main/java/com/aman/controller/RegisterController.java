@@ -1,5 +1,6 @@
 package com.aman.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aman.model.Register;
 import com.aman.service.RegisterService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/register")
 public class RegisterController {
@@ -18,46 +22,39 @@ public class RegisterController {
     private RegisterService rservice;
 
     @Autowired
-    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
-
-    @Autowired
     private com.aman.config.JwtUtils jwtUtils;
 
+    // ── REGISTRATION ──────────────────────────────────────────────────────────
     @PostMapping("/add")
     public ResponseEntity<String> registerUser(@RequestBody Register reg) {
         rservice.addData(reg);
         return new ResponseEntity<>("USER REGISTERED SUCCESSFULLY", HttpStatus.CREATED);
     }
 
-    @PostMapping("/login") 
-    public ResponseEntity<java.util.Map<String, String>> checkLogin(@RequestBody Register reg) {
-        Register r = rservice.findByUname(reg.getUname());
-        
-        if (r != null) {
-            boolean isMatch = false;
-            
-            // 1. Try standard BCrypt match
-            if (passwordEncoder.matches(reg.getPass(), r.getPass())) {
-                isMatch = true;
-            } 
-            // 2. Fallback for LEACY PLAIN-TEXT passwords
-            else if (reg.getPass().equals(r.getPass())) {
-                // If it matches plain-text, hash it NOW and update the database
-                r.setPass(reg.getPass()); // Set plain for the service to hash
-                rservice.addData(r);     // Service will hash and save
-                isMatch = true;
-            }
+    // ── LOGIN ─────────────────────────────────────────────────────────────────
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> checkLogin(
+            @RequestBody Register reg,
+            HttpServletRequest request) {
 
-            if (isMatch) {
-                String token = jwtUtils.generateToken(r.getUname());
-                java.util.Map<String, String> response = new java.util.HashMap<>();
-                response.put("token", token);
-                response.put("username", r.getUname());
-                response.put("role", r.getUname().equalsIgnoreCase("admin") ? "admin" : "user");
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            }
+        // authenticate() returns the persisted user only if BCrypt compare succeeds.
+        // SECURITY: no plain-text fallback. No user-enumeration (same error for both cases).
+        Register r = rservice.authenticate(reg.getUname(), reg.getPass());
+
+        if (r != null) {
+            // Role comes from DB — not from username string comparison
+            String token = jwtUtils.generateToken(r.getUname(), r.getRole());
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            response.put("username", r.getUname());
+            // role is embedded in the JWT; also return it so the frontend
+            // can read it without parsing the token itself
+            response.put("role", r.getRole());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
-        
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        // Generic message — do NOT reveal whether username exists
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Invalid credentials"));
     }
 }

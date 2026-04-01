@@ -23,14 +23,23 @@ public class JwtUtils {
 
     @PostConstruct
     public void init() {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        byte[] keyBytes = secret.getBytes();
+        if (keyBytes.length < 32) {
+            throw new IllegalStateException(
+                "[SECURITY] JWT_SECRET must be at least 32 characters. " +
+                "Current length: " + keyBytes.length + " chars. " +
+                "Generate one with: openssl rand -base64 32"
+            );
+        }
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("role", role)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 hours
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24)) // 24h
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
