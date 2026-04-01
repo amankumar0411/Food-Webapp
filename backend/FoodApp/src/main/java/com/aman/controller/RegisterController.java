@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.aman.model.Register;
 import com.aman.service.RegisterService;
+import com.aman.config.LoginAttemptService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,9 @@ public class RegisterController {
     @Autowired
     private com.aman.config.JwtUtils jwtUtils;
 
+    @Autowired
+    private LoginAttemptService loginAttemptService;
+
     // ── REGISTRATION ──────────────────────────────────────────────────────────
     @PostMapping("/add")
     public ResponseEntity<String> registerUser(@RequestBody Register reg) {
@@ -37,23 +41,38 @@ public class RegisterController {
             @RequestBody Register reg,
             HttpServletRequest request) {
 
+        // Resolve client IP — respect X-Forwarded-For set by Railway/Render proxies
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isBlank()) ip = request.getRemoteAddr();
+        // X-Forwarded-For can be a comma-separated list; use the first (originating) IP
+        if (ip.contains(",")) ip = ip.split(",")[0].trim();
+
+        // ── RATE LIMIT CHECK ──────────────────────────────────────────────────
+        if (loginAttemptService.isBlocked(ip)) {
+            long retryAfter = loginAttemptService.secondsUntilUnlock(ip);
+            return ResponseEntity
+                    .status(HttpStatus.TOO_MANY_REQUESTS)
+                    .header("Retry-After", String.valueOf(retryAfter))
+                    .body(Map.of(
+                        "error", "Too many failed login attempts. Try again in " + (retryAfter / 60 + 1) + " minute(s)."
+                    ));
+        }
+
         // authenticate() returns the persisted user only if BCrypt compare succeeds.
         // SECURITY: no plain-text fallback. No user-enumeration (same error for both cases).
         Register r = rservice.authenticate(reg.getUname(), reg.getPass());
 
         if (r != null) {
-            // Role comes from DB — not from username string comparison
+            loginAttemptService.recordSuccess(ip);   // reset counter on success
             String token = jwtUtils.generateToken(r.getUname(), r.getRole());
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
             response.put("username", r.getUname());
-            // role is embedded in the JWT; also return it so the frontend
-            // can read it without parsing the token itself
             response.put("role", r.getRole());
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
-        // Generic message — do NOT reveal whether username exists
+        loginAttemptService.recordFailure(ip);       // count failure toward lockout
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("error", "Invalid credentials"));
     }

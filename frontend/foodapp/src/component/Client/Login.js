@@ -34,7 +34,10 @@ function Login({ syncAuth }) {
             })
             .catch((err) => {
                 toast.dismiss(loadingToast);
-                if(err.response && err.response.status === 401) {
+                if (err.response && err.response.status === 429) {
+                    const msg = err.response.data?.error || "Too many attempts. Please wait and try again.";
+                    toast.error(msg, { duration: 6000 });
+                } else if (err.response && err.response.status === 401) {
                     toast.error("Invalid Username or Password");
                 } else {
                     toast.error("Could not connect to server. Ensure Backend is running.");

@@ -20,14 +20,14 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-// RESPONSE INTERCEPTOR: Handle unauthorized errors (e.g., token expired)
+// RESPONSE INTERCEPTOR: Handle unauthorized and rate-limited errors
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
         const isLoginRequest = error.config && error.config.url.includes('/login');
         
         if (error.response && error.response.status === 401 && !isLoginRequest) {
-            // Only redirect if NOT already on the login page or making a login request
+            // Token expired or invalid — clear storage and redirect to login
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             localStorage.removeItem('role');
