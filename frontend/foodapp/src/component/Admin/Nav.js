@@ -18,7 +18,6 @@ function Nav({ toggleTheme, isDark, searchQuery, setSearchQuery, isHomePage }) {
       label: "Orders",
       href: "#",
       items: [
-        { label: "All Orders",     href: "/adminorders" },
         { label: "Order Details",  href: "/adminorderdtls" },
       ],
     },
