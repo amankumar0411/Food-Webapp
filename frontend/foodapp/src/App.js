@@ -47,12 +47,6 @@ function App() {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Medium #11 — purge stale token before reading auth state
-  const storedToken = localStorage.getItem('token');
-  if (storedToken && isTokenExpired(storedToken)) {
-    clearAuthStorage();
-  }
-
   // REACTIVE AUTH STATE
   const [auth, setAuth] = useState(localStorage.getItem("user"));
   const [role, setRole] = useState(localStorage.getItem("role"));
@@ -64,6 +58,15 @@ function App() {
     setAuth(localStorage.getItem("user"));
     setRole(localStorage.getItem("role"));
   };
+
+  // Medium #11 — purge stale token
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken && isTokenExpired(storedToken)) {
+      clearAuthStorage();
+      syncAuth();
+    }
+  }, []);
 
   // Selective background logic: Grainient on inner pages (excluding home)
   const isHomePage = location.pathname === "/" || location.pathname === "/home";

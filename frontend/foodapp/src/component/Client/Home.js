@@ -151,7 +151,8 @@ function Home() {
                         <button 
                             className='btn btn-lg' 
                             onClick={() => {
-                                const isAdmin = auth && auth.toLowerCase() === "admin";
+                                const role = localStorage.getItem("role");
+                                const isAdmin = role && role.toLowerCase() === "admin";
                                 navigate(isAdmin ? '/foodlist' : '/foodlistclient');
                             }}
                             style={{ 

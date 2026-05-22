@@ -149,7 +149,7 @@ function Billing() {
                 )}
 
                 <div className="mt-5 d-flex justify-content-between align-items-center border-top pt-4">
-                    <button className="btn px-4 py-2" style={{ border: '1px solid var(--border-color)', color: 'var(--text-color)', borderRadius: '12px' }} onClick={() => window.location.href = '/addorder'}>
+                    <button className="btn px-4 py-2" style={{ border: '1px solid var(--border-color)', color: 'var(--text-color)', borderRadius: '12px' }} onClick={() => navigate('/addorder')}>
                        ← BACK TO CART
                     </button>
                     <div>

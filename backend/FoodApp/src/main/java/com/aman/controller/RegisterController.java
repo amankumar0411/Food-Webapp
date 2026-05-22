@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aman.model.Register;
 import com.aman.service.RegisterService;
 import com.aman.config.LoginAttemptService;
+import jakarta.validation.Valid;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class RegisterController {
 
     // ── REGISTRATION ──────────────────────────────────────────────────────────
     @PostMapping("/add")
-    public ResponseEntity<String> registerUser(@RequestBody Register reg) {
+    public ResponseEntity<String> registerUser(@Valid @RequestBody Register reg) {
         rservice.addData(reg);
         return new ResponseEntity<>("USER REGISTERED SUCCESSFULLY", HttpStatus.CREATED);
     }

@@ -57,6 +57,11 @@ public class SecurityConfig {
                 auth.requestMatchers("/register/**").permitAll();
                 auth.requestMatchers("/food/fetch/**").permitAll();
 
+                // Admin-only endpoints
+                auth.requestMatchers("/food/add", "/food/del/**", "/food/upd/**").hasRole("ADMIN");
+                auth.requestMatchers("/orders/all").hasRole("ADMIN");
+                auth.requestMatchers("/order-dtls/all").hasRole("ADMIN");
+
                 // Medium #10 — Swagger only accessible when SWAGGER_ENABLED=true env var is set
                 if (swaggerEnabled) {
                     auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();

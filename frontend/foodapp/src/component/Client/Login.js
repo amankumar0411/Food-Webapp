@@ -58,7 +58,7 @@ function Login({ syncAuth }) {
             {/* Background Particles Layer */}
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
                 <Particles
-                    particleColors={["#e23744", "var(--text-muted)"]}
+                    particleColors={["#e23744", "#6c757d"]}
                     particleCount={150}
                     particleSpread={15}
                     speed={0.4}

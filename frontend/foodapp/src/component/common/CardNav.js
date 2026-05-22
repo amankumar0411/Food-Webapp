@@ -73,6 +73,8 @@ const CardNav = ({ items, logo, logoAlt, baseColor, menuColor, buttonBgColor, bu
                     style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
                     onClick={() => {
                         localStorage.removeItem("user");
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("role");
                         window.location.href = "/";
                     }}
                 >

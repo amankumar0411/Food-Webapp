@@ -11,7 +11,8 @@ function Register() {
         pass: "", 
         nm: "", 
         email: "", 
-        phno: "" 
+        phno: "",
+        role: "user"
     });
 
     const addData = () => {
@@ -42,7 +43,7 @@ function Register() {
             {/* Background Particles Layer */}
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
                 <Particles
-                    particleColors={["#e23744", "var(--text-muted)"]}
+                    particleColors={["#e23744", "#6c757d"]}
                     particleCount={180}
                     particleSpread={15}
                     speed={0.4}
@@ -107,7 +108,7 @@ function Register() {
                         onChange={(e) => setUser({...user, email: e.target.value})} 
                     />
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                     <input 
                         type="text" 
                         className="form-control" 
@@ -116,6 +117,17 @@ function Register() {
                         value={user.phno}
                         onChange={(e) => setUser({...user, phno: e.target.value})} 
                     />
+                </div>
+                <div className="mb-4">
+                    <select 
+                        className="form-select" 
+                        style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)', color: 'var(--text-color)' }}
+                        value={user.role}
+                        onChange={(e) => setUser({...user, role: e.target.value})}
+                    >
+                        <option value="user">Register as Customer</option>
+                        <option value="admin">Register as Admin</option>
+                    </select>
                 </div>
                 
                 <button 

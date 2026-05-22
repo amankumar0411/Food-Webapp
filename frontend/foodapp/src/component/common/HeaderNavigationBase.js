@@ -8,6 +8,8 @@ export const HeaderNavigationBase = ({ items, brandName, toggleTheme, isDark, se
 
     const handleLogout = () => {
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
         window.location.href = "/";
     };
 

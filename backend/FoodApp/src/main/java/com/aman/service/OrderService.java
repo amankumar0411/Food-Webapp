@@ -5,12 +5,17 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.aman.model.Order;
+import com.aman.model.Food;
 import com.aman.repository.OrderRepository;
+import com.aman.repository.FoodRepository;
 
 @Service
 public class OrderService {
     @Autowired
     private OrderRepository orepo;
+
+    @Autowired
+    private FoodRepository frepo;
 
     public void addData(Order o) {
         orepo.save(o);
@@ -24,6 +29,10 @@ public class OrderService {
         Order existingOrder = orepo.findById(oid).orElse(null);
         if (existingOrder != null) {
             existingOrder.setQty(qty);
+            Food food = frepo.findById(existingOrder.getFid()).orElse(null);
+            if (food != null) {
+                existingOrder.setTotalPrice(food.getPrice() * qty);
+            }
             return orepo.save(existingOrder);
         }
         return null;

@@ -41,7 +41,7 @@ function Foodlist({ searchQuery }) {
             {
                 filteredFood.map((element,index)=>{ 
                     return(
-                        <tr>
+                        <tr key={element.fid}>
                             
                              <td>{element.fid }</td>
                             <td>{element.fname }</td>

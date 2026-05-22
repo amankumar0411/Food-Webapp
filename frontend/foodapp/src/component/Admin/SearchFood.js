@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import axiosInstance from '../../api/axiosInstance'
 import { useState } from 'react'
 
 function SearchFood() {
@@ -20,8 +20,8 @@ function SearchFood() {
             return;
         }
 
-        // Using axios.get to fetch data by ID
-        axios.get(`https://foodapp-api1.onrender.com/food/fetch/${foodId}`)
+        // Using axiosInstance to fetch data by ID
+        axiosInstance.get(`/food/fetch/${foodId}`)
             .then((res) => {
                 if (res.data) {
                     setSearchResult(res.data);

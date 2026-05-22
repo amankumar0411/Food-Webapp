@@ -97,7 +97,7 @@ const Particles = ({
   cameraDistance = 20,
   disableRotation = false,
   pixelRatio = 1,
-  className
+  className = ""
 }) => {
   const containerRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -237,7 +237,7 @@ const Particles = ({
     pixelRatio
   ]);
 
-  return <div ref={containerRef} className={`particles-container ${className}`} />;
+  return <div ref={containerRef} className={`particles-container ${className || ''}`.trim()} />;
 };
 
 export default Particles;
