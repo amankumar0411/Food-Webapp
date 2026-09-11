@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import toast from 'react-hot-toast';
 import './FoodListClient.css';
@@ -67,7 +68,10 @@ const CAT_DESC = {
 };
 
 function FoodlistClient({ searchQuery }) {
+  const navigate = useNavigate();
   const [food, setFood] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [cartItems, setCartItems] = useState([]);
   const [activeCategory, setActiveCategory] = useState('All');
   const [vegFilter, setVegFilter] = useState('All'); // 'All' | 'Veg' | 'NonVeg'
   const [selectedItem, setSelectedItem] = useState(null);
@@ -82,11 +86,23 @@ function FoodlistClient({ searchQuery }) {
 
   const currentUser = localStorage.getItem('user');
 
+  const fetchCart = React.useCallback(() => {
+    if (currentUser) {
+      axiosInstance.get(`/orders/user/details/${currentUser}`)
+        .then(res => setCartItems(res.data || []))
+        .catch(() => {});
+    }
+  }, [currentUser]);
+
   useEffect(() => {
+    setLoading(true);
     axiosInstance.get('/food/fetch')
       .then(res => setFood(res.data))
-      .catch(() => {});
-  }, []);
+      .catch(() => {})
+      .finally(() => setLoading(false));
+
+    fetchCart();
+  }, [currentUser, fetchCart]);
 
   const fetchReviews = (fid) => {
     axiosInstance.get(`/reviews/food/${fid}`)
@@ -164,6 +180,7 @@ function FoodlistClient({ searchQuery }) {
         toast.dismiss(t);
         toast.success(`${modalQty}× ${selectedItem.fname} added! 🛒`);
         setSelectedItem(null);
+        fetchCart(); // Instant UX cart update
       })
       .catch(() => {
         toast.dismiss(t);
@@ -171,8 +188,11 @@ function FoodlistClient({ searchQuery }) {
       });
   };
 
+  const cartTotal = cartItems.reduce((sum, i) => sum + (Number(i.totalprice || i.TOTALPRICE) || 0), 0);
+  const totalItemCount = cartItems.reduce((sum, i) => sum + (Number(i.qty || i.QTY) || 1), 0);
+
   return (
-    <div className="menu-wrapper">
+    <div className="menu-wrapper" style={{ paddingBottom: cartItems.length > 0 ? '120px' : '60px' }}>
       {/* ── Header ── */}
       <div className="menu-header">
         <h2>🍽️ Explore Our Menu</h2>
@@ -217,8 +237,21 @@ function FoodlistClient({ searchQuery }) {
         </div>
       </div>
 
-      {/* ── Card Grid ── */}
-      {filtered.length > 0 ? (
+      {/* ── Card Grid (Skeleton UX vs Product Cards) ── */}
+      {loading ? (
+        <div className="food-grid">
+          {[1, 2, 3, 4, 5, 6].map(n => (
+            <div key={n} className="food-card" style={{ height: '340px', opacity: 0.6, animation: 'pulse 1.5s infinite' }}>
+              <div style={{ height: '180px', backgroundColor: 'var(--input-bg)' }} />
+              <div className="food-card-body" style={{ gap: '12px' }}>
+                <div style={{ height: '20px', width: '70%', backgroundColor: 'var(--border-color)', borderRadius: '6px' }} />
+                <div style={{ height: '14px', width: '40%', backgroundColor: 'var(--border-color)', borderRadius: '6px' }} />
+                <div style={{ height: '30px', width: '100%', backgroundColor: 'var(--border-color)', borderRadius: '6px', marginTop: 'auto' }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : filtered.length > 0 ? (
         <div className="food-grid">
           {filtered.map((item) => (
             <div className="food-card" key={item.fid}>
@@ -262,6 +295,49 @@ function FoodlistClient({ searchQuery }) {
           <div className="emoji">🥺</div>
           <h4>No items found{searchQuery ? ` for "${searchQuery}"` : ''}</h4>
           <p>Try a different category or filter term</p>
+        </div>
+      )}
+
+      {/* ── SHOP.APP FLOATING QUICK CART CAPSULE BAR (UX UPGRADE) ── */}
+      {cartItems.length > 0 && (
+        <div 
+          onClick={() => navigate('/billing')}
+          style={{
+            position: 'fixed',
+            bottom: '25px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+            background: 'var(--primary-gradient)',
+            color: '#ffffff',
+            borderRadius: '100px',
+            padding: '14px 32px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '24px',
+            boxShadow: '0 16px 40px rgba(112, 0, 255, 0.45)',
+            cursor: 'pointer',
+            minWidth: '320px',
+            maxWidth: '90%',
+            animation: 'slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)'
+          }}
+        >
+          <div className="d-flex align-items-center gap-2">
+            <span style={{ fontSize: '1.4rem' }}>🛒</span>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: '0.95rem', lineHeight: 1.1 }}>
+                {totalItemCount} ITEM{totalItemCount > 1 ? 'S' : ''} ADDED
+              </div>
+              <div style={{ fontSize: '0.78rem', opacity: 0.9 }}>
+                Subtotal: ₹{cartTotal.toFixed(2)}
+              </div>
+            </div>
+          </div>
+          <div style={{ fontWeight: 900, fontSize: '0.92rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span>Checkout</span>
+            <span>&rarr;</span>
+          </div>
         </div>
       )}
 
