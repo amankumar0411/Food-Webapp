@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './HeaderNavigation.css';
+import VoiceOrderModal from '../Client/VoiceOrderModal';
 
 export const HeaderNavigationBase = ({ items, brandName, toggleTheme, isDark, searchQuery, setSearchQuery, isHomePage }) => {
     const navigate = useNavigate();
     const [openDropdown, setOpenDropdown] = useState(null);
+    const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
 
     const handleLogout = () => {
         localStorage.removeItem("user");
@@ -19,14 +21,15 @@ export const HeaderNavigationBase = ({ items, brandName, toggleTheme, isDark, se
 
     return (
         <nav className="header-nav">
+            <VoiceOrderModal isOpen={isVoiceModalOpen} onClose={() => setIsVoiceModalOpen(false)} />
             <div className="nav-container">
                 {/* Brand */}
                 <div className="nav-brand" onClick={() => navigate('/')}>
                     <h2>{brandName}</h2>
                 </div>
 
-                {/* Integrated Search Bar */}
-                <div className="nav-search">
+                {/* Integrated Search Bar with Quick Voice Order Mic Button */}
+                <div className="nav-search" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <div className="search-input-wrapper">
                         <span className="search-icon">🔍</span>
                         <input 
@@ -37,6 +40,25 @@ export const HeaderNavigationBase = ({ items, brandName, toggleTheme, isDark, se
                             style={{ position: 'relative', zIndex: 100 }}
                         />
                     </div>
+                    <button 
+                        className="btn btn-warning d-flex align-items-center gap-1"
+                        onClick={() => setIsVoiceModalOpen(true)}
+                        title="Quick Voice Order"
+                        style={{
+                            borderRadius: '16px',
+                            fontWeight: '800',
+                            padding: '8px 14px',
+                            backgroundColor: 'var(--primary-color)',
+                            color: '#fff',
+                            border: 'none',
+                            fontSize: '0.88rem',
+                            whiteSpace: 'nowrap',
+                            boxShadow: '0 4px 12px rgba(226,55,68,0.25)'
+                        }}
+                    >
+                        <span>🎙️</span>
+                        <span className="d-none d-md-inline">Voice Order</span>
+                    </button>
                 </div>
 
                 {/* Nav Items (Bottom Capsule on Mobile) */}
