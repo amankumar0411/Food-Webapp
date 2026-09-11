@@ -48,4 +48,31 @@ public class RegisterService {
         }
         return null;
     }
+
+    public Register updateProfile(String uname, Register updatedDetails) {
+        Register existing = rrepo.findByUname(uname);
+        if (existing != null) {
+            if (updatedDetails.getNm() != null && !updatedDetails.getNm().isBlank()) {
+                existing.setNm(updatedDetails.getNm());
+            }
+            if (updatedDetails.getEmail() != null && !updatedDetails.getEmail().isBlank()) {
+                existing.setEmail(updatedDetails.getEmail());
+            }
+            if (updatedDetails.getPhno() != null && !updatedDetails.getPhno().isBlank()) {
+                existing.setPhno(updatedDetails.getPhno());
+            }
+            return rrepo.save(existing);
+        }
+        return null;
+    }
+
+    public boolean changePassword(String uname, String oldPass, String newPass) {
+        Register existing = rrepo.findByUname(uname);
+        if (existing != null && passwordEncoder.matches(oldPass, existing.getPass())) {
+            existing.setPass(passwordEncoder.encode(newPass));
+            rrepo.save(existing);
+            return true;
+        }
+        return false;
+    }
 }

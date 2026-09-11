@@ -21,6 +21,7 @@ function Nav({ toggleTheme, isDark, searchQuery, setSearchQuery, isHomePage }) {
         { label: "Manage Orders & Status",  href: "/adminorderdtls" },
       ],
     },
+    { label: "My Account", href: "/account" },
   ];
 
   return (

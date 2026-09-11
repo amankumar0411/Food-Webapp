@@ -4,6 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,5 +79,38 @@ public class RegisterController {
         loginAttemptService.recordFailure(ip);       // count failure toward lockout
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("error", "Invalid credentials"));
+    }
+
+    // ── PROFILE ENDPOINTS ─────────────────────────────────────────────────────
+    @GetMapping("/profile/{uname}")
+    public ResponseEntity<?> getProfile(@PathVariable String uname) {
+        Register r = rservice.findByUname(uname);
+        if (r != null) {
+            return ResponseEntity.ok(r);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "User not found"));
+    }
+
+    @PutMapping("/profile/{uname}")
+    public ResponseEntity<?> updateProfile(@PathVariable String uname, @RequestBody Register updatedDetails) {
+        Register r = rservice.updateProfile(uname, updatedDetails);
+        if (r != null) {
+            return ResponseEntity.ok(r);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "User not found"));
+    }
+
+    @PutMapping("/change-password/{uname}")
+    public ResponseEntity<?> changePassword(@PathVariable String uname, @RequestBody Map<String, String> payload) {
+        String oldPass = payload.get("oldPassword");
+        String newPass = payload.get("newPassword");
+        if (oldPass == null || newPass == null || newPass.length() < 6) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Password must be at least 6 characters"));
+        }
+        boolean success = rservice.changePassword(uname, oldPass, newPass);
+        if (success) {
+            return ResponseEntity.ok(Map.of("message", "Password changed successfully"));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Incorrect current password"));
     }
 }

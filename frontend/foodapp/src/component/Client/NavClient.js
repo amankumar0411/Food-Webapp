@@ -5,6 +5,7 @@ function NavClient({ toggleTheme, isDark, searchQuery, setSearchQuery, isHomePag
   const clientItems = [
     { label: "Home", href: "/" },
     { label: "Cart", href: "/addorder" },
+    { label: "My Account", href: "/account" },
   ];
 
   return (

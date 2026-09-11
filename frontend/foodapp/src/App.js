@@ -21,6 +21,8 @@ import Register from './component/Client/Register';
 import Login from './component/Client/Login';
 import MerchantLogin from './component/Client/MerchantLogin';
 import MerchantRegister from './component/Client/MerchantRegister';
+import Account from './component/Client/Account';
+import ProtectedRoute from './component/common/ProtectedRoute';
 import Home from './component/Client/Home';
 
 import { Toaster } from 'react-hot-toast';
@@ -153,6 +155,9 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/merchant/login" element={<MerchantLogin syncAuth={syncAuth} />} />
           <Route path="/merchant/register" element={<MerchantRegister />} />
+
+          {/* AUTHENTICATED USER ROUTES */}
+          <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
 
           {/* 2. MERCHANT / ADMIN ROUTES */}
           {isMerchantOrAdmin && (
