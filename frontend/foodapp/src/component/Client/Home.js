@@ -105,18 +105,18 @@ function Home() {
                             className='btn btn-lg' 
                             onClick={() => navigate('/login')}
                             style={{ 
-                                backgroundColor: 'var(--primary-color)', 
+                                background: 'var(--primary-gradient)', 
                                 color: 'white', 
-                                fontWeight: '700', 
+                                fontWeight: '800', 
                                 padding: '15px 45px',
                                 border: 'none',
                                 borderRadius: '50px',
                                 fontSize: '1.2rem',
-                                boxShadow: '0 10px 20px rgba(226, 55, 68, 0.4)',
-                                transition: 'all 0.3s ease'
+                                boxShadow: '0 12px 30px rgba(112, 0, 255, 0.4)',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px) scale(1.02)'}
+                            onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0) scale(1)'}
                         >
                             Log in
                         </button>
@@ -124,22 +124,22 @@ function Home() {
                             className='btn btn-lg' 
                             onClick={() => navigate('/register')}
                             style={{ 
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+                                backgroundColor: 'rgba(255, 255, 255, 0.08)', 
                                 color: '#ffffff', 
-                                fontWeight: '700', 
+                                fontWeight: '800', 
                                 padding: '15px 45px',
-                                border: '2px solid rgba(255, 255, 255, 0.3)',
+                                border: '1px solid rgba(255, 255, 255, 0.25)',
                                 borderRadius: '50px',
                                 fontSize: '1.2rem',
-                                backdropFilter: 'blur(10px)',
-                                transition: 'all 0.3s ease'
+                                backdropFilter: 'blur(16px)',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                             }}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
                                 e.currentTarget.style.transform = 'translateY(-3px)';
                             }}
                             onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
                                 e.currentTarget.style.transform = 'translateY(0)';
                             }}
                         >
@@ -156,20 +156,20 @@ function Home() {
                                 navigate(isAdmin ? '/foodlist' : '/foodlistclient');
                             }}
                             style={{ 
-                                backgroundColor: 'var(--primary-color)', 
+                                background: 'var(--primary-gradient)', 
                                 color: 'white', 
-                                fontWeight: '700', 
-                                padding: '18px 40px',
+                                fontWeight: '800', 
+                                padding: '18px 45px',
                                 borderRadius: '50px',
                                 border: 'none',
-                                fontSize: '1.1rem',
-                                boxShadow: '0 12px 24px rgba(226, 55, 68, 0.5)',
-                                transition: 'all 0.3s ease'
+                                fontSize: '1.15rem',
+                                boxShadow: '0 14px 32px rgba(112, 0, 255, 0.45)',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px) scale(1.02)'}
+                            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px) scale(1.03)'}
                             onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0) scale(1)'}
                         >
-                            Explore Menu
+                            Explore Menu ✨
                         </button>
                         
                         {/* Mobile Theme Toggle Beside Explore */}
@@ -183,7 +183,6 @@ function Home() {
                             border: '1px solid rgba(255, 255, 255, 0.2)',
                             cursor: 'pointer'
                         }} onClick={() => {
-                            // Find the hidden header button or manually trigger theme change
                             const themeInput = document.querySelector('.theme-switch input');
                             if (themeInput) themeInput.click();
                         }}>

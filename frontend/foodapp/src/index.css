@@ -1,44 +1,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* ZOMATO LIGHT THEME (Default) */
-  --bg-color: #f8f9fa;
-  --text-color: #1c1c1c;
-  --text-muted: #696b79;
-  --label-color: #686b78;
+  /* SHOP.APP LIGHT THEME */
+  --bg-color: #f7f7fa;
   --card-bg: #ffffff;
-  --border-color: #e8ebe9;
-   --bg-color: #ffffff;
-   --card-bg: #ffffff;
-   --text-color: #1c1c1c;
-   --text-muted: #696b79;
-   --label-color: #686b78;
-   --border-color: rgba(0, 0, 0, 0.08);
-   --primary-color: #e23744;
-   --primary-color-rgb: 226, 55, 68;
-   --header-bg: rgba(255, 255, 255, 0.6); /* More transparent for capsule */
-   --input-bg: #ffffff;
-   --input-text: #1c1c1c;
-   --input-placeholder: #a0a0a2;
-   --dot-color: rgba(0, 0, 0, 0.05);
-   --shadow-color: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --text-color: #0c0a1d;
+  --text-muted: #68647d;
+  --label-color: #7b7794;
+  --border-color: rgba(12, 10, 29, 0.08);
+  --primary-color: #5a31f4;
+  --primary-color-rgb: 90, 49, 244;
+  --primary-hover: #451ed9;
+  --primary-gradient: linear-gradient(135deg, #7000ff 0%, #5a31f4 50%, #e23744 100%);
+  --header-bg: rgba(255, 255, 255, 0.75);
+  --input-bg: #ffffff;
+  --input-text: #0c0a1d;
+  --input-placeholder: #948fa8;
+  --dot-color: rgba(90, 49, 244, 0.04);
+  --shadow-color: 0 12px 36px rgba(12, 10, 29, 0.06);
+  --card-border-glow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 [data-theme='dark'] {
-   --bg-color: #0d0d0d;
-   --card-bg: #1a1a1a;
-   --text-color: #f1f1f1;
-   --text-muted: #a0a0a0;
-   --label-color: #8a8a8a;
-   --border-color: rgba(255, 255, 255, 0.1);
-   --primary-color: #e23744;
-   --primary-color-rgb: 226, 55, 68;
-   --header-bg: rgba(26, 26, 26, 0.7);
-   --input-bg: #292929;
-   --input-text: #ffffff;
-   --input-placeholder: #5a5a5a;
-   --dot-color: rgba(255, 255, 255, 0.05);
-   --shadow-color: 0 8px 32px rgba(0, 0, 0, 0.5);
+  /* SHOP.APP DARK THEME (Signature Obsidian Violet) */
+  --bg-color: #0b0914;
+  --card-bg: rgba(22, 17, 43, 0.75);
+  --text-color: #f5f3ff;
+  --text-muted: #9b95b8;
+  --label-color: #837c9f;
+  --border-color: rgba(255, 255, 255, 0.12);
+  --primary-color: #8b5cf6;
+  --primary-color-rgb: 139, 92, 246;
+  --primary-hover: #a78bfa;
+  --primary-gradient: linear-gradient(135deg, #a78bfa 0%, #7000ff 50%, #e23744 100%);
+  --header-bg: rgba(18, 14, 36, 0.75);
+  --input-bg: rgba(30, 23, 56, 0.8);
+  --input-text: #ffffff;
+  --input-placeholder: #6b6387;
+  --dot-color: rgba(255, 255, 255, 0.04);
+  --shadow-color: 0 16px 40px rgba(0, 0, 0, 0.5);
+  --card-border-glow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 html, body, #root, .App {
@@ -55,14 +56,16 @@ html, body, #root, .App {
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* GLOBAL COMPONENT THEME HOOKS */
+/* GLOBAL COMPONENT THEME HOOKS (Shop.app Aesthetics) */
 .card, .modal-content, .bg-white, .shadow-sm, .shadow, .shadow-lg {
   background-color: var(--card-bg) !important;
   color: var(--text-color) !important;
   border-color: var(--border-color) !important;
-  border-radius: 16px !important; /* Zomato Soft Edges */
-  box-shadow: var(--shadow-color) !important; /* Authentic Zomato shadows */
-  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  border-radius: 24px !important; /* Shop.app Soft Curved Edges */
+  box-shadow: var(--shadow-color) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
 }
 
 table {
@@ -76,7 +79,7 @@ table {
 }
 
 .table-hover tbody tr:hover {
-    background-color: var(--shadow-color) !important;
+    background-color: rgba(139, 92, 246, 0.06) !important;
     color: var(--text-color) !important;
 }
 
@@ -84,6 +87,8 @@ table {
   background-color: var(--input-bg) !important;
   color: var(--input-text) !important;
   border-color: var(--border-color) !important;
+  border-radius: 14px !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
 }
 
 .form-control::placeholder {
@@ -95,7 +100,20 @@ table {
   background-color: var(--input-bg) !important;
   color: var(--input-text) !important;
   border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 0.2rem rgba(226, 55, 68, 0.25) !important;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2) !important;
+}
+
+.btn-primary, .btn-warning {
+  background: var(--primary-gradient) !important;
+  border: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(112, 0, 255, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-primary:hover, .btn-warning:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 32px rgba(112, 0, 255, 0.45) !important;
 }
 
 .text-muted {
