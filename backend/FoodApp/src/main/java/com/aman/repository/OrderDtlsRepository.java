@@ -11,6 +11,9 @@ public interface OrderDtlsRepository extends JpaRepository<OrderDtls, Integer> {
     List<OrderDtls> findByUnameOrderByPaymentDateDesc(String uname);
     List<OrderDtls> findAllByOrderByPaymentDateDesc();
 
+    List<OrderDtls> findByOrderStatusInOrderByPaymentDateDesc(List<String> statuses);
+    List<OrderDtls> findByDriverUnameOrderByPaymentDateDesc(String driverUname);
+
     @Query(value = "SELECT * FROM order_dtls ORDER BY payment_date DESC", nativeQuery = true)
     List<java.util.Map<String, Object>> findAllNative();
 

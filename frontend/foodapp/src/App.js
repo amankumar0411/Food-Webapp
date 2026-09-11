@@ -21,6 +21,9 @@ import Register from './component/Client/Register';
 import Login from './component/Client/Login';
 import MerchantLogin from './component/Client/MerchantLogin';
 import MerchantRegister from './component/Client/MerchantRegister';
+import DriverLogin from './component/Client/DriverLogin';
+import DriverRegister from './component/Client/DriverRegister';
+import DriverDashboard from './component/Client/DriverDashboard';
 import Account from './component/Client/Account';
 import ProtectedRoute from './component/common/ProtectedRoute';
 import Home from './component/Client/Home';
@@ -56,6 +59,7 @@ function App() {
   const [role, setRole] = useState(localStorage.getItem("role"));
 
   const isMerchantOrAdmin = auth && role && (role.toLowerCase() === "admin" || role.toLowerCase() === "merchant");
+  const isDriver = auth && role && (role.toLowerCase() === "driver");
 
   // Function to sync auth state from other components
   const syncAuth = () => {
@@ -155,9 +159,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/merchant/login" element={<MerchantLogin syncAuth={syncAuth} />} />
           <Route path="/merchant/register" element={<MerchantRegister />} />
+          <Route path="/driver/login" element={<DriverLogin syncAuth={syncAuth} />} />
+          <Route path="/driver/register" element={<DriverRegister />} />
 
           {/* AUTHENTICATED USER ROUTES */}
           <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
+          <Route path="/driver/dashboard" element={<ProtectedRoute allowedRoles={['driver', 'admin']}><DriverDashboard /></ProtectedRoute>} />
 
           {/* 2. MERCHANT / ADMIN ROUTES */}
           {isMerchantOrAdmin && (
@@ -172,7 +179,7 @@ function App() {
           )}
 
           {/* 3. CLIENT-ONLY ROUTES */}
-          {(auth && !isMerchantOrAdmin) && (
+          {(auth && !isMerchantOrAdmin && !isDriver) && (
             <>
               <Route path="/foodlistclient" element={<FoodListClient searchQuery={searchQuery} />} />
               <Route path="/addorder" element={<AddOrder />} />

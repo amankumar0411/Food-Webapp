@@ -37,6 +37,16 @@ public class OrderDtls {
     @Column(length = 50)
     private String orderStatus = "PAID"; // PAID -> PREPARING -> OUT_FOR_DELIVERY -> DELIVERED -> CANCELLED
 
+    private Double deliveryFee = 25.0;
+    private Double platformFee = 5.0;
+    private Double discountAmount = 0.0;
+    @Column(length = 50)
+    private String couponCode;
+
+    @Column(length = 50)
+    private String driverUname;        // Delivery partner assigned
+    private Double driverEarning = 0.0; // Payout earned by driver for this trip
+
     public OrderDtls() {}
 
     public Integer getId() { return id; }
@@ -90,4 +100,22 @@ public class OrderDtls {
 
     public String getOrderStatus() { return orderStatus; }
     public void setOrderStatus(String orderStatus) { this.orderStatus = orderStatus; }
+
+    public Double getDeliveryFee() { return deliveryFee; }
+    public void setDeliveryFee(Double deliveryFee) { this.deliveryFee = deliveryFee; }
+
+    public Double getPlatformFee() { return platformFee; }
+    public void setPlatformFee(Double platformFee) { this.platformFee = platformFee; }
+
+    public Double getDiscountAmount() { return discountAmount; }
+    public void setDiscountAmount(Double discountAmount) { this.discountAmount = discountAmount; }
+
+    public String getCouponCode() { return couponCode; }
+    public void setCouponCode(String couponCode) { this.couponCode = couponCode; }
+
+    public String getDriverUname() { return driverUname; }
+    public void setDriverUname(String driverUname) { this.driverUname = driverUname; }
+
+    public Double getDriverEarning() { return driverEarning; }
+    public void setDriverEarning(Double driverEarning) { this.driverEarning = driverEarning; }
 }

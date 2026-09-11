@@ -63,6 +63,9 @@ public class SecurityConfig {
                 auth.requestMatchers("/orders/all").hasAnyRole("ADMIN", "MERCHANT");
                 auth.requestMatchers("/order-dtls/all", "/order-dtls/status/**").hasAnyRole("ADMIN", "MERCHANT");
 
+                // Driver endpoints
+                auth.requestMatchers("/order-dtls/driver/**").hasAnyRole("ADMIN", "MERCHANT", "DRIVER");
+
                 // Medium #10 — Swagger only accessible when SWAGGER_ENABLED=true env var is set
                 if (swaggerEnabled) {
                     auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();

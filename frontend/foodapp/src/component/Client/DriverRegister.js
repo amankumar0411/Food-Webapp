@@ -4,24 +4,24 @@ import Particles from '../common/Particles';
 import axiosInstance from '../../api/axiosInstance';
 import toast from 'react-hot-toast';
 
-function Register() {
+function DriverRegister() {
     const navigate = useNavigate();
-    let [user, setUser] = useState({ 
+    const [user, setUser] = useState({ 
         uname: "", 
         pass: "", 
         nm: "", 
         email: "", 
         phno: "",
-        role: "user"
+        role: "driver"
     });
 
     const addData = () => {
-        const loadingToast = toast.loading("Creating your account...");
+        const loadingToast = toast.loading("Creating Delivery Partner account...");
         axiosInstance.post("/register/add", user)
-            .then((res) => {
+            .then(() => {
                 toast.dismiss(loadingToast);
-                toast.success("Registration Successful! Please Login.");
-                navigate('/login');
+                toast.success("Delivery Account Created! Please Sign In.");
+                navigate('/driver/login');
             })
             .catch(() => {
                 toast.dismiss(loadingToast);
@@ -40,10 +40,9 @@ function Register() {
             backgroundColor: 'var(--bg-color)',
             padding: '40px 20px' 
         }}>
-            {/* Background Particles Layer */}
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
                 <Particles
-                    particleColors={["#e23744", "#6c757d"]}
+                    particleColors={["#f59e0b", "#d97706", "#6c757d"]}
                     particleCount={180}
                     particleSpread={15}
                     speed={0.4}
@@ -55,17 +54,20 @@ function Register() {
             </div>
 
             <div className="container p-5 shadow-sm" style={{ 
-                maxWidth: "450px", 
+                maxWidth: "460px", 
                 width: "90%", 
                 backgroundColor: 'var(--card-bg)',
                 borderRadius: '24px',
-                border: '1px solid var(--border-color)',
+                border: '1px solid #f59e0b',
                 zIndex: 2,
                 position: 'relative'
             }}>
-                <h2 style={{ fontWeight: '800', marginBottom: '5px', color: 'var(--text-color)', letterSpacing: '-0.5px' }}>Customer Sign up</h2>
-                <p style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: '500', marginBottom: '30px' }}>
-                    or <a href="/login" style={{ textDecoration: 'none', color: 'var(--primary-color)' }}>log in to your account</a>
+                <div className="d-flex align-items-center gap-2 mb-2">
+                    <span style={{ fontSize: '26px' }}>🛵</span>
+                    <h2 style={{ fontWeight: '800', marginBottom: 0, color: 'var(--text-color)', letterSpacing: '-0.5px' }}>Delivery Partner</h2>
+                </div>
+                <p style={{ fontSize: '13px', color: '#f59e0b', fontWeight: 'bold', marginBottom: '25px' }}>
+                    Join our delivery fleet & earn per delivery
                 </p>
 
                 <div className="mb-2">
@@ -73,7 +75,7 @@ function Register() {
                         type="text" 
                         className="form-control" 
                         style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
-                        placeholder="Username" 
+                        placeholder="Driver Username" 
                         value={user.uname}
                         onChange={(e) => setUser({...user, uname: e.target.value})} 
                     />
@@ -103,7 +105,7 @@ function Register() {
                         type="email" 
                         className="form-control" 
                         style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
-                        placeholder="Email" 
+                        placeholder="Email Address" 
                         value={user.email}
                         onChange={(e) => setUser({...user, email: e.target.value})} 
                     />
@@ -113,7 +115,7 @@ function Register() {
                         type="text" 
                         className="form-control" 
                         style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
-                        placeholder="Phone Number" 
+                        placeholder="Mobile Phone Number" 
                         value={user.phno}
                         onChange={(e) => setUser({...user, phno: e.target.value})} 
                     />
@@ -123,66 +125,28 @@ function Register() {
                     className="btn w-100" 
                     onClick={addData}
                     style={{ 
-                        backgroundColor: 'var(--primary-color)', 
+                        backgroundColor: '#f59e0b', 
                         color: 'white', 
-                        fontWeight: '600', 
+                        fontWeight: '700', 
                         height: '52px',
                         borderRadius: '12px',
-                        fontSize: '1.1rem',
-                        marginTop: '5px'
+                        fontSize: '1.1rem'
                     }}
                 >
-                    Create Customer Account
+                    Register Delivery Partner
                 </button>
                 
-                <p style={{ fontSize: '11px', color: 'var(--label-color)', marginTop: '15px', textAlign: 'center' }}>
-                    By creating an account, I accept the Terms & Conditions & Privacy Policy
-                </p>
-
-                {/* Bottom Merchant & Delivery Partner Banners */}
-                <div style={{
-                    marginTop: '25px',
-                    paddingTop: '20px',
-                    borderTop: '1px solid var(--border-color)',
-                    textAlign: 'center'
-                }}>
+                <div style={{ marginTop: '20px', textAlign: 'center' }}>
                     <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                        Want to list your restaurant on FoodApp?
+                        Already registered? <a href="/driver/login" style={{ color: '#f59e0b', fontWeight: '700', textDecoration: 'none' }}>Sign In here</a>
                     </p>
-                    <a 
-                        href="/merchant/register" 
-                        style={{ 
-                            color: '#10b981', 
-                            fontWeight: '700', 
-                            textDecoration: 'none',
-                            fontSize: '14px',
-                            display: 'block',
-                            marginBottom: '12px'
-                        }}
-                    >
-                        Sign up as a Merchant Partner &rarr;
+                    <a href="/login" style={{ fontSize: '12px', color: 'var(--text-muted)', textDecoration: 'none' }}>
+                        &larr; Switch to Customer Portal
                     </a>
-
-                    <div style={{ paddingTop: '10px', borderTop: '1px dashed var(--border-color)' }}>
-                        <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                            Want to earn as a Delivery Fleet Rider? 🛵
-                        </p>
-                        <a 
-                            href="/driver/register" 
-                            style={{ 
-                                color: 'var(--primary-color)', 
-                                fontWeight: '700', 
-                                textDecoration: 'none',
-                                fontSize: '14px'
-                            }}
-                        >
-                            Sign up as a Delivery Partner &rarr;
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
     );
 }
 
-export default Register;
+export default DriverRegister;

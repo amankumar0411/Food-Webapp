@@ -54,4 +54,26 @@ public class OrderDtlsController {
         String status = payload.get("orderStatus");
         return service.updateOrderStatus(id, status);
     }
+
+    // ── DELIVERY PARTNER (DRIVER) ENDPOINTS ───────────────────────────────────
+    @GetMapping("/driver/available")
+    public List<OrderDtls> getAvailableDriverOrders() {
+        return service.getAvailableDriverOrders();
+    }
+
+    @PutMapping("/driver/accept/{id}")
+    public OrderDtls acceptOrderForDelivery(@PathVariable Integer id, @RequestBody Map<String, String> payload) {
+        String driverUname = payload.get("driverUname");
+        return service.acceptOrderForDelivery(id, driverUname);
+    }
+
+    @PutMapping("/driver/deliver/{id}")
+    public OrderDtls deliverOrder(@PathVariable Integer id) {
+        return service.deliverOrder(id);
+    }
+
+    @GetMapping("/driver/earnings/{driverUname}")
+    public Map<String, Object> getDriverEarnings(@PathVariable String driverUname) {
+        return service.getDriverEarnings(driverUname);
+    }
 }

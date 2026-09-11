@@ -16,6 +16,12 @@ function Billing() {
     const [paymentMethod, setPaymentMethod] = useState("UPI");
     const [notes, setNotes] = useState("");
 
+    // Swiggy Billing & Coupon States
+    const [couponInput, setCouponInput] = useState("");
+    const [appliedCoupon, setAppliedCoupon] = useState(null);
+    const [discountAmount, setDiscountAmount] = useState(0);
+    const [isVipMember, setIsVipMember] = useState(false);
+
     const uname = localStorage.getItem("user");
 
     useEffect(() => {
@@ -31,10 +37,46 @@ function Billing() {
         }
     }, [uname]);
 
-    // Calculate Grand Total 
-    const grandTotal = invoices.reduce((sum, item) => {
+    // Swiggy Fee Structure Calculations
+    const itemTotal = invoices.reduce((sum, item) => {
         return sum + (Number(item.totalprice) || Number(item.TOTALPRICE) || 0);
     }, 0);
+
+    const platformFee = itemTotal > 0 ? 5.00 : 0.00;
+    const deliveryFee = itemTotal > 0 ? (isVipMember ? 0.00 : 25.00) : 0.00;
+    const vipPassFee = isVipMember ? 49.00 : 0.00;
+
+    // Apply Coupon Logic
+    const handleApplyCoupon = (codeToApply) => {
+        const code = (codeToApply || couponInput).trim().toUpperCase();
+        if (!code) {
+            toast.error("Please enter a coupon code.");
+            return;
+        }
+
+        if (code === "SWIGGY50") {
+            const disc = Math.min(itemTotal * 0.5, 100);
+            setDiscountAmount(disc);
+            setAppliedCoupon("SWIGGY50");
+            toast.success("Coupon SWIGGY50 applied! Saved ₹" + disc.toFixed(2));
+        } else if (code === "WELCOME100") {
+            const disc = Math.min(100, itemTotal);
+            setDiscountAmount(disc);
+            setAppliedCoupon("WELCOME100");
+            toast.success("Coupon WELCOME100 applied! Saved ₹" + disc.toFixed(2));
+        } else {
+            toast.error("Invalid coupon code. Try SWIGGY50 or WELCOME100.");
+        }
+    };
+
+    const handleRemoveCoupon = () => {
+        setAppliedCoupon(null);
+        setDiscountAmount(0);
+        setCouponInput("");
+        toast("Coupon removed");
+    };
+
+    const grandTotal = Math.max(0, itemTotal + platformFee + deliveryFee + vipPassFee - discountAmount);
 
     const handlePayment = async () => {
         if (!deliveryAddress.trim()) {
@@ -60,6 +102,10 @@ function Billing() {
                 qty:             Number(item.qty             || item.QTY)             || 1,
                 unitPrice:       Number(item.fprice          || item.FPRICE)          || 0,
                 totalPrice:      Number(item.totalprice      || item.TOTALPRICE)      || 0,
+                deliveryFee:     deliveryFee,
+                platformFee:     platformFee,
+                discountAmount:  discountAmount,
+                couponCode:      appliedCoupon || '',
                 grandTotal:      grandTotal,
                 deliveryAddress: deliveryAddress,
                 phoneNumber:     phoneNumber,
@@ -151,6 +197,73 @@ function Billing() {
                     </div>
                 </div>
 
+                {/* Swiggy Offers & VIP Membership Section */}
+                <div className="row g-3 mb-4">
+                    {/* Coupons Box */}
+                    <div className="col-md-6">
+                        <div className="p-3 rounded-4" style={{ border: '1px dashed var(--primary-color)', backgroundColor: 'rgba(226,55,68,0.04)' }}>
+                            <h6 className="fw-bold mb-2" style={{ color: 'var(--text-color)' }}>🏷️ Coupons & Offers</h6>
+                            {appliedCoupon ? (
+                                <div className="d-flex justify-content-between align-items-center bg-white p-2 rounded-3 border">
+                                    <div>
+                                        <span className="badge bg-success me-2">{appliedCoupon}</span>
+                                        <span className="small text-success fw-bold">Saved ₹{discountAmount.toFixed(2)}</span>
+                                    </div>
+                                    <button className="btn btn-sm btn-outline-danger" onClick={handleRemoveCoupon}>Remove</button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <div className="input-group mb-2">
+                                        <input 
+                                            type="text" 
+                                            className="form-control" 
+                                            placeholder="Enter Coupon (e.g. SWIGGY50)"
+                                            value={couponInput}
+                                            onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                                            style={{ borderRadius: '8px 0 0 8px' }}
+                                        />
+                                        <button className="btn btn-danger fw-bold" onClick={() => handleApplyCoupon()}>Apply</button>
+                                    </div>
+                                    <div className="d-flex gap-2">
+                                        <button className="btn btn-sm btn-light border fw-bold text-danger" onClick={() => handleApplyCoupon("SWIGGY50")}>
+                                            🔥 SWIGGY50 (50% OFF)
+                                        </button>
+                                        <button className="btn btn-sm btn-light border fw-bold text-primary" onClick={() => handleApplyCoupon("WELCOME100")}>
+                                            🎉 WELCOME100 (₹100 OFF)
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* FoodApp One Membership Box */}
+                    <div className="col-md-6">
+                        <div className="p-3 rounded-4" style={{ border: '1px solid #f59e0b', backgroundColor: '#fffbe8' }}>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 className="fw-bold mb-1" style={{ color: '#b45309' }}>⭐ FoodApp One VIP Pass</h6>
+                                    <p className="small text-muted mb-0">Get FREE Delivery on all orders for ₹49/mo!</p>
+                                </div>
+                                <div className="form-check form-switch">
+                                    <input 
+                                        className="form-check-input" 
+                                        type="checkbox" 
+                                        role="switch" 
+                                        id="vipSwitch"
+                                        checked={isVipMember}
+                                        onChange={(e) => {
+                                            setIsVipMember(e.target.checked);
+                                            if (e.target.checked) toast.success("FoodApp One VIP Pass Added! Free Delivery unlocked 🎉");
+                                        }}
+                                        style={{ width: '45px', height: '22px', cursor: 'pointer' }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {loading ? (
                     <div className="text-center py-5">
                         <div className="spinner-border text-warning" role="status"></div>
@@ -190,8 +303,36 @@ function Billing() {
                             {invoices.length > 0 && (
                                 <tfoot>
                                     <tr>
-                                        <td colSpan="4" className="text-end fw-bold" style={{ backgroundColor: 'var(--header-bg)', color: 'var(--text-color)' }}>GRAND TOTAL:</td>
-                                        <td className="text-end fw-bold text-danger" style={{ fontSize: '1.4rem', backgroundColor: 'var(--header-bg)' }}>
+                                        <td colSpan="4" className="text-end fw-bold" style={{ backgroundColor: 'var(--header-bg)', color: 'var(--text-color)' }}>Items Total:</td>
+                                        <td className="text-end fw-bold" style={{ backgroundColor: 'var(--header-bg)' }}>₹{itemTotal.toFixed(2)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan="4" className="text-end text-muted small">Platform Fee:</td>
+                                        <td className="text-end text-muted small">₹{platformFee.toFixed(2)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan="4" className="text-end text-muted small">
+                                            Delivery Partner Fee: {isVipMember && <span className="badge bg-success ms-1">FREE with VIP</span>}
+                                        </td>
+                                        <td className="text-end text-muted small">
+                                            {deliveryFee === 0 ? <s className="text-muted">₹25.00</s> : `₹${deliveryFee.toFixed(2)}`}
+                                        </td>
+                                    </tr>
+                                    {isVipMember && (
+                                        <tr>
+                                            <td colSpan="4" className="text-end text-warning fw-bold small">FoodApp One VIP Pass Subscription:</td>
+                                            <td className="text-end text-warning fw-bold small">₹49.00</td>
+                                        </tr>
+                                    )}
+                                    {discountAmount > 0 && (
+                                        <tr>
+                                            <td colSpan="4" className="text-end text-success fw-bold">Coupon Discount ({appliedCoupon}):</td>
+                                            <td className="text-end text-success fw-bold">- ₹{discountAmount.toFixed(2)}</td>
+                                        </tr>
+                                    )}
+                                    <tr>
+                                        <td colSpan="4" className="text-end fw-bold fs-5" style={{ backgroundColor: 'var(--header-bg)', color: 'var(--text-color)' }}>FINAL GRAND TOTAL:</td>
+                                        <td className="text-end fw-bold text-danger fs-4" style={{ backgroundColor: 'var(--header-bg)' }}>
                                             ₹{grandTotal.toFixed(2)}
                                         </td>
                                     </tr>

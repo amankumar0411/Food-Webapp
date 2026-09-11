@@ -325,13 +325,27 @@ function Account() {
           ) : (
             <div style={{ display: 'grid', gap: '16px' }}>
               {userOrders.map((ord, idx) => {
-                const status = ord.orderStatus || ord.order_status || ord.paymentStatus || 'PAID';
+                const status = (ord.orderStatus || ord.order_status || ord.paymentStatus || 'PAID').toUpperCase();
                 const address = ord.deliveryAddress || ord.delivery_address || 'Standard Address';
                 const date = ord.paymentDate || ord.payment_date;
+                const driver = ord.driverUname || ord.driver_uname;
+
+                // Step status mapper (1 to 4)
+                let currentStep = 1;
+                if (status === 'PREPARING') currentStep = 2;
+                if (status === 'OUT_FOR_DELIVERY') currentStep = 3;
+                if (status === 'DELIVERED') currentStep = 4;
+
+                const steps = [
+                  { label: 'Order Placed', icon: '🧾' },
+                  { label: 'Preparing Food', icon: '🍳' },
+                  { label: 'Out for Delivery', icon: '🛵' },
+                  { label: 'Delivered', icon: '🎉' }
+                ];
 
                 return (
                   <div key={ord.id || ord.ID || idx} style={{ background: 'var(--card-bg)', borderRadius: '20px', padding: '24px', border: '1px solid var(--border-color)', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px', marginBottom: '16px' }}>
                       <div>
                         <h5 style={{ fontWeight: 800, color: 'var(--text-color)', margin: 0 }}>
                           {ord.fname || ord.FNAME} <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>× {ord.qty || ord.QTY}</span>
@@ -344,6 +358,75 @@ function Account() {
                         {getStatusBadge(status)}
                       </div>
                     </div>
+
+                    {/* LIVE 4-STAGE DELIVERY TRACKER STEPPER */}
+                    {status !== 'CANCELLED' ? (
+                      <div style={{ margin: '20px 0', padding: '16px', background: 'var(--input-bg)', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', alignItems: 'center' }}>
+                          {/* Connecting Line */}
+                          <div style={{
+                            position: 'absolute',
+                            top: '18px',
+                            left: '5%',
+                            right: '5%',
+                            height: '4px',
+                            background: '#e5e7eb',
+                            zIndex: 1
+                          }} />
+                          <div style={{
+                            position: 'absolute',
+                            top: '18px',
+                            left: '5%',
+                            width: `${((currentStep - 1) / (steps.length - 1)) * 90}%`,
+                            height: '4px',
+                            background: 'var(--primary-color)',
+                            transition: 'width 0.4s ease',
+                            zIndex: 2
+                          }} />
+
+                          {steps.map((st, sIdx) => {
+                            const stepNum = sIdx + 1;
+                            const isCompleted = stepNum <= currentStep;
+                            const isCurrent = stepNum === currentStep;
+
+                            return (
+                              <div key={sIdx} style={{ zIndex: 3, textAlign: 'center', flex: 1 }}>
+                                <div style={{
+                                  width: '36px',
+                                  height: '36px',
+                                  borderRadius: '50%',
+                                  background: isCompleted ? 'var(--primary-color)' : '#fff',
+                                  color: isCompleted ? '#fff' : '#6b7280',
+                                  border: `3px solid ${isCompleted ? 'var(--primary-color)' : '#d1d5db'}`,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  margin: '0 auto 6px',
+                                  fontWeight: 'bold',
+                                  fontSize: '14px',
+                                  boxShadow: isCurrent ? '0 0 0 4px rgba(226,55,68,0.2)' : 'none',
+                                  transition: 'all 0.3s ease'
+                                }}>
+                                  {st.icon}
+                                </div>
+                                <div style={{ fontSize: '0.75rem', fontWeight: isCurrent ? '800' : '600', color: isCurrent ? 'var(--primary-color)' : 'var(--text-color)' }}>
+                                  {st.label}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        {driver && (
+                          <div style={{ marginTop: '12px', textAlign: 'center', fontSize: '0.82rem', color: '#047857', fontWeight: '700', background: '#d1fae5', padding: '6px 12px', borderRadius: '10px' }}>
+                            🛵 Delivery Partner <strong>@{driver}</strong> is assigned to your order
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="alert alert-danger my-3 py-2 small fw-bold text-center">
+                        This order was cancelled.
+                      </div>
+                    )}
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-color)', paddingTop: '12px', flexWrap: 'wrap', gap: '10px' }}>
                       <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>

@@ -18,12 +18,12 @@ public class RegisterService {
 	public void addData(Register r) {
         // Always hash the password before saving
         r.setPass(passwordEncoder.encode(r.getPass()));
-        // Accept custom role if valid ("user" or "admin"), otherwise default to "user"
+        // Accept valid roles: "user", "admin", "merchant", "driver"
         if (r.getRole() == null || r.getRole().isBlank()) {
             r.setRole("user");
         } else {
             String requestedRole = r.getRole().trim().toLowerCase();
-            if (requestedRole.equals("admin") || requestedRole.equals("user")) {
+            if (requestedRole.equals("admin") || requestedRole.equals("merchant") || requestedRole.equals("driver") || requestedRole.equals("user")) {
                 r.setRole(requestedRole);
             } else {
                 r.setRole("user");

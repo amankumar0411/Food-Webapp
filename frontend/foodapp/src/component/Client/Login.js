@@ -121,27 +121,35 @@ function Login({ syncAuth }) {
                     Don't have an account? <a href="/register" style={{ color: 'var(--primary-color)', fontWeight: '600', textDecoration: 'none' }}>Sign up</a>
                 </p>
 
-                {/* Bottom Merchant Banner */}
+                {/* Bottom Merchant & Driver Banners */}
                 <div style={{
                     marginTop: '25px',
                     paddingTop: '20px',
                     borderTop: '1px solid var(--border-color)',
                     textAlign: 'center'
                 }}>
-                    <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                        Are you a Restaurant Partner?
-                    </p>
-                    <a 
-                        href="/merchant/login" 
-                        style={{ 
-                            color: '#10b981', 
-                            fontWeight: '700', 
-                            textDecoration: 'none',
-                            fontSize: '14px'
-                        }}
-                    >
-                        Access Merchant Portal &rarr;
-                    </a>
+                    <div className="mb-3">
+                        <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                            Are you a Restaurant Partner?
+                        </p>
+                        <a 
+                            href="/merchant/login" 
+                            style={{ color: '#10b981', fontWeight: '700', textDecoration: 'none', fontSize: '14px' }}
+                        >
+                            Access Merchant Portal &rarr;
+                        </a>
+                    </div>
+                    <div>
+                        <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                            Want to deliver food & earn with us?
+                        </p>
+                        <a 
+                            href="/driver/login" 
+                            style={{ color: '#f59e0b', fontWeight: '700', textDecoration: 'none', fontSize: '14px' }}
+                        >
+                            Access Delivery Partner Portal &rarr;
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
