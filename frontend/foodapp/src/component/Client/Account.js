@@ -7,7 +7,7 @@ function Account() {
   const userRole = localStorage.getItem('role');
 
   const [activeTab, setActiveTab] = useState('profile'); // 'profile' | 'security' | 'orders'
-  
+
   // Profile State
   const [profile, setProfile] = useState({ uname: '', nm: '', email: '', phno: '', role: '' });
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -42,7 +42,7 @@ function Account() {
         .then(res => {
           setUserOrders(res.data || []);
         })
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => setLoadingOrders(false));
     }
   }, [currentUser]);
@@ -146,7 +146,7 @@ function Account() {
 
       {/* Navigation Tabs */}
       <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
-        <button 
+        <button
           onClick={() => setActiveTab('profile')}
           style={{
             padding: '12px 24px', borderRadius: '14px',
@@ -158,7 +158,7 @@ function Account() {
           👤 Profile Details
         </button>
 
-        <button 
+        <button
           onClick={() => setActiveTab('security')}
           style={{
             padding: '12px 24px', borderRadius: '14px',
@@ -170,7 +170,7 @@ function Account() {
           🔒 Security
         </button>
 
-        <button 
+        <button
           onClick={() => { setActiveTab('orders'); fetchUserOrders(); }}
           style={{
             padding: '12px 24px', borderRadius: '14px',
@@ -179,7 +179,7 @@ function Account() {
             fontWeight: '700', cursor: 'pointer', border: '1px solid var(--border-color)'
           }}
         >
-          📦 My Orders & Live Tracker
+          My Orders
         </button>
       </div>
 
@@ -193,51 +193,51 @@ function Account() {
             <form onSubmit={handleUpdateProfile} style={{ maxWidth: '600px' }}>
               <div className="mb-3">
                 <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--label-color)' }}>USERNAME (Read-only)</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={profile.uname} 
-                  disabled 
-                  style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }} 
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profile.uname}
+                  disabled
+                  style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }}
                 />
               </div>
 
               <div className="mb-3">
                 <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--label-color)' }}>FULL NAME</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={profile.nm || ''} 
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profile.nm || ''}
                   onChange={e => setProfile({ ...profile, nm: e.target.value })}
-                  style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }} 
+                  style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }}
                 />
               </div>
 
               <div className="mb-3">
                 <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--label-color)' }}>EMAIL ADDRESS</label>
-                <input 
-                  type="email" 
-                  className="form-control" 
-                  value={profile.email || ''} 
+                <input
+                  type="email"
+                  className="form-control"
+                  value={profile.email || ''}
                   onChange={e => setProfile({ ...profile, email: e.target.value })}
-                  style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }} 
+                  style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }}
                 />
               </div>
 
               <div className="mb-4">
                 <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--label-color)' }}>PHONE NUMBER</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={profile.phno || ''} 
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profile.phno || ''}
                   onChange={e => setProfile({ ...profile, phno: e.target.value })}
-                  style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }} 
+                  style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }}
                 />
               </div>
 
-              <button 
-                type="submit" 
-                disabled={updatingProfile} 
+              <button
+                type="submit"
+                disabled={updatingProfile}
                 className="btn px-4 py-3 fw-bold"
                 style={{ backgroundColor: 'var(--primary-color)', color: '#fff', borderRadius: '12px' }}
               >
@@ -255,43 +255,43 @@ function Account() {
           <form onSubmit={handleChangePassword} style={{ maxWidth: '600px' }}>
             <div className="mb-3">
               <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--label-color)' }}>CURRENT PASSWORD</label>
-              <input 
-                type="password" 
-                className="form-control" 
-                value={passwords.oldPassword} 
+              <input
+                type="password"
+                className="form-control"
+                value={passwords.oldPassword}
                 onChange={e => setPasswords({ ...passwords, oldPassword: e.target.value })}
                 required
-                style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }} 
+                style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }}
               />
             </div>
 
             <div className="mb-3">
               <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--label-color)' }}>NEW PASSWORD</label>
-              <input 
-                type="password" 
-                className="form-control" 
-                value={passwords.newPassword} 
+              <input
+                type="password"
+                className="form-control"
+                value={passwords.newPassword}
                 onChange={e => setPasswords({ ...passwords, newPassword: e.target.value })}
                 required
-                style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }} 
+                style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }}
               />
             </div>
 
             <div className="mb-4">
               <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--label-color)' }}>CONFIRM NEW PASSWORD</label>
-              <input 
-                type="password" 
-                className="form-control" 
-                value={passwords.confirmPassword} 
+              <input
+                type="password"
+                className="form-control"
+                value={passwords.confirmPassword}
                 onChange={e => setPasswords({ ...passwords, confirmPassword: e.target.value })}
                 required
-                style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }} 
+                style={{ height: '50px', borderRadius: '12px', backgroundColor: 'var(--input-bg)' }}
               />
             </div>
 
-            <button 
-              type="submit" 
-              disabled={changingPass} 
+            <button
+              type="submit"
+              disabled={changingPass}
               className="btn px-4 py-3 fw-bold"
               style={{ backgroundColor: 'var(--primary-color)', color: '#fff', borderRadius: '12px' }}
             >
@@ -301,7 +301,7 @@ function Account() {
         </div>
       )}
 
-      {/* TAB 3: MY ORDERS & LIVE TRACKER */}
+      {/* TAB 3: MY ORDERS  */}
       {activeTab === 'orders' && (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
