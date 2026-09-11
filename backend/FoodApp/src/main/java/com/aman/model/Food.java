@@ -22,6 +22,11 @@ public class Food {
     @Column(length = 500)
     private String imageUrl; // Custom image URL set by admin
 
+    @Column(length = 50)
+    private String category = "Main Course"; // Default category
+
+    private Boolean isVeg = true; // Default to true
+
     public Food() { super(); }
 
     public Food(String fid, String fname, Double price, String imageUrl) {
@@ -30,6 +35,16 @@ public class Food {
         this.fname = fname;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public Food(String fid, String fname, Double price, String imageUrl, String category, Boolean isVeg) {
+        super();
+        this.fid = fid;
+        this.fname = fname;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category != null ? category : "Main Course";
+        this.isVeg = isVeg != null ? isVeg : true;
     }
 
     public String getFid() { return fid; }
@@ -44,8 +59,14 @@ public class Food {
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+
+    public Boolean getIsVeg() { return isVeg; }
+    public void setIsVeg(Boolean isVeg) { this.isVeg = isVeg; }
+
     @Override
     public String toString() {
-        return "Food [fid=" + fid + ", fname=" + fname + ", price=" + price + ", imageUrl=" + imageUrl + "]";
+        return "Food [fid=" + fid + ", fname=" + fname + ", price=" + price + ", imageUrl=" + imageUrl + ", category=" + category + ", isVeg=" + isVeg + "]";
     }
 }

@@ -8,9 +8,13 @@ function Billing() {
     const [invoices, setInvoices] = useState([]);
     const [loading, setLoading] = useState(true);
     
-    // Payment Gateway States
+    // Payment & Checkout States
     const [isPaying, setIsPaying] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState("confirm"); // 'confirm' | 'processing' | 'success' | 'error'
+    const [deliveryAddress, setDeliveryAddress] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState("UPI");
+    const [notes, setNotes] = useState("");
 
     const uname = localStorage.getItem("user");
 
@@ -18,12 +22,10 @@ function Billing() {
         if (uname) {
             axiosInstance.get(`/orders/user/details/${uname}`)
                 .then((res) => {
-
                     setInvoices(res.data);
                     setLoading(false);
                 })
-                .catch((err) => {
-
+                .catch(() => {
                     setLoading(false);
                 });
         }
@@ -34,26 +36,39 @@ function Billing() {
         return sum + (Number(item.totalprice) || Number(item.TOTALPRICE) || 0);
     }, 0);
 
-    // Mock Zomato Payment Gateway & Cart Clearance
     const handlePayment = async () => {
+        if (!deliveryAddress.trim()) {
+            toast.error("Please enter a valid delivery address.");
+            return;
+        }
+        if (!phoneNumber.trim()) {
+            toast.error("Please enter a contact phone number.");
+            return;
+        }
+
         setPaymentStatus("processing");
-        const loadingToast = toast.loading("Connecting to payment gateway...");
+        const loadingToast = toast.loading("Processing order & payment...");
         
         try {
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
             // 1. Build order_dtls payload — one entry per cart line
             const orderDtlsPayload = invoices.map(item => ({
-                uname:      item.uname      || item.UNAME      || uname,
-                fid:        item.fid        || item.FID        || '',
-                fname:      item.fname      || item.FNAME      || '',
-                qty:        Number(item.qty        || item.QTY)        || 1,
-                unitPrice:  Number(item.fprice     || item.FPRICE)     || 0,
-                totalPrice: Number(item.totalprice || item.TOTALPRICE) || 0,
-                grandTotal: grandTotal,
+                uname:           item.uname           || item.UNAME           || uname,
+                fid:             item.fid             || item.FID             || '',
+                fname:           item.fname           || item.FNAME           || '',
+                qty:             Number(item.qty             || item.QTY)             || 1,
+                unitPrice:       Number(item.fprice          || item.FPRICE)          || 0,
+                totalPrice:      Number(item.totalprice      || item.TOTALPRICE)      || 0,
+                grandTotal:      grandTotal,
+                deliveryAddress: deliveryAddress,
+                phoneNumber:     phoneNumber,
+                paymentMethod:   paymentMethod,
+                notes:           notes,
+                orderStatus:     "PAID"
             }));
 
-            // 2. Persist to order_dtls table (required — must succeed before clearing cart)
+            // 2. Persist to order_dtls table
             await axiosInstance.post("/order-dtls/save", orderDtlsPayload);
 
             // 3. Clear cart (delete from order_table)
@@ -64,7 +79,7 @@ function Billing() {
             );
             
             toast.dismiss(loadingToast);
-            toast.success("Payment Received! Order Placed. 🎉");
+            toast.success("Order Placed Successfully! 🎉");
             setPaymentStatus("success");
             
             setTimeout(() => {
@@ -89,12 +104,50 @@ function Billing() {
             <div className="container p-5 shadow-sm" style={{ borderRadius: '24px', backgroundColor: 'var(--card-bg)', maxWidth: '900px' }}>
                 <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                     <div>
-                        <h2 style={{ fontWeight: '800', color: 'var(--text-color)', margin: 0 }}>FINAL BILL</h2>
+                        <h2 style={{ fontWeight: '800', color: 'var(--text-color)', margin: 0 }}>FINAL BILL & CHECKOUT</h2>
                         <p className="text-muted small">Invoice Generated on {new Date().toLocaleDateString()}</p>
                     </div>
                     <div className="text-end">
                         <p className="m-0 text-muted" style={{ fontSize: '12px' }}>CUSTOMER</p>
                         <h5 className="fw-bold m-0" style={{ color: 'var(--primary-color)' }}>{uname?.toUpperCase()}</h5>
+                    </div>
+                </div>
+
+                {/* Delivery Information Section */}
+                <div className="mb-4 p-4 rounded-4" style={{ border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}>
+                    <h5 className="fw-bold mb-3" style={{ color: 'var(--text-color)' }}>📍 Delivery & Contact Details</h5>
+                    <div className="row g-3">
+                        <div className="col-md-6">
+                            <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--label-color)' }}>DELIVERY ADDRESS *</label>
+                            <textarea 
+                                className="form-control" 
+                                rows="2" 
+                                placeholder="House / Flat No., Street, City, Pincode"
+                                value={deliveryAddress}
+                                onChange={(e) => setDeliveryAddress(e.target.value)}
+                                style={{ borderRadius: '12px', border: '1px solid var(--border-color)' }}
+                            />
+                        </div>
+                        <div className="col-md-6">
+                            <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--label-color)' }}>PHONE NUMBER *</label>
+                            <input 
+                                type="text" 
+                                className="form-control mb-2" 
+                                placeholder="10-digit mobile number"
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                style={{ height: '45px', borderRadius: '12px', border: '1px solid var(--border-color)' }}
+                            />
+                            <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--label-color)' }}>SPECIAL INSTRUCTIONS</label>
+                            <input 
+                                type="text" 
+                                className="form-control" 
+                                placeholder="e.g., Less spicy, Leave at doorstep"
+                                value={notes}
+                                onChange={(e) => setNotes(e.target.value)}
+                                style={{ height: '45px', borderRadius: '12px', border: '1px solid var(--border-color)' }}
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -156,14 +209,20 @@ function Billing() {
                         <button className="btn px-4 py-2 me-3" style={{ backgroundColor: 'var(--text-color)', color: 'var(--bg-color)', borderRadius: '12px' }} onClick={() => window.print()}>PRINT INVOICE</button>
                         <button className="btn btn-warning px-5 py-2 fw-bold" 
                                 style={{ backgroundColor: 'var(--primary-color)', color: 'white', border: 'none', borderRadius: '12px' }}
-                                onClick={() => setIsPaying(true)}>
-                            PAY NOW
+                                onClick={() => {
+                                    if (!deliveryAddress.trim() || !phoneNumber.trim()) {
+                                        toast.error("Please fill in delivery address and phone number above.");
+                                        return;
+                                    }
+                                    setIsPaying(true);
+                                }}>
+                            PROCEED TO PAYMENT
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* ZOMATO PAY FULLSCREEN OVERLAY */}
+            {/* PAYMENT METHOD OVERLAY */}
             {isPaying && (
                 <div style={{
                     position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
@@ -172,24 +231,56 @@ function Billing() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     zIndex: 9999
                 }}>
-                    <div className="card shadow-lg p-5 text-center" style={{ maxWidth: '450px', width: '90%', borderRadius: '24px', backgroundColor: 'var(--card-bg)' }}>
-                        <h3 className="fw-bold mb-4" style={{ color: 'var(--text-color)' }}>💳 Zomato Pay</h3>
+                    <div className="card shadow-lg p-5 text-center" style={{ maxWidth: '480px', width: '90%', borderRadius: '24px', backgroundColor: 'var(--card-bg)' }}>
+                        <h3 className="fw-bold mb-4" style={{ color: 'var(--text-color)' }}>💳 Checkout & Payment</h3>
                         
-                        <div className="mb-4 p-4 rounded-4" style={{ backgroundColor: 'var(--header-bg)', border: '1px solid var(--border-color)' }}>
-                            <p className="text-muted mb-1">Amount to pay</p>
-                            <h2 className="fw-bold mb-0" style={{ color: 'var(--text-color)' }}>₹{grandTotal.toFixed(2)}</h2>
+                        <div className="mb-3 p-3 rounded-4" style={{ backgroundColor: 'var(--header-bg)', border: '1px solid var(--border-color)' }}>
+                            <p className="text-muted mb-1" style={{ fontSize: '13px' }}>Total Payable Amount</p>
+                            <h2 className="fw-bold mb-0" style={{ color: 'var(--primary-color)' }}>₹{grandTotal.toFixed(2)}</h2>
                         </div>
 
                         {paymentStatus === "confirm" && (
                             <>
-                                <button className="btn w-100 py-3 mb-3 fw-bold flex-grow-1" 
+                                <div className="text-start mb-4">
+                                    <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--label-color)', marginBottom: '8px', display: 'block' }}>SELECT PAYMENT METHOD</label>
+                                    <div className="d-grid gap-2">
+                                        {[
+                                            { id: 'UPI', label: 'UPI / GooglePay / PhonePe 📱' },
+                                            { id: 'CARD', label: 'Credit / Debit Card 💳' },
+                                            { id: 'NETBANKING', label: 'Net Banking 🏦' },
+                                            { id: 'COD', label: 'Cash on Delivery 💵' }
+                                        ].map(method => (
+                                            <div 
+                                                key={method.id} 
+                                                onClick={() => setPaymentMethod(method.id)}
+                                                style={{
+                                                    padding: '12px 16px',
+                                                    borderRadius: '12px',
+                                                    border: `2px solid ${paymentMethod === method.id ? 'var(--primary-color)' : 'var(--border-color)'}`,
+                                                    backgroundColor: paymentMethod === method.id ? 'rgba(226,55,68,0.08)' : 'transparent',
+                                                    cursor: 'pointer',
+                                                    fontWeight: '600',
+                                                    fontSize: '0.95rem',
+                                                    display: 'flex',
+                                                    justify: 'space-between',
+                                                    alignItems: 'center'
+                                                }}
+                                            >
+                                                <span>{method.label}</span>
+                                                {paymentMethod === method.id && <span style={{ color: 'var(--primary-color)' }}>✓</span>}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <button className="btn w-100 py-3 mb-3 fw-bold" 
                                     style={{ backgroundColor: 'var(--primary-color)', color: 'white', borderRadius: '14px', fontSize: '1.1rem' }}
                                     onClick={handlePayment}
                                 >
-                                    Confirm Secure Payment
+                                    Confirm Order ({paymentMethod})
                                 </button>
                                 <button className="btn text-muted fw-bold" onClick={() => setIsPaying(false)}>
-                                    Cancel Transaction
+                                    Cancel & Return
                                 </button>
                             </>
                         )}
@@ -197,16 +288,16 @@ function Billing() {
                         {paymentStatus === "processing" && (
                             <div className="py-4">
                                 <div className="spinner-border mb-3" style={{ color: 'var(--primary-color)' }} role="status"></div>
-                                <h5 className="fw-bold" style={{ color: 'var(--text-color)' }}>Processing Secure Payment...</h5>
-                                <p className="text-muted small">Please don't close this window.</p>
+                                <h5 className="fw-bold" style={{ color: 'var(--text-color)' }}>Processing Payment & Order...</h5>
+                                <p className="text-muted small">Communicating with payment server...</p>
                             </div>
                         )}
 
                         {paymentStatus === "success" && (
                             <div className="py-4">
-                                <span style={{ fontSize: '4rem' }}>✅</span>
-                                <h4 className="fw-bold text-success mt-3">Payment Successful!</h4>
-                                <p className="text-muted">Your order has been placed. Redirecting to home...</p>
+                                <span style={{ fontSize: '4rem' }}>🎉</span>
+                                <h4 className="fw-bold text-success mt-3">Order Confirmed!</h4>
+                                <p className="text-muted">Your order has been placed successfully.</p>
                             </div>
                         )}
 
@@ -214,7 +305,7 @@ function Billing() {
                             <div className="py-4">
                                 <span style={{ fontSize: '4rem' }}>❌</span>
                                 <h4 className="fw-bold text-danger mt-3">Transaction Failed</h4>
-                                <p className="text-muted">Could not synchronize with the database. Please try again.</p>
+                                <p className="text-muted">Could not save order details. Please try again.</p>
                             </div>
                         )}
                     </div>

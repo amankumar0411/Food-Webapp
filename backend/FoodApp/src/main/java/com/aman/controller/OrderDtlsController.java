@@ -25,7 +25,12 @@ public class OrderDtlsController {
         LocalDateTime now = LocalDateTime.now();
         items.forEach(item -> {
             item.setPaymentDate(now);
-            item.setPaymentStatus("PAID");
+            if (item.getPaymentStatus() == null || item.getPaymentStatus().isBlank()) {
+                item.setPaymentStatus("PAID");
+            }
+            if (item.getOrderStatus() == null || item.getOrderStatus().isBlank()) {
+                item.setOrderStatus("PAID");
+            }
         });
         service.saveAll(items);
         return items;
@@ -37,9 +42,16 @@ public class OrderDtlsController {
         return service.getByUser(uname);
     }
 
-    /** Admin: view ALL paid orders */
+    /** Admin / Merchant: view ALL paid orders */
     @GetMapping("/all")
     public List<Map<String, Object>> getAll() {
         return service.getAll();
+    }
+
+    /** Admin / Merchant: update order lifecycle status */
+    @PutMapping("/status/{id}")
+    public OrderDtls updateStatus(@PathVariable Integer id, @RequestBody Map<String, String> payload) {
+        String status = payload.get("orderStatus");
+        return service.updateOrderStatus(id, status);
     }
 }

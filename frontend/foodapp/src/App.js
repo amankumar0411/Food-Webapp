@@ -19,6 +19,8 @@ import AddOrder from './component/Client/AddOrder';
 import Billing from './component/Client/Billing';
 import Register from './component/Client/Register';
 import Login from './component/Client/Login';
+import MerchantLogin from './component/Client/MerchantLogin';
+import MerchantRegister from './component/Client/MerchantRegister';
 import Home from './component/Client/Home';
 
 import { Toaster } from 'react-hot-toast';
@@ -51,7 +53,7 @@ function App() {
   const [auth, setAuth] = useState(localStorage.getItem("user"));
   const [role, setRole] = useState(localStorage.getItem("role"));
 
-  const isAdmin = auth && role && role.toLowerCase() === "admin";
+  const isMerchantOrAdmin = auth && role && (role.toLowerCase() === "admin" || role.toLowerCase() === "merchant");
 
   // Function to sync auth state from other components
   const syncAuth = () => {
@@ -130,7 +132,7 @@ function App() {
       )}
 
       {/* 2. DYNAMIC NAVIGATION SELECTION */}
-      {auth && (isAdmin ?
+      {auth && (isMerchantOrAdmin ?
         <Nav toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} /> :
         <NavClient toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} />
       )}
@@ -149,9 +151,11 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login syncAuth={syncAuth} />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/merchant/login" element={<MerchantLogin syncAuth={syncAuth} />} />
+          <Route path="/merchant/register" element={<MerchantRegister />} />
 
-          {/* 2. ADMIN-ONLY ROUTES */}
-          {isAdmin && (
+          {/* 2. MERCHANT / ADMIN ROUTES */}
+          {isMerchantOrAdmin && (
             <>
               <Route path="/addfood" element={<Addfood />} />
               <Route path="/foodlist" element={<Foodlist searchQuery={searchQuery} />} />
@@ -163,7 +167,7 @@ function App() {
           )}
 
           {/* 3. CLIENT-ONLY ROUTES */}
-          {(auth && !isAdmin) && (
+          {(auth && !isMerchantOrAdmin) && (
             <>
               <Route path="/foodlistclient" element={<FoodListClient searchQuery={searchQuery} />} />
               <Route path="/addorder" element={<AddOrder />} />

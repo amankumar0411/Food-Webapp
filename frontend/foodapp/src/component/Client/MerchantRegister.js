@@ -4,28 +4,28 @@ import Particles from '../common/Particles';
 import axiosInstance from '../../api/axiosInstance';
 import toast from 'react-hot-toast';
 
-function Register() {
+function MerchantRegister() {
     const navigate = useNavigate();
-    let [user, setUser] = useState({ 
+    const [user, setUser] = useState({ 
         uname: "", 
         pass: "", 
         nm: "", 
         email: "", 
         phno: "",
-        role: "user"
+        role: "merchant"
     });
 
     const addData = () => {
-        const loadingToast = toast.loading("Creating your account...");
+        const loadingToast = toast.loading("Registering your restaurant...");
         axiosInstance.post("/register/add", user)
-            .then((res) => {
+            .then(() => {
                 toast.dismiss(loadingToast);
-                toast.success("Registration Successful! Please Login.");
-                navigate('/login');
+                toast.success("Merchant Account Created! Please Sign In.");
+                navigate('/merchant/login');
             })
             .catch(() => {
                 toast.dismiss(loadingToast);
-                toast.error("Registration Failed. Please check your details.");
+                toast.error("Merchant Registration Failed. Please check your details.");
             });
     };
 
@@ -40,10 +40,9 @@ function Register() {
             backgroundColor: 'var(--bg-color)',
             padding: '40px 20px' 
         }}>
-            {/* Background Particles Layer */}
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
                 <Particles
-                    particleColors={["#e23744", "#6c757d"]}
+                    particleColors={["#10b981", "#059669", "#6c757d"]}
                     particleCount={180}
                     particleSpread={15}
                     speed={0.4}
@@ -55,17 +54,20 @@ function Register() {
             </div>
 
             <div className="container p-5 shadow-sm" style={{ 
-                maxWidth: "450px", 
+                maxWidth: "460px", 
                 width: "90%", 
                 backgroundColor: 'var(--card-bg)',
                 borderRadius: '24px',
-                border: '1px solid var(--border-color)',
+                border: '1px solid #10b981',
                 zIndex: 2,
                 position: 'relative'
             }}>
-                <h2 style={{ fontWeight: '800', marginBottom: '5px', color: 'var(--text-color)', letterSpacing: '-0.5px' }}>Customer Sign up</h2>
-                <p style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: '500', marginBottom: '30px' }}>
-                    or <a href="/login" style={{ textDecoration: 'none', color: 'var(--primary-color)' }}>log in to your account</a>
+                <div className="d-flex align-items-center gap-2 mb-2">
+                    <span style={{ fontSize: '24px' }}>🏪</span>
+                    <h2 style={{ fontWeight: '800', marginBottom: 0, color: 'var(--text-color)', letterSpacing: '-0.5px' }}>Partner Registration</h2>
+                </div>
+                <p style={{ fontSize: '13px', color: '#10b981', fontWeight: 'bold', marginBottom: '25px' }}>
+                    Create a Merchant Partner Account
                 </p>
 
                 <div className="mb-2">
@@ -73,7 +75,7 @@ function Register() {
                         type="text" 
                         className="form-control" 
                         style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
-                        placeholder="Username" 
+                        placeholder="Merchant Username" 
                         value={user.uname}
                         onChange={(e) => setUser({...user, uname: e.target.value})} 
                     />
@@ -93,7 +95,7 @@ function Register() {
                         type="text" 
                         className="form-control" 
                         style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
-                        placeholder="Full Name" 
+                        placeholder="Restaurant / Owner Name" 
                         value={user.nm}
                         onChange={(e) => setUser({...user, nm: e.target.value})} 
                     />
@@ -103,7 +105,7 @@ function Register() {
                         type="email" 
                         className="form-control" 
                         style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
-                        placeholder="Email" 
+                        placeholder="Business Email" 
                         value={user.email}
                         onChange={(e) => setUser({...user, email: e.target.value})} 
                     />
@@ -113,7 +115,7 @@ function Register() {
                         type="text" 
                         className="form-control" 
                         style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
-                        placeholder="Phone Number" 
+                        placeholder="Contact Phone Number" 
                         value={user.phno}
                         onChange={(e) => setUser({...user, phno: e.target.value})} 
                     />
@@ -123,42 +125,23 @@ function Register() {
                     className="btn w-100" 
                     onClick={addData}
                     style={{ 
-                        backgroundColor: 'var(--primary-color)', 
+                        backgroundColor: '#10b981', 
                         color: 'white', 
                         fontWeight: '600', 
                         height: '52px',
                         borderRadius: '12px',
-                        fontSize: '1.1rem',
-                        marginTop: '5px'
+                        fontSize: '1.1rem'
                     }}
                 >
-                    Create Customer Account
+                    Register Restaurant
                 </button>
                 
-                <p style={{ fontSize: '11px', color: 'var(--label-color)', marginTop: '15px', textAlign: 'center' }}>
-                    By creating an account, I accept the Terms & Conditions & Privacy Policy
-                </p>
-
-                {/* Bottom Merchant Banner */}
-                <div style={{
-                    marginTop: '25px',
-                    paddingTop: '20px',
-                    borderTop: '1px solid var(--border-color)',
-                    textAlign: 'center'
-                }}>
+                <div style={{ marginTop: '20px', textAlign: 'center' }}>
                     <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                        Want to list your restaurant on FoodApp?
+                        Already registered? <a href="/merchant/login" style={{ color: '#10b981', fontWeight: '600', textDecoration: 'none' }}>Sign In here</a>
                     </p>
-                    <a 
-                        href="/merchant/register" 
-                        style={{ 
-                            color: '#10b981', 
-                            fontWeight: '700', 
-                            textDecoration: 'none',
-                            fontSize: '14px'
-                        }}
-                    >
-                        Sign up as a Merchant Partner &rarr;
+                    <a href="/register" style={{ fontSize: '12px', color: 'var(--text-muted)', textDecoration: 'none' }}>
+                        &larr; Switch to Customer Signup
                     </a>
                 </div>
             </div>
@@ -166,4 +149,4 @@ function Register() {
     );
 }
 
-export default Register;
+export default MerchantRegister;

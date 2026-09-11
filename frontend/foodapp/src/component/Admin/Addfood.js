@@ -3,11 +3,18 @@ import { useState } from 'react'
 import toast from 'react-hot-toast';
 
 function Addfood() {
-    const [food, setfood] = useState({ fid: "", fname: "", price: "", imageUrl: "" });
+    const [food, setfood] = useState({ 
+        fid: "", 
+        fname: "", 
+        price: "", 
+        imageUrl: "", 
+        category: "Main Course", 
+        isVeg: true 
+    });
     const [preview, setPreview] = useState("");
 
     const refreshData = () => {
-        setfood({ fid: "", fname: "", price: "", imageUrl: "" });
+        setfood({ fid: "", fname: "", price: "", imageUrl: "", category: "Main Course", isVeg: true });
         setPreview("");
     }
 
@@ -80,6 +87,43 @@ function Addfood() {
                     onChange={e => setfood({ ...food, price: e.target.value })}
                     placeholder='e.g. 299'
                 />
+
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Category *</label>
+                <select
+                    style={inputStyle}
+                    value={food.category}
+                    onChange={e => setfood({ ...food, category: e.target.value })}
+                >
+                    <option value="Starters">Starters 🥗</option>
+                    <option value="Main Course">Main Course 🍕</option>
+                    <option value="Desserts">Desserts 🍰</option>
+                    <option value="Beverages">Beverages 🥤</option>
+                    <option value="Snacks">Snacks 🍟</option>
+                </select>
+
+                <div style={{ marginBottom: 16 }}>
+                    <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: 6 }}>Dietary Classification</label>
+                    <div style={{ display: 'flex', gap: 15, alignItems: 'center' }}>
+                        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600 }}>
+                            <input 
+                                type="radio" 
+                                name="isVeg" 
+                                checked={food.isVeg === true} 
+                                onChange={() => setfood({...food, isVeg: true})} 
+                            />
+                            <span style={{ color: '#10b981' }}>🟢 Veg</span>
+                        </label>
+                        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600 }}>
+                            <input 
+                                type="radio" 
+                                name="isVeg" 
+                                checked={food.isVeg === false} 
+                                onChange={() => setfood({...food, isVeg: false})} 
+                            />
+                            <span style={{ color: '#ef4444' }}>🔴 Non-Veg</span>
+                        </label>
+                    </div>
+                </div>
 
                 <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     Image URL <span style={{ color: '#bbb', fontWeight: 400, textTransform: 'none' }}>(optional)</span>

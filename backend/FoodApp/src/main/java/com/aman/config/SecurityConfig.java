@@ -56,11 +56,12 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers("/register/**").permitAll();
                 auth.requestMatchers("/food/fetch/**").permitAll();
+                auth.requestMatchers("/reviews/food/**").permitAll();
 
-                // Admin-only endpoints
-                auth.requestMatchers("/food/add", "/food/del/**", "/food/upd/**").hasRole("ADMIN");
-                auth.requestMatchers("/orders/all").hasRole("ADMIN");
-                auth.requestMatchers("/order-dtls/all").hasRole("ADMIN");
+                // Admin & Merchant endpoints
+                auth.requestMatchers("/food/add", "/food/del/**", "/food/upd/**").hasAnyRole("ADMIN", "MERCHANT");
+                auth.requestMatchers("/orders/all").hasAnyRole("ADMIN", "MERCHANT");
+                auth.requestMatchers("/order-dtls/all", "/order-dtls/status/**").hasAnyRole("ADMIN", "MERCHANT");
 
                 // Medium #10 — Swagger only accessible when SWAGGER_ENABLED=true env var is set
                 if (swaggerEnabled) {

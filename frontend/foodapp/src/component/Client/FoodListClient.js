@@ -49,9 +49,8 @@ function isBestseller(fid = '') {
   return sum % 3 === 0;
 }
 
-const CATEGORIES = ['All', 'Starters', 'Pizza', 'Burgers', 'Curries', 'Rice', 'Pasta', 'Rolls', 'Soups', 'Desserts', 'Drinks', 'Main Course'];
+const CATEGORIES = ['All', 'Starters', 'Main Course', 'Desserts', 'Beverages', 'Snacks'];
 
-// ── Short descriptions per category ────────────────────────────────────────
 const CAT_DESC = {
   'Pizza':       'Wood-fired, crispy & loaded with toppings',
   'Burgers':     'Juicy patties stacked with fresh veggies',
@@ -61,16 +60,25 @@ const CAT_DESC = {
   'Rolls':       'Stuffed wraps, hot off the tawa',
   'Soups':       'Warm & wholesome comfort bowls',
   'Desserts':    'Indulgent sweets to end your meal',
-  'Drinks':      'Refreshing & chilled beverages',
+  'Beverages':   'Refreshing & chilled beverages',
   'Starters':    'Crispy bites & small plates',
   'Main Course': 'Hearty mains for the perfect meal',
+  'Snacks':      'Crispy snacks & quick bites',
 };
 
 function FoodlistClient({ searchQuery }) {
   const [food, setFood] = useState([]);
   const [activeCategory, setActiveCategory] = useState('All');
+  const [vegFilter, setVegFilter] = useState('All'); // 'All' | 'Veg' | 'NonVeg'
   const [selectedItem, setSelectedItem] = useState(null);
   const [modalQty, setModalQty] = useState(1);
+
+  // Review Modal States
+  const [reviewItem, setReviewItem] = useState(null);
+  const [reviewsData, setReviewsData] = useState({ reviews: [], averageRating: 0, totalReviews: 0 });
+  const [newRating, setNewRating] = useState(5);
+  const [newComment, setNewComment] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
 
   const currentUser = localStorage.getItem('user');
 
@@ -80,21 +88,60 @@ function FoodlistClient({ searchQuery }) {
       .catch(() => {});
   }, []);
 
-  // Enrich each food item with category, image, rating
-  const enriched = food.map(item => ({
-    ...item,
-    category: detectCategory(item.fname),
-    image:    item.imageUrl || CATEGORY_IMAGES[detectCategory(item.fname)],
-    rating:   getStaticRating(item.fid),
-    best:     isBestseller(item.fid),
-    desc:     CAT_DESC[detectCategory(item.fname)] || '',
-  }));
+  const fetchReviews = (fid) => {
+    axiosInstance.get(`/reviews/food/${fid}`)
+      .then(res => setReviewsData(res.data))
+      .catch(() => setReviewsData({ reviews: [], averageRating: 0, totalReviews: 0 }));
+  };
 
-  // Filter by search + category
+  const openReviewModal = (item, e) => {
+    e.stopPropagation();
+    setReviewItem(item);
+    fetchReviews(item.fid);
+  };
+
+  const submitReview = () => {
+    if (!currentUser) {
+      toast.error("Please log in to write a review");
+      return;
+    }
+    setSubmittingReview(true);
+    axiosInstance.post('/reviews/add', {
+      fid: reviewItem.fid,
+      uname: currentUser,
+      rating: newRating,
+      comment: newComment
+    })
+    .then(() => {
+      toast.success("Review posted successfully! ⭐");
+      setNewComment("");
+      fetchReviews(reviewItem.fid);
+    })
+    .catch(() => toast.error("Could not post review."))
+    .finally(() => setSubmittingReview(false));
+  };
+
+  // Enrich each food item with fallback category, image, rating
+  const enriched = food.map(item => {
+    const cat = item.category || detectCategory(item.fname);
+    const isV = item.isVeg !== undefined && item.isVeg !== null ? item.isVeg : true;
+    return {
+      ...item,
+      category: cat,
+      isVeg:    isV,
+      image:    item.imageUrl || CATEGORY_IMAGES[cat] || CATEGORY_IMAGES['Main Course'],
+      rating:   getStaticRating(item.fid),
+      best:     isBestseller(item.fid),
+      desc:     CAT_DESC[cat] || 'Freshly prepared with authentic ingredients',
+    };
+  });
+
+  // Filter by search + category + veg preference
   const filtered = enriched.filter(item => {
     const matchSearch = item.fname?.toLowerCase().includes(searchQuery?.toLowerCase() || '');
-    const matchCat    = activeCategory === 'All' || item.category === activeCategory;
-    return matchSearch && matchCat;
+    const matchCat    = activeCategory === 'All' || item.category.toLowerCase() === activeCategory.toLowerCase();
+    const matchVeg    = vegFilter === 'All' || (vegFilter === 'Veg' && item.isVeg) || (vegFilter === 'NonVeg' && !item.isVeg);
+    return matchSearch && matchCat && matchVeg;
   });
 
   const openModal = (item) => {
@@ -132,17 +179,42 @@ function FoodlistClient({ searchQuery }) {
         <p>Fresh ingredients, bold flavours — order in minutes</p>
       </div>
 
-      {/* ── Category Tabs ── */}
-      <div className="category-tabs">
-        {CATEGORIES.map(cat => (
-          <button
-            key={cat}
-            className={`cat-tab${activeCategory === cat ? ' active' : ''}`}
-            onClick={() => setActiveCategory(cat)}
+      {/* ── Filter Controls ── */}
+      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        {/* Category Tabs */}
+        <div className="category-tabs" style={{ marginBottom: 0 }}>
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat}
+              className={`cat-tab${activeCategory === cat ? ' active' : ''}`}
+              onClick={() => setActiveCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Veg / Non-Veg Toggle Buttons */}
+        <div style={{ display: 'flex', gap: '8px', background: 'var(--card-bg)', padding: '4px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+          <button 
+            onClick={() => setVegFilter('All')} 
+            style={{ padding: '6px 12px', borderRadius: '8px', border: 'none', background: vegFilter === 'All' ? 'var(--primary-color)' : 'transparent', color: vegFilter === 'All' ? '#fff' : 'var(--text-color)', fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer' }}
           >
-            {cat}
+            All
           </button>
-        ))}
+          <button 
+            onClick={() => setVegFilter('Veg')} 
+            style={{ padding: '6px 12px', borderRadius: '8px', border: 'none', background: vegFilter === 'Veg' ? '#10b981' : 'transparent', color: vegFilter === 'Veg' ? '#fff' : '#10b981', fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer' }}
+          >
+            🟢 Veg Only
+          </button>
+          <button 
+            onClick={() => setVegFilter('NonVeg')} 
+            style={{ padding: '6px 12px', borderRadius: '8px', border: 'none', background: vegFilter === 'NonVeg' ? '#ef4444' : 'transparent', color: vegFilter === 'NonVeg' ? '#fff' : '#ef4444', fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer' }}
+          >
+            🔴 Non-Veg
+          </button>
+        </div>
       </div>
 
       {/* ── Card Grid ── */}
@@ -152,18 +224,27 @@ function FoodlistClient({ searchQuery }) {
             <div className="food-card" key={item.fid}>
               <div className="food-card-img-wrap">
                 <img src={item.image} alt={item.fname} loading="lazy" />
-                {/* Veg marker */}
-                <div className="veg-badge"><div className="veg-dot" /></div>
+                {/* Veg / Non-Veg Badge */}
+                <div style={{
+                  position: 'absolute', top: '10px', left: '10px',
+                  background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(4px)',
+                  padding: '3px 8px', borderRadius: '8px',
+                  border: `1.5px solid ${item.isVeg ? '#10b981' : '#ef4444'}`,
+                  display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.75rem', fontWeight: '800'
+                }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: item.isVeg ? '50%' : '0', backgroundColor: item.isVeg ? '#10b981' : '#ef4444' }} />
+                  <span style={{ color: item.isVeg ? '#047857' : '#b91c1c' }}>{item.isVeg ? 'VEG' : 'NON-VEG'}</span>
+                </div>
                 {item.best && <span className="bestseller-badge">⭐ Bestseller</span>}
               </div>
 
               <div className="food-card-body">
                 <h5 className="food-card-name">{item.fname}</h5>
 
-                <div className="food-card-meta">
+                <div className="food-card-meta" style={{ cursor: 'pointer' }} onClick={(e) => openReviewModal(item, e)}>
                   <span className="rating-chip">⭐ {item.rating}</span>
                   <span>• {item.category}</span>
-                  <span>• #{item.fid}</span>
+                  <span style={{ textDecoration: 'underline', color: 'var(--primary-color)' }}>• Reviews &rsaquo;</span>
                 </div>
 
                 <p className="food-card-desc">{item.desc}</p>
@@ -180,7 +261,7 @@ function FoodlistClient({ searchQuery }) {
         <div className="empty-menu">
           <div className="emoji">🥺</div>
           <h4>No items found{searchQuery ? ` for "${searchQuery}"` : ''}</h4>
-          <p>Try a different category or search term</p>
+          <p>Try a different category or filter term</p>
         </div>
       )}
 
@@ -210,6 +291,77 @@ function FoodlistClient({ searchQuery }) {
             <button className="confirm-btn" onClick={confirmAddToCart}>
               Add to Cart • ₹{(Number(selectedItem.price) * modalQty).toFixed(2)}
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Reviews Modal ── */}
+      {reviewItem && (
+        <div className="qty-modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) setReviewItem(null); }}>
+          <div className="qty-modal-card" style={{ position: 'relative', maxWidth: '500px', width: '92%', maxHeight: '85vh', overflowY: 'auto' }}>
+            <button className="modal-close-btn" onClick={() => setReviewItem(null)}>✕</button>
+
+            <h4 style={{ fontWeight: 800, color: 'var(--text-color)', marginBottom: 4 }}>⭐ Customer Reviews</h4>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: 16 }}>{reviewItem.fname} (#{reviewItem.fid})</p>
+
+            <div style={{ background: 'var(--input-bg)', padding: '16px', borderRadius: '12px', marginBottom: '20px', textAlign: 'center' }}>
+              <h2 style={{ margin: 0, fontWeight: 900, color: '#f59e0b' }}>
+                {reviewsData.averageRating > 0 ? reviewsData.averageRating : reviewItem.rating} ★
+              </h2>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                Based on {reviewsData.totalReviews} user ratings
+              </span>
+            </div>
+
+            {/* Write Review Form */}
+            <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '15px', marginBottom: '20px' }}>
+              <h6 style={{ fontWeight: 700, color: 'var(--text-color)', marginBottom: '8px' }}>Write a Review</h6>
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.85rem', fontWeight: '600' }}>Rating:</span>
+                {[1, 2, 3, 4, 5].map(star => (
+                  <button 
+                    key={star} 
+                    onClick={() => setNewRating(star)} 
+                    style={{ background: 'none', border: 'none', fontSize: '1.4rem', cursor: 'pointer', color: star <= newRating ? '#f59e0b' : '#ccc', padding: 0 }}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+              <textarea 
+                className="form-control mb-2" 
+                rows="2" 
+                placeholder="Share your thoughts about this dish..."
+                value={newComment}
+                onChange={e => setNewComment(e.target.value)}
+                style={{ borderRadius: '10px', fontSize: '0.88rem' }}
+              />
+              <button 
+                onClick={submitReview} 
+                disabled={submittingReview || !newComment.trim()} 
+                style={{ width: '100%', padding: '10px', borderRadius: '10px', border: 'none', background: 'var(--primary-color)', color: '#fff', fontWeight: '700', cursor: 'pointer' }}
+              >
+                {submittingReview ? 'Posting...' : 'Submit Review'}
+              </button>
+            </div>
+
+            {/* Existing Reviews List */}
+            <div>
+              <h6 style={{ fontWeight: 700, color: 'var(--text-color)', marginBottom: '12px' }}>Recent Comments</h6>
+              {reviewsData.reviews && reviewsData.reviews.length > 0 ? (
+                reviewsData.reviews.map(rev => (
+                  <div key={rev.id} style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '10px', marginBottom: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontWeight: '700', fontSize: '0.85rem', color: 'var(--text-color)' }}>{rev.uname}</span>
+                      <span style={{ color: '#f59e0b', fontWeight: '700', fontSize: '0.85rem' }}>{"★".repeat(rev.rating)}</span>
+                    </div>
+                    <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'var(--text-muted)' }}>{rev.comment}</p>
+                  </div>
+                ))
+              ) : (
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', textAlign: 'center', margin: '20px 0' }}>No customer comments yet. Be the first to review!</p>
+              )}
+            </div>
           </div>
         </div>
       )}

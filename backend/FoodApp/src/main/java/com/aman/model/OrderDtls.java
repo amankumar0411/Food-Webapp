@@ -22,6 +22,21 @@ public class OrderDtls {
     private String paymentDate;   // Stored as ISO string e.g. "2024-03-22T22:10:30"
     private String paymentStatus;  // e.g. "PAID"
 
+    @Column(length = 255)
+    private String deliveryAddress;
+
+    @Column(length = 20)
+    private String phoneNumber;
+
+    @Column(length = 50)
+    private String paymentMethod;  // e.g. "UPI", "Card", "COD"
+
+    @Column(length = 255)
+    private String notes;
+
+    @Column(length = 50)
+    private String orderStatus = "PAID"; // PAID -> PREPARING -> OUT_FOR_DELIVERY -> DELIVERED -> CANCELLED
+
     public OrderDtls() {}
 
     public Integer getId() { return id; }
@@ -54,7 +69,25 @@ public class OrderDtls {
             ? paymentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))
             : null;
     }
+    public void setPaymentDateRaw(String paymentDate) {
+        this.paymentDate = paymentDate;
+    }
 
     public String getPaymentStatus() { return paymentStatus; }
     public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
+
+    public String getDeliveryAddress() { return deliveryAddress; }
+    public void setDeliveryAddress(String deliveryAddress) { this.deliveryAddress = deliveryAddress; }
+
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    public String getPaymentMethod() { return paymentMethod; }
+    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
+
+    public String getOrderStatus() { return orderStatus; }
+    public void setOrderStatus(String orderStatus) { this.orderStatus = orderStatus; }
 }

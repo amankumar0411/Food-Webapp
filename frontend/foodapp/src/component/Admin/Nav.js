@@ -5,27 +5,27 @@ function Nav({ toggleTheme, isDark, searchQuery, setSearchQuery, isHomePage }) {
   const adminItems = [
     { label: "Home", href: "/home" },
     {
-      label: "Food Management",
+      label: "Menu Management",
       href: "#",
       items: [
-        { label: "Add Food", href: "/addfood" },
-        { label: "Food List", href: "/foodlist" },
-        { label: "Update Food", href: "/updatefood" },
-        { label: "Delete Food", href: "/deletefood" },
+        { label: "Add Food Item", href: "/addfood" },
+        { label: "View Menu List", href: "/foodlist" },
+        { label: "Update Menu Item", href: "/updatefood" },
+        { label: "Delete Menu Item", href: "/deletefood" },
       ],
     },
     {
-      label: "Orders",
+      label: "Merchant Orders",
       href: "#",
       items: [
-        { label: "Order Details",  href: "/adminorderdtls" },
+        { label: "Manage Orders & Status",  href: "/adminorderdtls" },
       ],
     },
   ];
 
   return (
     <HeaderNavigationBase 
-      brandName="FOOD APP ADMIN"
+      brandName="MERCHANT PORTAL"
       items={adminItems}
       toggleTheme={toggleTheme}
       isDark={isDark}

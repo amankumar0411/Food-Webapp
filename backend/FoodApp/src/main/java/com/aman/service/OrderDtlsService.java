@@ -24,4 +24,13 @@ public class OrderDtlsService {
     public List<Map<String, Object>> getAll() {
         return repo.findAllNative();
     }
+
+    public OrderDtls updateOrderStatus(Integer id, String status) {
+        OrderDtls item = repo.findById(id).orElse(null);
+        if (item != null) {
+            item.setOrderStatus(status);
+            return repo.save(item);
+        }
+        return null;
+    }
 }
