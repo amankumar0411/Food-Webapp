@@ -57,6 +57,7 @@ public class SecurityConfig {
                 auth.requestMatchers("/register/**").permitAll();
                 auth.requestMatchers("/food/fetch/**").permitAll();
                 auth.requestMatchers("/reviews/food/**").permitAll();
+                auth.requestMatchers("/api/voice-order").permitAll();
 
                 // Admin & Merchant endpoints
                 auth.requestMatchers("/food/add", "/food/del/**", "/food/upd/**").hasAnyRole("ADMIN", "MERCHANT");
