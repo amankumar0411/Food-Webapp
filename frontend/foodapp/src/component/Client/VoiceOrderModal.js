@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import toast from 'react-hot-toast';
+import MatrixOrb from '../common/MatrixOrb';
 
 export function VoiceOrderModal({ isOpen, onClose }) {
     const navigate = useNavigate();
@@ -10,6 +11,9 @@ export function VoiceOrderModal({ isOpen, onClose }) {
     const [isProcessing, setIsProcessing] = useState(false);
     const [resultData, setResultData] = useState(null);
     const recognitionRef = useRef(null);
+
+    // Compute orb state ('idle' | 'listening' | 'thinking')
+    const orbState = isProcessing ? 'thinking' : isListening ? 'listening' : 'idle';
 
     useEffect(() => {
         // Web Speech Recognition setup
@@ -133,30 +137,25 @@ export function VoiceOrderModal({ isOpen, onClose }) {
                     <button className="btn-close" onClick={onClose} style={{ filter: 'var(--close-filter)' }} />
                 </div>
 
-                <p className="text-muted small mb-4">
+                <p className="text-muted small mb-3">
                     Speak your order naturally (e.g. <em>"Order 2 chicken fried with garlic bread"</em>) and we'll add items directly to your cart!
                 </p>
 
-                {/* Animated Microphone Area */}
-                <div className="my-4 text-center">
-                    <div 
+                {/* MATRIX ORB ANIMATED SPEECH STATE */}
+                <div className="my-3 d-flex flex-column align-items-center justify-content-center">
+                    <MatrixOrb 
+                        state={orbState}
+                        size={210}
+                        color="var(--primary-color)"
                         onClick={isListening ? stopListening : startListening}
-                        style={{
-                            width: '100px', height: '100px', borderRadius: '50%',
-                            backgroundColor: isListening ? 'var(--primary-color)' : 'rgba(226,55,68,0.1)',
-                            color: isListening ? '#fff' : 'var(--primary-color)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            margin: '0 auto', cursor: 'pointer',
-                            fontSize: '2.5rem',
-                            boxShadow: isListening ? '0 0 0 15px rgba(226,55,68,0.25)' : 'none',
-                            transition: 'all 0.3s ease'
-                        }}
+                    />
+                    <button 
+                        className={`btn btn-sm mt-2 px-4 fw-bold ${isListening ? 'btn-danger' : 'btn-outline-danger'}`}
+                        onClick={isListening ? stopListening : startListening}
+                        style={{ borderRadius: '20px' }}
                     >
-                        {isListening ? '🛑' : '🎙️'}
-                    </div>
-                    <p className="fw-bold mt-3 mb-1" style={{ color: isListening ? 'var(--primary-color)' : 'var(--text-color)' }}>
-                        {isListening ? "Listening... Speak your order now!" : "Click Mic to Start Speaking"}
-                    </p>
+                        {isListening ? '🛑 Stop Listening' : '🎙️ Tap Orb to Speak'}
+                    </button>
                 </div>
 
                 {/* Live Transcript Display Box */}
