@@ -78,7 +78,8 @@ function App() {
 
   // Selective background logic: Grainient on inner pages (excluding home)
   const isHomePage = location.pathname === "/" || location.pathname === "/home";
-  const showGrainient = auth && !isHomePage;
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+  const showGrainient = auth && !isHomePage && !isAuthPage;
 
   // THEME STATE LOGIC (Default to Light Mode, Check LocalStorage)
   const [isDarkTheme, setIsDarkTheme] = useState(() => {
@@ -140,8 +141,8 @@ function App() {
 
       <div className="container-fluid main-content-area" style={{ 
         paddingTop: auth ? (isHomePage ? '0' : '180px') : '0', 
-        paddingLeft: isHomePage ? '0' : '15px',
-        paddingRight: isHomePage ? '0' : '15px',
+        paddingLeft: (isHomePage || isAuthPage) ? '0' : '15px',
+        paddingRight: (isHomePage || isAuthPage) ? '0' : '15px',
         position: 'relative', 
         zIndex: 1, 
         minHeight: isHomePage ? '100vh' : 'auto' 
