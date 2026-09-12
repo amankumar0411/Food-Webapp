@@ -16,16 +16,14 @@ function Login({ syncAuth }) {
                 toast.dismiss(loadingToast);
                 const { token, username, role } = res.data;
                 
-                // STORE SECURE TOKEN AND USER DATA
                 localStorage.setItem("token", token);
                 localStorage.setItem("user", username);
                 localStorage.setItem("role", role);
                 
-                if (syncAuth) syncAuth(); // Sync App.js state
+                if (syncAuth) syncAuth();
                 
-                toast.success(`Welcome back, ${username}!`);
+                toast.success(`Welcome back, ${username}! 🎉`);
                 
-                // DYNAMIC REDIRECT
                 const rLower = role ? role.toLowerCase() : "";
                 if (rLower === "admin" || rLower === "merchant") {
                     navigate("/foodlist"); 
@@ -54,100 +52,101 @@ function Login({ syncAuth }) {
             justifyContent: 'center',
             position: 'relative',
             overflow: 'hidden',
-            backgroundColor: 'var(--bg-color)',
+            background: 'radial-gradient(circle at 50% 20%, rgba(255, 87, 17, 0.2) 0%, transparent 60%), linear-gradient(180deg, #18030d 0%, #110108 100%)',
             flexDirection: 'column',
-            padding: '40px 20px'
+            padding: '60px 20px'
         }}>
             {/* Background Particles Layer */}
-            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none' }}>
                 <Particles
-                    particleColors={["#e23744", "#6c757d"]}
+                    particleColors={["#ff5711", "#f5bf2d", "#ffffff"]}
                     particleCount={150}
                     particleSpread={15}
                     speed={0.4}
                     particleBaseSize={120}
                     moveParticlesOnHover={true}
                     alphaParticles={true}
-                    disableRotation={false}
                 />
             </div>
 
-            <div className="container p-5 shadow-sm" style={{ 
-                maxWidth: "420px", 
-                width: "90%", 
+            <div className="card p-4 p-md-5 shadow-lg" style={{ 
+                maxWidth: "440px", 
+                width: "100%", 
                 margin: "auto", 
-                backgroundColor: 'var(--card-bg)',
+                backgroundColor: 'rgba(36, 8, 21, 0.9)',
                 borderRadius: '24px',
-                border: '1px solid var(--border-color)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
                 zIndex: 2,
                 position: 'relative'
             }}>
-                <h2 style={{ fontWeight: '800', color: 'var(--text-color)', letterSpacing: '-0.5px' }}>Customer Login</h2>
-                <p style={{ fontSize: '13px', color: 'var(--primary-color)', fontWeight: 'bold', marginBottom: '30px' }}>
-                    Enter your credentials to continue
-                </p>
+                <div className="text-center mb-4">
+                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-2" style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(255, 87, 17, 0.2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span className="material-symbols-outlined text-primary" style={{ fontSize: '28px', color: '#ff5711' }}>person</span>
+                    </div>
+                    <h2 style={{ fontWeight: '800', color: 'var(--text-color)', letterSpacing: '-0.5px', margin: 0 }}>Customer Sign In</h2>
+                    <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                        Welcome back to Food Delivery
+                    </p>
+                </div>
 
                 <div className="mb-3">
-                    <label style={{fontSize:'12px', fontWeight:'bold', color:'var(--label-color)'}}>USERNAME</label>
+                    <label style={{ fontSize: '11px', fontWeight: '800', color: 'var(--label-color)', letterSpacing: '0.5px' }}>USERNAME</label>
                     <input 
                         type="text" 
                         className="form-control" 
-                        style={{ height: '55px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
-                        placeholder="e.g. aman" 
+                        style={{ height: '50px', borderRadius: '14px' }}
+                        placeholder="Enter your username" 
                         value={creds.uname}
                         onChange={(e) => setCreds({...creds, uname: e.target.value})} 
                     />
                 </div>
                 <div className="mb-4">
-                    <label style={{fontSize:'12px', fontWeight:'bold', color:'var(--label-color)'}}>PASSWORD</label>
+                    <label style={{ fontSize: '11px', fontWeight: '800', color: 'var(--label-color)', letterSpacing: '0.5px' }}>PASSWORD</label>
                     <input 
                         type="password" 
                         className="form-control" 
-                        style={{ height: '55px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
-                        placeholder="********" 
+                        style={{ height: '50px', borderRadius: '14px' }}
+                        placeholder="••••••••" 
                         value={creds.pass}
                         onChange={(e) => setCreds({...creds, pass: e.target.value})} 
                     />
                 </div>
                 
                 <button 
-                    className="btn w-100 mt-2" 
+                    className="btn btn-primary w-100 py-3 fw-bold" 
                     onClick={performLogin}
-                    style={{ backgroundColor: 'var(--primary-color)', color: 'white', fontWeight: '600', height: '54px', borderRadius: '12px', fontSize: '1.1rem' }}
+                    style={{ borderRadius: '999px', fontSize: '1.05rem' }}
                 >
-                    Continue
+                    Sign In to Account
                 </button>
-                <p style={{ textAlign: 'center', marginTop: '15px', fontSize: '14px', color: 'var(--text-muted)' }}>
-                    Don't have an account? <a href="/register" style={{ color: 'var(--primary-color)', fontWeight: '600', textDecoration: 'none' }}>Sign up</a>
+                
+                <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '13.5px', color: 'var(--text-muted)' }}>
+                    Don't have an account? <a href="/register" style={{ color: '#ff5711', fontWeight: '700', textDecoration: 'none' }}>Sign up</a>
                 </p>
 
-                {/* Bottom Merchant & Driver Banners */}
+                {/* Merchant & Driver Quick Switch Links */}
                 <div style={{
-                    marginTop: '25px',
-                    paddingTop: '20px',
-                    borderTop: '1px solid var(--border-color)',
+                    marginTop: '20px',
+                    paddingTop: '16px',
+                    borderTop: '1px solid rgba(255, 255, 255, 0.08)',
                     textAlign: 'center'
                 }}>
-                    <div className="mb-3">
-                        <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                            Are you a Restaurant Partner?
-                        </p>
+                    <div className="mb-2">
+                        <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Merchant Partner? </span>
                         <a 
                             href="/merchant/login" 
-                            style={{ color: '#10b981', fontWeight: '700', textDecoration: 'none', fontSize: '14px' }}
+                            style={{ color: '#ff9e44', fontWeight: '700', textDecoration: 'none', fontSize: '12.5px' }}
                         >
-                            Access Merchant Portal &rarr;
+                            Merchant Portal &rarr;
                         </a>
                     </div>
                     <div>
-                        <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                            Want to deliver food & earn with us?
-                        </p>
+                        <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Delivery Partner? </span>
                         <a 
                             href="/driver/login" 
-                            style={{ color: '#f59e0b', fontWeight: '700', textDecoration: 'none', fontSize: '14px' }}
+                            style={{ color: '#f5bf2d', fontWeight: '700', textDecoration: 'none', fontSize: '12.5px' }}
                         >
-                            Access Delivery Partner Portal &rarr;
+                            Driver Portal &rarr;
                         </a>
                     </div>
                 </div>
@@ -156,4 +155,4 @@ function Login({ syncAuth }) {
     );
 }
 
-export default Login;
+export default Login;

@@ -94,14 +94,9 @@ function App() {
       localStorage.setItem("theme", "light");
     }
 
-    // LOCK SCROLL ON HOME PAGE
-    if (isHomePage) {
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-      document.documentElement.style.overflow = 'auto';
-    }
+    // Enable scrolling across all pages
+    document.body.style.overflow = 'auto';
+    document.documentElement.style.overflow = 'auto';
 
     return () => {
       document.body.style.overflow = 'auto';
@@ -137,8 +132,8 @@ function App() {
         </div>
       )}
 
-      {/* 2. DYNAMIC NAVIGATION SELECTION */}
-      {auth && (isMerchantOrAdmin ?
+      {/* 2. DYNAMIC NAVIGATION SELECTION (Inner pages only) */}
+      {(auth && !isHomePage) && (isMerchantOrAdmin ?
         <Nav toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} /> :
         <NavClient toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} />
       )}

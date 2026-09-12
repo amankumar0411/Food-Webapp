@@ -4,85 +4,63 @@ import axiosInstance from '../../api/axiosInstance';
 import toast from 'react-hot-toast';
 import './FoodListClient.css';
 
-// ── Category detection from food name ──────────────────────────────────────
+// Category detection from food name
 function detectCategory(fname = '') {
   const n = fname.toLowerCase();
-  if (n.includes('pizza'))                                return 'Pizza';
+  if (n.includes('pizza'))                                return 'Pizzas';
   if (n.includes('burger') || n.includes('sandwich'))    return 'Burgers';
-  if (n.includes('pasta') || n.includes('noodle') || n.includes('spaghetti')) return 'Pasta';
-  if (n.includes('biryani') || n.includes('rice') || n.includes('pulao'))     return 'Rice';
-  if (n.includes('curry') || n.includes('masala') || n.includes('paneer') || n.includes('chicken') || n.includes('mutton')) return 'Curries';
-  if (n.includes('roll') || n.includes('wrap') || n.includes('kati'))        return 'Rolls';
-  if (n.includes('soup') || n.includes('salad'))                              return 'Soups';
-  if (n.includes('cake') || n.includes('ice cream') || n.includes('dessert') || n.includes('sweet') || n.includes('gulab') || n.includes('kheer')) return 'Desserts';
-  if (n.includes('juice') || n.includes('lassi') || n.includes('shake') || n.includes('coffee') || n.includes('tea') || n.includes('drink'))      return 'Drinks';
-  if (n.includes('samosa') || n.includes('chat') || n.includes('chaat') || n.includes('tikka') || n.includes('starter') || n.includes('snack'))   return 'Starters';
+  if (n.includes('pasta') || n.includes('noodle'))        return 'Pasta';
+  if (n.includes('biryani') || n.includes('rice'))         return 'Biryani';
+  if (n.includes('curry') || n.includes('masala') || n.includes('paneer') || n.includes('chicken')) return 'Curries';
+  if (n.includes('cake') || n.includes('dessert') || n.includes('mousse') || n.includes('cookie')) return 'Cakes';
+  if (n.includes('juice') || n.includes('shake') || n.includes('coffee') || n.includes('tea'))      return 'Beverages';
   return 'Main Course';
 }
 
-// ── Food image map by category ──────────────────────────────────────────────
 const CATEGORY_IMAGES = {
-  'Pizza':       'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80',
+  'Pizzas':      'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80',
   'Burgers':     'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80',
   'Pasta':       'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=400&q=80',
-  'Rice':        'https://images.unsplash.com/photo-1596560548464-f010549b84d7?w=400&q=80',
+  'Biryani':     'https://images.unsplash.com/photo-1596560548464-f010549b84d7?w=400&q=80',
   'Curries':     'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&q=80',
-  'Rolls':       'https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&q=80',
-  'Soups':       'https://images.unsplash.com/photo-1547592180-85f173990554?w=400&q=80',
-  'Desserts':    'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&q=80',
-  'Drinks':      'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&q=80',
-  'Starters':    'https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?w=400&q=80',
+  'Cakes':       'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&q=80',
+  'Beverages':   'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&q=80',
   'Main Course': 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80',
 };
 
-// ── Static ratings per food (deterministic from fid) ───────────────────────
+const CATEGORIES_RAIL = [
+  { name: 'Pizzas', img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=150&q=80' },
+  { name: 'Cakes', img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=150&q=80' },
+  { name: 'Cookies', img: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=150&q=80' },
+  { name: 'Mousse', img: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=150&q=80' },
+  { name: 'Biryani', img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=150&q=80' },
+  { name: 'Burgers', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=150&q=80' },
+];
+
 function getStaticRating(fid = '') {
-  const ratings = [4.1, 4.3, 4.5, 3.9, 4.2, 4.7, 4.0, 4.4, 4.6, 3.8];
+  const ratings = [4.3, 4.5, 4.7, 4.2, 4.6, 4.8, 4.4, 4.9];
   let sum = 0;
   for (let i = 0; i < fid.length; i++) sum += fid.charCodeAt(i);
   return ratings[sum % ratings.length];
 }
 
-// ── Bestseller flag (every 3rd item roughly) ───────────────────────────────
-function isBestseller(fid = '') {
-  let sum = 0;
-  for (let i = 0; i < fid.length; i++) sum += fid.charCodeAt(i);
-  return sum % 3 === 0;
-}
-
-const CATEGORIES = ['All', 'Starters', 'Main Course', 'Desserts', 'Beverages', 'Snacks'];
-
-const CAT_DESC = {
-  'Pizza':       'Wood-fired, crispy & loaded with toppings',
-  'Burgers':     'Juicy patties stacked with fresh veggies',
-  'Pasta':       'Al-dente pasta in rich, aromatic sauces',
-  'Rice':        'Aromatic basmati with spices & herbs',
-  'Curries':     'Rich, slow-cooked gravies & masalas',
-  'Rolls':       'Stuffed wraps, hot off the tawa',
-  'Soups':       'Warm & wholesome comfort bowls',
-  'Desserts':    'Indulgent sweets to end your meal',
-  'Beverages':   'Refreshing & chilled beverages',
-  'Starters':    'Crispy bites & small plates',
-  'Main Course': 'Hearty mains for the perfect meal',
-  'Snacks':      'Crispy snacks & quick bites',
-};
-
-function FoodlistClient({ searchQuery }) {
+function FoodlistClient({ searchQuery: globalSearchQuery }) {
   const navigate = useNavigate();
   const [food, setFood] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cartItems, setCartItems] = useState([]);
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [vegFilter, setVegFilter] = useState('All'); // 'All' | 'Veg' | 'NonVeg'
+  const [topTab, setTopTab] = useState('food'); // 'food' | 'quick'
+  const [subTab, setSubTab] = useState('ALL'); // 'ALL' | 'OFFERS' | 'FOOD ON TRAIN' | 'GOURMET'
+  const [vegOnly, setVegOnly] = useState(false);
+  const [localSearch, setLocalSearch] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
   const [modalQty, setModalQty] = useState(1);
 
-  // Review Modal States
-  const [reviewItem, setReviewItem] = useState(null);
-  const [reviewsData, setReviewsData] = useState({ reviews: [], averageRating: 0, totalReviews: 0 });
-  const [newRating, setNewRating] = useState(5);
-  const [newComment, setNewComment] = useState("");
-  const [submittingReview, setSubmittingReview] = useState(false);
+  // Quick Voice Order Stage States
+  const [isRecording, setIsRecording] = useState(false);
+  const [transcript, setTranscript] = useState("“2 Belgian Chocolate Cupcakes from Glen's”");
+  const [voiceMatchedItem, setVoiceMatchedItem] = useState(null);
+  const [voiceQty, setVoiceQty] = useState(2);
 
   const currentUser = localStorage.getItem('user');
 
@@ -97,67 +75,97 @@ function FoodlistClient({ searchQuery }) {
   useEffect(() => {
     setLoading(true);
     axiosInstance.get('/food/fetch')
-      .then(res => setFood(res.data))
+      .then(res => {
+        setFood(res.data || []);
+        if (res.data && res.data.length > 0) {
+          setVoiceMatchedItem(res.data[0]);
+        }
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
 
     fetchCart();
   }, [currentUser, fetchCart]);
 
-  const fetchReviews = (fid) => {
-    axiosInstance.get(`/reviews/food/${fid}`)
-      .then(res => setReviewsData(res.data))
-      .catch(() => setReviewsData({ reviews: [], averageRating: 0, totalReviews: 0 }));
+  const handleMicPress = () => {
+    setIsRecording(true);
+    toast.loading("Listening... Speak your order!", { id: 'voice-toast' });
+
+    // Try Web Speech API if available
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.start();
+
+      recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript;
+        setTranscript(`“${text}”`);
+        setIsRecording(false);
+        toast.dismiss('voice-toast');
+        toast.success(`Recognized: "${text}"`);
+        
+        // Find matching item
+        const match = food.find(item => text.toLowerCase().includes(item.fname.toLowerCase()));
+        if (match) {
+          setVoiceMatchedItem(match);
+        }
+      };
+
+      recognition.onerror = () => {
+        setIsRecording(false);
+        toast.dismiss('voice-toast');
+        toast.error("Could not capture audio. Try speaking again.");
+      };
+    } else {
+      setTimeout(() => {
+        setIsRecording(false);
+        toast.dismiss('voice-toast');
+        setTranscript("“Order Paneer Butter Masala”");
+        toast.success("Recognized: Paneer Butter Masala");
+      }, 2500);
+    }
   };
 
-  const openReviewModal = (item, e) => {
-    e.stopPropagation();
-    setReviewItem(item);
-    fetchReviews(item.fid);
-  };
-
-  const submitReview = () => {
+  const handleProceedVoicePay = () => {
+    if (!voiceMatchedItem) return;
     if (!currentUser) {
-      toast.error("Please log in to write a review");
+      toast.error("Please login to proceed to checkout");
       return;
     }
-    setSubmittingReview(true);
-    axiosInstance.post('/reviews/add', {
-      fid: reviewItem.fid,
+    const cartItem = {
+      fid: voiceMatchedItem.fid,
+      fname: voiceMatchedItem.fname,
+      qty: voiceQty,
       uname: currentUser,
-      rating: newRating,
-      comment: newComment
-    })
-    .then(() => {
-      toast.success("Review posted successfully! ⭐");
-      setNewComment("");
-      fetchReviews(reviewItem.fid);
-    })
-    .catch(() => toast.error("Could not post review."))
-    .finally(() => setSubmittingReview(false));
+    };
+    axiosInstance.post('/orders/add', cartItem)
+      .then(() => {
+        toast.success(`Added ${voiceQty}x ${voiceMatchedItem.fname}! Redirecting to Payment...`);
+        fetchCart();
+        setTimeout(() => navigate('/billing'), 800);
+      })
+      .catch(() => toast.error("Could not add item to cart."));
   };
 
-  // Enrich each food item with fallback category, image, rating
   const enriched = food.map(item => {
     const cat = item.category || detectCategory(item.fname);
-    const isV = item.isVeg !== undefined && item.isVeg !== null ? item.isVeg : true;
+    const isV = item.isVeg !== undefined ? item.isVeg : true;
     return {
       ...item,
       category: cat,
-      isVeg:    isV,
-      image:    item.imageUrl || CATEGORY_IMAGES[cat] || CATEGORY_IMAGES['Main Course'],
-      rating:   getStaticRating(item.fid),
-      best:     isBestseller(item.fid),
-      desc:     CAT_DESC[cat] || 'Freshly prepared with authentic ingredients',
+      isVeg: isV,
+      image: item.imageUrl || CATEGORY_IMAGES[cat] || CATEGORY_IMAGES['Main Course'],
+      rating: getStaticRating(item.fid),
     };
   });
 
-  // Filter by search + category + veg preference
+  const query = (globalSearchQuery || localSearch).toLowerCase();
   const filtered = enriched.filter(item => {
-    const matchSearch = item.fname?.toLowerCase().includes(searchQuery?.toLowerCase() || '');
-    const matchCat    = activeCategory === 'All' || item.category.toLowerCase() === activeCategory.toLowerCase();
-    const matchVeg    = vegFilter === 'All' || (vegFilter === 'Veg' && item.isVeg) || (vegFilter === 'NonVeg' && !item.isVeg);
-    return matchSearch && matchCat && matchVeg;
+    const matchSearch = item.fname?.toLowerCase().includes(query);
+    const matchVeg = !vegOnly || item.isVeg;
+    const matchSub = subTab === 'ALL' || (subTab === 'OFFERS' && item.price < 250);
+    return matchSearch && matchVeg && matchSub;
   });
 
   const openModal = (item) => {
@@ -169,164 +177,376 @@ function FoodlistClient({ searchQuery }) {
   const confirmAddToCart = () => {
     if (!selectedItem) return;
     const cartItem = {
-      fid:   selectedItem.fid,
+      fid: selectedItem.fid,
       fname: selectedItem.fname,
-      qty:   modalQty,
+      qty: modalQty,
       uname: currentUser,
     };
-    const t = toast.loading(`Adding ${selectedItem.fname}...`);
     axiosInstance.post('/orders/add', cartItem)
       .then(() => {
-        toast.dismiss(t);
         toast.success(`${modalQty}× ${selectedItem.fname} added! 🛒`);
         setSelectedItem(null);
-        fetchCart(); // Instant UX cart update
+        fetchCart();
       })
-      .catch(() => {
-        toast.dismiss(t);
-        toast.error('Failed to add item.');
-      });
+      .catch(() => toast.error('Failed to add item.'));
   };
 
   const cartTotal = cartItems.reduce((sum, i) => sum + (Number(i.totalprice || i.TOTALPRICE) || 0), 0);
   const totalItemCount = cartItems.reduce((sum, i) => sum + (Number(i.qty || i.QTY) || 1), 0);
 
   return (
-    <div className="menu-wrapper" style={{ paddingBottom: cartItems.length > 0 ? '120px' : '60px' }}>
-      {/* ── Header ── */}
-      <div className="menu-header">
-        <h2>🍽️ Explore Our Menu</h2>
-        <p>Fresh ingredients, bold flavours — order in minutes</p>
+    <div className="stitch-stage">
+      {/* ── USER GREETING & QUICK BADGES ── */}
+      <div className="stitch-user-bar">
+        <div className="stitch-user-info">
+          <div className="stitch-user-name flex items-center gap-1">
+            <span>Aman</span>
+            <span className="material-symbols-outlined text-muted" style={{ fontSize: '20px' }}>chevron_right</span>
+          </div>
+          <div className="stitch-user-sub">
+            <span className="material-symbols-outlined text-primary" style={{ fontSize: '14px' }}>location_on</span>
+            <span>HSR Layout, Sector 4, Bengaluru</span>
+          </div>
+        </div>
+
+        <div className="stitch-badges">
+          <div className="stitch-gold-badge">
+            <span className="material-symbols-outlined fill" style={{ fontSize: '15px' }}>moped</span>
+            <span>FREE DEL</span>
+          </div>
+          <button className="stitch-icon-btn">
+            <span className="material-symbols-outlined">menu</span>
+          </button>
+        </div>
       </div>
 
-      {/* ── Filter Controls ── */}
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        {/* Category Tabs */}
-        <div className="category-tabs" style={{ marginBottom: 0 }}>
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat}
-              className={`cat-tab${activeCategory === cat ? ' active' : ''}`}
-              onClick={() => setActiveCategory(cat)}
+      {/* ── OVERLAPPING TOP SEGMENTED SWITCHER (FOOD vs QUICK ORDER) ── */}
+      <div className="stitch-segmented-container">
+        <div className="stitch-segmented-pill">
+          {/* Tab 1: Food */}
+          <button 
+            className={`stitch-seg-btn ${topTab === 'food' ? 'active' : ''}`}
+            onClick={() => setTopTab('food')}
+          >
+            <span className={`material-symbols-outlined ${topTab === 'food' ? 'fill' : ''}`} style={{ fontSize: '20px' }}>lunch_dining</span>
+            <span>Food</span>
+            {topTab === 'food' && <div className="stitch-active-indicator" />}
+          </button>
+
+          {/* Tab 2: Quick Order */}
+          <button 
+            className={`stitch-seg-btn ${topTab === 'quick' ? 'active' : ''}`}
+            onClick={() => setTopTab('quick')}
+          >
+            <div className="relative flex items-center justify-center">
+              <span className={`material-symbols-outlined ${topTab === 'quick' ? 'fill text-primary' : ''}`} style={{ fontSize: '20px' }}>mic</span>
+              {topTab === 'quick' && <span className="stitch-live-dot" />}
+            </div>
+            <span>Quick Order</span>
+            {topTab === 'quick' && <div className="stitch-active-indicator" />}
+          </button>
+        </div>
+      </div>
+
+      {/* ────────────────── VIEW 1: FOOD TAB ────────────────── */}
+      {topTab === 'food' && (
+        <div className="stitch-food-view">
+          {/* Search Bar + VEG Switch Row */}
+          <div className="stitch-search-row">
+            <div className="stitch-search-bar">
+              <span className="material-symbols-outlined text-primary">search</span>
+              <input 
+                type="text"
+                placeholder="Search for 'Cake', 'Pizza'..."
+                value={localSearch}
+                onChange={(e) => setLocalSearch(e.target.value)}
+              />
+              <button className="stitch-mic-trigger" onClick={() => setTopTab('quick')}>
+                <span className="material-symbols-outlined">mic</span>
+              </button>
+            </div>
+
+            <button 
+              className={`stitch-veg-toggle ${vegOnly ? 'active' : ''}`}
+              onClick={() => setVegOnly(!vegOnly)}
             >
-              {cat}
+              <div className="stitch-veg-box">
+                <div className={`stitch-veg-circle ${vegOnly ? 'bg-green-500' : ''}`} />
+              </div>
+              <span>VEG</span>
             </button>
-          ))}
-        </div>
+          </div>
 
-        {/* Veg / Non-Veg Toggle Buttons */}
-        <div style={{ display: 'flex', gap: '8px', background: 'var(--card-bg)', padding: '4px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-          <button 
-            onClick={() => setVegFilter('All')} 
-            style={{ padding: '6px 12px', borderRadius: '8px', border: 'none', background: vegFilter === 'All' ? 'var(--primary-color)' : 'transparent', color: vegFilter === 'All' ? '#fff' : 'var(--text-color)', fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer' }}
-          >
-            All
-          </button>
-          <button 
-            onClick={() => setVegFilter('Veg')} 
-            style={{ padding: '6px 12px', borderRadius: '8px', border: 'none', background: vegFilter === 'Veg' ? '#10b981' : 'transparent', color: vegFilter === 'Veg' ? '#fff' : '#10b981', fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer' }}
-          >
-            🟢 Veg Only
-          </button>
-          <button 
-            onClick={() => setVegFilter('NonVeg')} 
-            style={{ padding: '6px 12px', borderRadius: '8px', border: 'none', background: vegFilter === 'NonVeg' ? '#ef4444' : 'transparent', color: vegFilter === 'NonVeg' ? '#fff' : '#ef4444', fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer' }}
-          >
-            🔴 Non-Veg
-          </button>
-        </div>
-      </div>
+          {/* Sub-Tabs Row */}
+          <div className="stitch-subtabs-row">
+            {['ALL', 'OFFERS', 'FOOD ON TRAIN', 'GOURMET', 'GUILT FREE'].map(tab => (
+              <button 
+                key={tab}
+                className={`stitch-subtab-btn ${subTab === tab ? 'active' : ''}`}
+                onClick={() => setSubTab(tab)}
+              >
+                <span>{tab}</span>
+                {subTab === tab && <div className="stitch-subtab-line" />}
+              </button>
+            ))}
+          </div>
 
-      {/* ── Card Grid (Skeleton UX vs Product Cards) ── */}
-      {loading ? (
-        <div className="food-grid">
-          {[1, 2, 3, 4, 5, 6].map(n => (
-            <div key={n} className="food-card" style={{ height: '340px', opacity: 0.6, animation: 'pulse 1.5s infinite' }}>
-              <div style={{ height: '180px', backgroundColor: 'var(--input-bg)' }} />
-              <div className="food-card-body" style={{ gap: '12px' }}>
-                <div style={{ height: '20px', width: '70%', backgroundColor: 'var(--border-color)', borderRadius: '6px' }} />
-                <div style={{ height: '14px', width: '40%', backgroundColor: 'var(--border-color)', borderRadius: '6px' }} />
-                <div style={{ height: '30px', width: '100%', backgroundColor: 'var(--border-color)', borderRadius: '6px', marginTop: 'auto' }} />
+          {/* Hero Promotional Banner Card */}
+          <div className="stitch-promo-banner">
+            <div className="stitch-promo-content">
+              <div className="stitch-promo-pill">
+                <span className="material-symbols-outlined" style={{ fontSize: '13px' }}>bolt</span>
+                <span>LIMITED TIME</span>
               </div>
+              <h2 className="stitch-promo-title">Feast On Your Cravings</h2>
+              <p className="stitch-promo-sub">Up to 60% OFF + Free Delivery on trending spots</p>
+              <button className="stitch-promo-cta">
+                <span>ORDER NOW</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>arrow_forward</span>
+              </button>
             </div>
-          ))}
-        </div>
-      ) : filtered.length > 0 ? (
-        <div className="food-grid">
-          {filtered.map((item) => (
-            <div className="food-card" key={item.fid}>
-              <div className="food-card-img-wrap">
-                <img src={item.image} alt={item.fname} loading="lazy" />
-                {/* Veg / Non-Veg Badge */}
-                <div style={{
-                  position: 'absolute', top: '10px', left: '10px',
-                  background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(4px)',
-                  padding: '3px 8px', borderRadius: '8px',
-                  border: `1.5px solid ${item.isVeg ? '#10b981' : '#ef4444'}`,
-                  display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.75rem', fontWeight: '800'
-                }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: item.isVeg ? '50%' : '0', backgroundColor: item.isVeg ? '#10b981' : '#ef4444' }} />
-                  <span style={{ color: item.isVeg ? '#047857' : '#b91c1c' }}>{item.isVeg ? 'VEG' : 'NON-VEG'}</span>
-                </div>
-                {item.best && <span className="bestseller-badge">⭐ Bestseller</span>}
-              </div>
-
-              <div className="food-card-body">
-                <h5 className="food-card-name">{item.fname}</h5>
-
-                <div className="food-card-meta" style={{ cursor: 'pointer' }} onClick={(e) => openReviewModal(item, e)}>
-                  <span className="rating-chip">⭐ {item.rating}</span>
-                  <span>• {item.category}</span>
-                  <span style={{ textDecoration: 'underline', color: 'var(--primary-color)' }}>• Reviews &rsaquo;</span>
-                </div>
-
-                <p className="food-card-desc">{item.desc}</p>
-
-                <div className="food-card-footer">
-                  <span className="food-price">₹{item.price}</span>
-                  <button className="add-btn" onClick={() => openModal(item)}>ADD +</button>
-                </div>
-              </div>
+            <div className="stitch-promo-img-wrap">
+              <img 
+                src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80" 
+                alt="Feast" 
+              />
             </div>
-          ))}
-        </div>
-      ) : (
-        <div className="empty-menu">
-          <div className="emoji">🥺</div>
-          <h4>No items found{searchQuery ? ` for "${searchQuery}"` : ''}</h4>
-          <p>Try a different category or filter term</p>
+          </div>
+
+          {/* Category Rail */}
+          <div className="stitch-rail-section">
+            <div className="stitch-rail-header">
+              <h3>What's on your mind?</h3>
+              <span className="stitch-rail-link">EXPLORE</span>
+            </div>
+            <div className="stitch-rail-items">
+              {CATEGORIES_RAIL.map(cat => (
+                <div 
+                  key={cat.name} 
+                  className="stitch-rail-item"
+                  onClick={() => setLocalSearch(cat.name)}
+                >
+                  <div className="stitch-rail-img-circle">
+                    <img src={cat.img} alt={cat.name} />
+                  </div>
+                  <span>{cat.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Top Rated Near You Section */}
+          <div className="stitch-section">
+            <div className="stitch-section-header">
+              <div>
+                <h3>Top rated near you</h3>
+                <p className="stitch-section-sub">Handpicked culinary gems around Indiranagar</p>
+              </div>
+              <span className="stitch-rail-link">SEE ALL ›</span>
+            </div>
+
+            {loading ? (
+              <div className="stitch-loading-skeleton">Loading fresh dishes...</div>
+            ) : filtered.length > 0 ? (
+              <div className="stitch-cards-grid">
+                {filtered.map(item => (
+                  <div key={item.fid} className="stitch-food-card">
+                    <div className="stitch-card-img-wrap">
+                      <img src={item.image} alt={item.fname} />
+                      <div className="stitch-discount-badge">50% OFF UP TO ₹120</div>
+                      <button className="stitch-heart-btn">
+                        <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>favorite</span>
+                      </button>
+                    </div>
+
+                    <div className="stitch-card-body">
+                      <div className="stitch-card-title-row">
+                        <h4 className="stitch-card-title">{item.fname}</h4>
+                        <div className="stitch-rating-badge">
+                          <span className="material-symbols-outlined fill" style={{ fontSize: '12px', color: '#f5bf2d' }}>star</span>
+                          <span>{item.rating}</span>
+                        </div>
+                      </div>
+                      <p className="stitch-card-meta">{item.category} • Fast Delivery</p>
+
+                      <div className="stitch-card-footer">
+                        <span className="stitch-card-price">₹{item.price}</span>
+                        <button className="stitch-add-btn" onClick={() => openModal(item)}>
+                          ADD +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-menu">
+                <div className="emoji">🥺</div>
+                <h4>No items found</h4>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
-      {/* ── SHOP.APP FLOATING QUICK CART CAPSULE BAR (UX UPGRADE) ── */}
+      {/* ────────────────── VIEW 2: QUICK VOICE ORDER TAB ────────────────── */}
+      {topTab === 'quick' && (
+        <div className="stitch-quick-view">
+          {/* Listening Live Header Pill */}
+          <div className="stitch-listening-header">
+            <div className="stitch-live-pill">
+              <span className="stitch-pulse-dot" />
+              <span>LISTENING LIVE</span>
+            </div>
+            <h2 className="stitch-voice-heading">Tap & speak your order</h2>
+            <p className="stitch-voice-sub">
+              Try: <span className="italic text-secondary">“Order 2 Paneer Butter Masala”</span>
+            </p>
+          </div>
+
+          {/* Centered Large Glowing Mic Button with Sonic Pulse Rings */}
+          <div className="stitch-mic-stage">
+            <div className={`stitch-ring-outer ${isRecording ? 'animate-pulse-ring' : ''}`} />
+            <div className="stitch-ring-inner" />
+            
+            <button 
+              className={`stitch-main-mic-btn ${isRecording ? 'recording' : ''}`}
+              onClick={handleMicPress}
+            >
+              <div className="stitch-mic-icon-circle">
+                <span className="material-symbols-outlined fill" style={{ fontSize: '42px' }}>mic</span>
+              </div>
+            </button>
+          </div>
+
+          {/* Equalizer Soundwave Visualizer Bars */}
+          <div className="stitch-sound-waves">
+            {[...Array(10)].map((_, i) => (
+              <div 
+                key={i} 
+                className="wave-bar" 
+                style={{ 
+                  animationDelay: `${i * 90}ms`,
+                  height: isRecording ? `${Math.random() * 20 + 10}px` : '8px',
+                  background: i % 2 === 0 ? 'var(--primary-color)' : 'var(--tertiary-gold)'
+                }} 
+              />
+            ))}
+          </div>
+
+          {/* Recognized Transcript Pill */}
+          <div className="stitch-transcript-card">
+            <div className="stitch-eq-icon">
+              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>graphic_eq</span>
+            </div>
+            <p className="stitch-transcript-text">{transcript}</p>
+            <span className="stitch-recognized-tag">RECOGNIZED</span>
+          </div>
+
+          {/* Auto-Checkout Timer Pill */}
+          <div className="stitch-auto-timer-card">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined fill text-tertiary" style={{ fontSize: '18px' }}>timer</span>
+                <span className="font-bold text-sm">Instant Voice Checkout ready</span>
+              </div>
+              <span className="stitch-timer-badge">Auto in 2s</span>
+            </div>
+            <div className="stitch-progress-track">
+              <div className="stitch-progress-bar" />
+            </div>
+          </div>
+
+          {/* Matched Cart Item Confirmation Card */}
+          {voiceMatchedItem && (
+            <div className="stitch-voice-matched-card">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="stitch-check-circle">
+                    <span className="material-symbols-outlined" style={{ fontSize: '14px', color: '#10b981' }}>check</span>
+                  </div>
+                  <span className="font-bold text-sm">Got it! Adding to cart...</span>
+                </div>
+                <span className="font-extrabold text-tertiary">₹{voiceMatchedItem.price * voiceQty}</span>
+              </div>
+
+              <div className="stitch-matched-item-row">
+                <img 
+                  src={voiceMatchedItem.imageUrl || CATEGORY_IMAGES['Main Course']} 
+                  alt={voiceMatchedItem.fname} 
+                  className="stitch-matched-img"
+                />
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-bold text-sm truncate">{voiceMatchedItem.fname}</h3>
+                  <p className="text-xs text-muted truncate">Glen's Bakehouse • 4.8 ★</p>
+
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-xs text-primary font-medium">Extra Fudge</span>
+                    <div className="stitch-qty-stepper">
+                      <button onClick={() => setVoiceQty(q => Math.max(1, q - 1))}>−</button>
+                      <span>{voiceQty}</span>
+                      <button onClick={() => setVoiceQty(q => q + 1)}>+</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button className="stitch-voice-pay-cta" onClick={handleProceedVoicePay}>
+                <span className="flex items-center gap-2">
+                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>shopping_bag</span>
+                  <span>Proceed to Pay</span>
+                </span>
+                <span className="flex items-center gap-1 font-extrabold">
+                  <span>₹{voiceMatchedItem.price * voiceQty}</span>
+                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>arrow_forward</span>
+                </span>
+              </button>
+            </div>
+          )}
+
+          {/* Fallback Suggestion Chips */}
+          <div className="stitch-suggestions-card">
+            <h4 className="font-bold text-sm mb-2">Did you mean one of these popular specials?</h4>
+            <div className="flex flex-col gap-2">
+              {[
+                { name: 'Chocolate Truffle Cake', price: 450, icon: '🍫' },
+                { name: 'Belgian Dark Mousse', price: 190, icon: '🍮' },
+                { name: 'Choco Lava Cupcake', price: 120, icon: '🧁' },
+              ].map(sug => (
+                <div 
+                  key={sug.name} 
+                  className="stitch-suggestion-row"
+                  onClick={() => {
+                    const found = food.find(f => f.fname.toLowerCase().includes(sug.name.toLowerCase()));
+                    if (found) setVoiceMatchedItem(found);
+                    toast.success(`Selected ${sug.name}`);
+                  }}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span>{sug.icon}</span>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-xs">{sug.name}</span>
+                      <span className="text-xs text-muted">Glen's • ₹{sug.price}</span>
+                    </div>
+                  </div>
+                  <span className="material-symbols-outlined text-muted" style={{ fontSize: '18px' }}>add_circle</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── FLOATING CHECKOUT CAPSULE ── */}
       {cartItems.length > 0 && (
         <div 
+          className="stitch-floating-cart"
           onClick={() => navigate('/billing')}
-          style={{
-            position: 'fixed',
-            bottom: '25px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 1000,
-            background: 'var(--primary-gradient)',
-            color: '#ffffff',
-            borderRadius: '100px',
-            padding: '14px 32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '24px',
-            boxShadow: '0 16px 40px rgba(112, 0, 255, 0.45)',
-            cursor: 'pointer',
-            minWidth: '320px',
-            maxWidth: '90%',
-            animation: 'slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)'
-          }}
         >
-          <div className="d-flex align-items-center gap-2">
+          <div className="flex items-center gap-2">
             <span style={{ fontSize: '1.4rem' }}>🛒</span>
             <div>
-              <div style={{ fontWeight: 800, fontSize: '0.95rem', lineHeight: 1.1 }}>
+              <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>
                 {totalItemCount} ITEM{totalItemCount > 1 ? 'S' : ''} ADDED
               </div>
               <div style={{ fontSize: '0.78rem', opacity: 0.9 }}>
@@ -344,7 +564,7 @@ function FoodlistClient({ searchQuery }) {
       {/* ── Quantity Modal ── */}
       {selectedItem && (
         <div className="qty-modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) setSelectedItem(null); }}>
-          <div className="qty-modal-card" style={{ position: 'relative' }}>
+          <div className="qty-modal-card">
             <button className="modal-close-btn" onClick={() => setSelectedItem(null)}>✕</button>
 
             <img
@@ -354,9 +574,7 @@ function FoodlistClient({ searchQuery }) {
             />
 
             <h5 style={{ fontWeight: 800, color: 'var(--text-color)', marginBottom: 2 }}>{selectedItem.fname}</h5>
-            <p style={{ color: '#21a447', fontWeight: 700, fontSize: '1.1rem', marginBottom: 16 }}>₹{selectedItem.price} per item</p>
-
-            <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: 12 }}>Select quantity</p>
+            <p style={{ color: '#ff5711', fontWeight: 700, fontSize: '1.1rem', marginBottom: 16 }}>₹{selectedItem.price} per item</p>
 
             <div className="qty-controls">
               <button className="qty-btn" onClick={() => setModalQty(q => Math.max(1, q - 1))}>−</button>
@@ -367,77 +585,6 @@ function FoodlistClient({ searchQuery }) {
             <button className="confirm-btn" onClick={confirmAddToCart}>
               Add to Cart • ₹{(Number(selectedItem.price) * modalQty).toFixed(2)}
             </button>
-          </div>
-        </div>
-      )}
-
-      {/* ── Reviews Modal ── */}
-      {reviewItem && (
-        <div className="qty-modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) setReviewItem(null); }}>
-          <div className="qty-modal-card" style={{ position: 'relative', maxWidth: '500px', width: '92%', maxHeight: '85vh', overflowY: 'auto' }}>
-            <button className="modal-close-btn" onClick={() => setReviewItem(null)}>✕</button>
-
-            <h4 style={{ fontWeight: 800, color: 'var(--text-color)', marginBottom: 4 }}>⭐ Customer Reviews</h4>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: 16 }}>{reviewItem.fname} (#{reviewItem.fid})</p>
-
-            <div style={{ background: 'var(--input-bg)', padding: '16px', borderRadius: '12px', marginBottom: '20px', textAlign: 'center' }}>
-              <h2 style={{ margin: 0, fontWeight: 900, color: '#f59e0b' }}>
-                {reviewsData.averageRating > 0 ? reviewsData.averageRating : reviewItem.rating} ★
-              </h2>
-              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                Based on {reviewsData.totalReviews} user ratings
-              </span>
-            </div>
-
-            {/* Write Review Form */}
-            <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '15px', marginBottom: '20px' }}>
-              <h6 style={{ fontWeight: 700, color: 'var(--text-color)', marginBottom: '8px' }}>Write a Review</h6>
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: '600' }}>Rating:</span>
-                {[1, 2, 3, 4, 5].map(star => (
-                  <button 
-                    key={star} 
-                    onClick={() => setNewRating(star)} 
-                    style={{ background: 'none', border: 'none', fontSize: '1.4rem', cursor: 'pointer', color: star <= newRating ? '#f59e0b' : '#ccc', padding: 0 }}
-                  >
-                    ★
-                  </button>
-                ))}
-              </div>
-              <textarea 
-                className="form-control mb-2" 
-                rows="2" 
-                placeholder="Share your thoughts about this dish..."
-                value={newComment}
-                onChange={e => setNewComment(e.target.value)}
-                style={{ borderRadius: '10px', fontSize: '0.88rem' }}
-              />
-              <button 
-                onClick={submitReview} 
-                disabled={submittingReview || !newComment.trim()} 
-                style={{ width: '100%', padding: '10px', borderRadius: '10px', border: 'none', background: 'var(--primary-color)', color: '#fff', fontWeight: '700', cursor: 'pointer' }}
-              >
-                {submittingReview ? 'Posting...' : 'Submit Review'}
-              </button>
-            </div>
-
-            {/* Existing Reviews List */}
-            <div>
-              <h6 style={{ fontWeight: 700, color: 'var(--text-color)', marginBottom: '12px' }}>Recent Comments</h6>
-              {reviewsData.reviews && reviewsData.reviews.length > 0 ? (
-                reviewsData.reviews.map(rev => (
-                  <div key={rev.id} style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '10px', marginBottom: '10px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontWeight: '700', fontSize: '0.85rem', color: 'var(--text-color)' }}>{rev.uname}</span>
-                      <span style={{ color: '#f59e0b', fontWeight: '700', fontSize: '0.85rem' }}>{"★".repeat(rev.rating)}</span>
-                    </div>
-                    <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'var(--text-muted)' }}>{rev.comment}</p>
-                  </div>
-                ))
-              ) : (
-                <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', textAlign: 'center', margin: '20px 0' }}>No customer comments yet. Be the first to review!</p>
-              )}
-            </div>
           </div>
         </div>
       )}

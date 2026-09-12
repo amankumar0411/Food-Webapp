@@ -1,0 +1,430 @@
+<!DOCTYPE html><html lang="en" style="width: 1280px; height: 1722px; overflow: hidden; position: relative;"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Zayka | Artisanal Food Delivery</title>
+<!-- Tailwind CSS v3 with Forms and Container Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration for Skinkind / Editorial Botanical Theme -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            oat: {
+              50: '#FDFBF7',
+              100: '#FAF3E8',
+              200: '#F3EAD8',
+              300: '#E7DCBE',
+              400: '#D5C7A3'
+            },
+            crimson: {
+              DEFAULT: '#C20019',
+              dark: '#950010',
+              deep: '#73000C',
+              light: '#FDF2F3'
+            },
+            ink: {
+              DEFAULT: '#191816',
+              soft: '#4A4843',
+              muted: '#7A766F',
+              faint: '#B8B3A8'
+            },
+            sandborder: '#E8E1D5',
+            sandlight: '#F8F5EE'
+          },
+          fontFamily: {
+            sans: ['Space Grotesk', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            serif: ['Playfair Display', 'Georgia', 'serif']
+          },
+          boxShadow: {
+            subtle: '0 2px 10px rgba(25, 24, 22, 0.04)',
+            card: '0 8px 24px -6px rgba(25, 24, 22, 0.06)',
+            floating: '0 16px 36px -8px rgba(25, 24, 22, 0.28)'
+          }
+        }
+      }
+    }
+  </script>
+<!-- Google Fonts: Space Grotesk and Playfair Display -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style data-purpose="base-enhancements">
+    body {
+      background-color: #FAF3E8;
+      color: #191816;
+      font-family: 'Space Grotesk', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #FAF3E8;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #D5C7A3;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-oat-100 flex flex-col selection:bg-crimson selection:text-white">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-40 bg-oat-100/95 backdrop-blur-md border-b border-sandborder transition-colors"><div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-6"><div class="flex items-center gap-8 shrink-0"><a class="group flex items-center gap-1.5" href="#"><span class="text-2xl font-bold tracking-tighter uppercase font-serif text-crimson group-hover:text-crimson-dark transition-colors">ZAYKA</span><span class="w-2 h-2 rounded-full bg-crimson mb-1"></span></a><button aria-label="Select delivery address" class="hidden lg:flex items-center gap-2 text-left text-xs tracking-tight group hover:bg-oat-200/50 py-1.5 px-3 rounded-lg border border-transparent hover:border-sandborder transition-all"><svg class="w-4 h-4 text-crimson shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg><div><div class="font-bold flex items-center gap-1 text-ink uppercase tracking-wider text-[11px]">Indiranagar, Bengaluru<svg class="w-3.5 h-3.5 text-ink-muted group-hover:translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div><span class="text-ink-muted text-[11px] block truncate max-w-[180px]">12th Main, HAL 2nd Stage</span></div></button></div><div class="flex-1 max-w-xl mx-4"><div class="relative flex items-center"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none"><svg class="w-4 h-4 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div><input class="w-full pl-10 pr-20 py-2.5 bg-oat-50/80 hover:bg-oat-50 focus:bg-white text-sm text-ink placeholder-ink-muted rounded-full border border-sandborder focus:outline-none focus:ring-1 focus:ring-crimson focus:border-crimson shadow-inner transition-all" placeholder="Search dish or restaurant..." type="search"><div class="absolute inset-y-0 right-0 pr-3 flex items-center gap-2"><button aria-label="Voice Search" class="p-1 text-crimson hover:opacity-75 rounded-full hover:bg-crimson/10 transition-colors" title="Voice Search" type="button"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button></div></div></div><div class="flex items-center gap-5 shrink-0"><nav class="hidden lg:flex items-center gap-5 text-xs font-semibold uppercase tracking-wider text-ink-soft"></nav><label class="hidden md:flex items-center gap-2 cursor-pointer select-none bg-oat-50 border border-sandborder px-3 py-1.5 rounded-full hover:border-ink-faint transition"><span class="text-[11px] font-bold uppercase tracking-wider text-ink-soft">VEG</span><div class="relative"><input class="sr-only peer" type="checkbox"><div class="w-8 h-4 bg-oat-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-emerald-600"></div></div></label><a aria-label="Cart" class="relative p-2 rounded-full hover:bg-oat-200 text-ink transition-colors" href="#"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg><span class="absolute top-1 right-1 w-4 h-4 rounded-full bg-crimson text-white text-[10px] font-bold flex items-center justify-center">1</span></a><div class="flex items-center gap-3 pl-2 border-l border-sandborder"><button aria-label="User Account" class="flex items-center gap-2 p-1 rounded-full hover:bg-oat-200 transition-colors"><div class="w-8 h-8 rounded-full bg-crimson text-white flex items-center justify-center font-bold text-xs tracking-tight shadow-sm">AM</div><span class="text-xs font-bold text-ink hidden sm:inline">Aman V.</span><svg class="w-3 h-3 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button></div></div></div></header>
+<!-- END: MainHeader -->
+<!-- BEGIN: MainContent -->
+<main class="flex-grow max-w-7xl mx-auto px-6 py-6 w-full space-y-10">
+<!-- BEGIN: ModeSwitcherAndFilters -->
+<section class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-sandborder pb-6"><div class="inline-flex bg-oat-50 p-1.5 rounded-2xl border border-sandborder shadow-inner self-start md:self-auto"><button class="flex items-center gap-2.5 px-5 py-2 rounded-xl bg-white text-ink font-bold text-xs tracking-wider uppercase shadow-subtle border border-sandborder/50 transition-all"><span class="w-2 h-2 rounded-full bg-crimson animate-pulse"></span><span class="">FOOD DELIVERY</span><span class="text-[10px] font-normal text-ink-muted normal-case border-l border-sandborder pl-2">25 mins</span></button><button class="flex items-center gap-2 px-5 py-2 rounded-xl text-ink-muted hover:text-ink font-semibold text-xs tracking-wider uppercase transition-colors"><svg class="w-4 h-4 text-ink-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg><span class="">QUICK ORDER</span><span class="text-[9px] bg-crimson/10 text-crimson px-1.5 py-0.5 rounded font-bold">VOICE</span></button></div><div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 custom-scrollbar"><button class="px-4 py-1.5 rounded-full bg-ink text-white text-xs font-bold tracking-wide shrink-0 shadow-sm">All</button><button class="px-3.5 py-1.5 rounded-full bg-white border border-sandborder hover:border-ink-soft text-ink-soft text-xs font-semibold tracking-wide shrink-0 transition-colors">Fast Delivery (&lt;25 mins)</button></div></section>
+<!-- END: ModeSwitcherAndFilters -->
+<!-- BEGIN: HeroShowcase -->
+<section class="relative overflow-hidden rounded-3xl bg-ink text-oat-50 border border-sandborder/30 shadow-card">
+<div class="grid grid-cols-1 md:grid-cols-12 items-center">
+<!-- Editorial Copy & Offer Box -->
+<div class="md:col-span-7 p-8 md:p-12 z-10 space-y-5">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-crimson text-white text-[10px] font-bold uppercase tracking-widest">
+<span class="">Botanical Kitchen Specials</span>
+</div>
+<h1 class="text-3xl md:text-5xl font-serif font-bold text-white tracking-tight leading-tight">
+            Feast on your cravings,<br>
+<span class="italic font-normal text-oat-200">handcrafted daily.</span>
+</h1>
+<p class="text-sm text-oat-300 max-w-md font-light leading-relaxed">
+            Experience restaurant dining delivered to your table. Woodfired artisan sourdough pizzas, slow-cooked royal biryanis, and decadent desserts.
+          </p>
+<div class="pt-2 flex flex-wrap items-center gap-4">
+<button class="px-6 py-3 bg-crimson hover:bg-crimson-dark text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-transform hover:-translate-y-0.5 shadow-md">
+              Order Now →
+            </button>
+<div class="flex items-center gap-2 border border-dashed border-oat-400/50 bg-white/5 px-3 py-2 rounded-xl text-xs text-oat-200">
+<span class="text-ink-faint font-mono text-[11px]">USE CODE:</span>
+<span class="font-bold tracking-wider text-white">ZAYKA60</span>
+</div>
+</div>
+</div>
+<!-- Hero Featured Imagery Banner -->
+<div class="md:col-span-5 h-64 md:h-full relative min-h-[300px]">
+<img alt="Artisanal hot pizza with melting mozzarella" class="absolute inset-0 w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgyNIWbuwY9G_yJDZqnLgz1Q1JmnuNwO4JRxd-jIR9pre0IMmgeQTk7LzfA0hJx3BkWBeM4-5J4rAzYacsTnI1l2WFbSKR0ItLMKAstkV27K5iIzrCc9nd9WKrWr0DClbBMtsk5M2T9Gfj8MMSr9Cr1UuEGmA7vgZCO4Ns6EQ-zeEkzITOoufe155SmhmfaLJur36mzHxuFB2SyTpz4-KT1JhG1y7dtxKijaMhe6ON-nOgQ8nfO5wd">
+<div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-ink via-transparent to-transparent"></div>
+
+</div>
+</div>
+</section>
+<!-- END: HeroShowcase -->
+<!-- BEGIN: CuisineCategories -->
+<section class="space-y-6">
+<div class="flex items-end justify-between">
+<div>
+<h2 class="text-2xl font-bold tracking-tight text-ink font-serif">What’s on your mind?</h2>
+<p class="text-xs text-ink-muted uppercase tracking-wider mt-1">Handcrafted picks from your favorite cuisines</p>
+</div>
+<div class="flex items-center gap-2">
+<button aria-label="Previous categories" class="w-8 h-8 rounded-full border border-sandborder bg-white flex items-center justify-center text-ink-muted hover:text-ink hover:border-ink transition">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Next categories" class="w-8 h-8 rounded-full border border-sandborder bg-white flex items-center justify-center text-ink-muted hover:text-ink hover:border-ink transition">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+<!-- Cuisine Round Elements Grid -->
+<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4 sm:gap-6 text-center">
+<!-- Pizzas -->
+<a class="group flex flex-col items-center space-y-2" href="#">
+<div class="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white">
+<img alt="Pizzas" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB-KiIQVIVWDwSUO98G728FZY5yUj1zc5A2bByDJLaWIdiD_sGLZpKThOLZbNJ84NAjQ0V6VZQ5H9AvBitSL9_B4QRrZTO-CsURTQ-De3lJhBW8CxVsPKLF-HsyfemQ073Z2ERXx4digo-7n7TeLFbcqlplb6Jq-jhP-VXitNSpq52B68djc2CBwP-y8gF5H71gLkyMTf2TZ-WKZ2Xfzn-gaFDMuMuEluuxkloimSAFxxfBhpYWkV2">
+</div>
+<span class="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Pizzas</span>
+</a>
+<!-- Biryani -->
+<a class="group flex flex-col items-center space-y-2" href="#">
+<div class="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white">
+<img alt="Biryani" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcFugny5y-BAB93-dEbgIcN9TVt0aJFwaGfX5rNMvIrFjaQIxwF4_Jp-EWY8elrHhJ3iHiGlTZDrwFwl9WwNTFGT-riLGbwEgp1pL0J1h1h93ygdGoYgP_3nu_aSwXp0NuE6YkDZuHqQ8zqg82YcADOBTAOMZE6JUL58vWyTyERB8KSqGtlmZSsHsF9Agm5mXsvDB-n1fqBm1_kfRQwe6vtZ86iERfEy2yaQhQMJ-zFQ4RixB4HKB5">
+</div>
+<span class="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Biryani</span>
+</a>
+<!-- Burgers -->
+<a class="group flex flex-col items-center space-y-2" href="#">
+<div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
+<img alt="Burgers" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnTvAs90fjgBXkAyDu4rwlkbjGlSalr6guUk9sdFS17qibfPd-kKv2UYiDdIfdyakx9G6c4VpHGf5oKWWzmC1ZnzRfSKYanCLIfDJa_uKnZXZL7dzkAFr3KzOEIl_ZAtZYTL9fchggAcvbV_qAzIp6RsfjdODiqpLM0gwSUscKEOcUVaWl-FH22ZevDbNZIzKY7sgPifAsnDJDX-2uelpZLgUn7g7aIThHX1eA9OJyPRbJB9oilAiv">
+</div>
+<span class="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Burgers</span>
+</a>
+<!-- Cakes & Pastries -->
+<a class="group flex flex-col items-center space-y-2" href="#">
+<div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
+<img alt="Cakes and Desserts" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWK15IdkufWwyj_ciHSz4M7fhVTUdh5atsvEMt65ALnWD0AfxoWamtqUeftWYnuJkmVRK-o2w5ZTsBkzoQCwHSB8ShN9bTdktZEB5brmEtecnEgH8dWVmfyrSA9uoXHTZ-J3YkSFyyKxq-kKYubqdMkrbra2hnP1gbL3wj2WfkV2f_b8cmUSB_LXtLxC4mg2y4bALKd4VfDR9zobwikjN1CEAK2tgrCsBElcluLybsRXtxpb6lq73D">
+</div>
+<span class="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Cakes</span>
+</a>
+<!-- Rolls & Wraps -->
+<a class="group flex flex-col items-center space-y-2" href="#">
+<div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
+<img alt="Rolls and Wraps" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADSFB1Fx2cl2ErMxv3L3-2lee1oUbw683amEMC1-N5zlVU3H_sztmKtrtHBs2vK4f9eStKJBinSlocuH_npNTUxIjluN8taTJoCQDpnpZnPdTgg0uoRKS57Zx4hBLnkK6SFQH_Bjh_cUPw7SvIpvefgtYEE4C3cFqHj2527t8rBnA79mQTznvwi9oI_uL_8qZkLIHi2FP1Co4IdbSJkR9X-wdwbvUpLrQ4HZv5dNq7EGSbeHzX8xxL">
+</div>
+<span class="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Rolls</span>
+</a>
+<!-- Pastas -->
+<a class="group flex flex-col items-center space-y-2" href="#">
+<div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
+<img alt="Pastas" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAPBNcoCG6gPAse0zns0lu4i5AZrMFn3l1qC2m2kvsXgrt2z73kWkDUQ-hjiqxD6QlBWoQQGS6h87WB5G___gXGMj2Pn4fB8UFh62KRpIha-kdLDC78M9mu127SQXDfE8DW_bXUIwEWxUPV0oHuW943UTQ07WWD0WXgLP1Hz8P_EkAKLn3S5erX0X-po0rpRP_ndE-seUts5t4-YTFRXZa2sVkFKspEh9VNLs3i7EOGn2MYvjMfIWI">
+</div>
+<span class="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Pastas</span>
+</a>
+<!-- Gelato & Ice Creams -->
+<a class="group flex flex-col items-center space-y-2" href="#">
+<div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
+<img alt="Gelato and desserts" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ4rE7W4ptwQLHJ0EoSQ8vLZNxysY47nCzqYzrGDLeG6b0c0Pkvy3OcJTuIwfzwFaVsZP7DOJmR8jG6NLXuUa7JFLNfHcWe72BCW2GmTOjx9Un4VG49ryTxmlQsbU7SbhnBeShrMKw5JkocvXGAs7NIbv20Rg4aGfmByds7q7X4Les398QBagHMy-b3ujYvuQ4RC3N9pYKi97sk_qOJApRh2DmC5oF7I5_wz-rEPPRWJxRaOONETDi">
+</div>
+<span class="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Gelato</span>
+</a>
+<!-- Grain & Salad Bowls -->
+<a class="group flex flex-col items-center space-y-2" href="#">
+<div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
+<img alt="Healthy Bowls" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfLbQu8uPbsDN7HRpyrHZ_MMtK5iAnGo1QOEJ6i23ZH9I9P1tM9gY4SdUp7kuLOGF_bTXkFSjGpBKmT6g4zUqFAc6DGzWEO2c9HwRT1lU-pwXUpZcmmK3hspERTRFt8cXck7RwAsmjYtSyVYNZTwTIoDoJSxyX6OXkxiJDZMXY42ixmaMsaD6vsmwdPSyDmvu37qVc2wOtXeuJBsOt_yUnR-9m5njTcci9EHQT7Z4LzGhq0Z1ksqO6">
+</div>
+<span class="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Bowls</span>
+</a>
+</div>
+</section>
+<!-- END: CuisineCategories -->
+<!-- BEGIN: TopRatedRestaurants -->
+<section class="space-y-6 pt-4">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="text-2xl font-bold tracking-tight text-ink font-serif">Top rated near you</h2>
+<p class="text-xs text-ink-muted uppercase tracking-wider mt-1">Curated dining partners around Indiranagar</p>
+</div>
+<a class="text-xs font-bold uppercase tracking-wider text-crimson hover:text-crimson-dark flex items-center gap-1" href="#">
+          See all restaurants →
+        </a>
+</div>
+<!-- Restaurant Cards Grid: 4 Columns on Desktop -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1: Toscano Artisan Pizzeria (Matched from Mobile Screenshot) -->
+<article class="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col">
+<div class="relative h-48 w-full overflow-hidden bg-oat-200">
+<img alt="Toscano Artisan Pizzeria wood-fired pizza" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuwD-4csL15oSZLbYVafbr4_eqD3x9qr6gioUfG5xoOsYyvixS0vwmF06FrG-EJyf2zslZPOZzcZwF2waME8glfGUJtZRQMEEp57G-yH1FvrgoCdkBNT9QK8An2P46A4HFGtyBymWiDapI3vdm-taiTgjDkg42JHujfpgDYvdhz663xWzojkPX_Zvr4vdJTW8eoXGqH9K45Hn6Qo181BEJVvrHAOmkLIB2H-lPylus5Jy1ItBicpmS">
+<!-- Favorite Heart Button -->
+<button aria-label="Add to wishlist" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-ink-muted hover:text-crimson shadow-sm transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- Discount Badge Bar -->
+<div class="absolute bottom-3 left-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-crimson/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider">
+<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" fill-rule="evenodd"></path></svg>
+<span class="">70% OFF UPTO ₹120</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+<div>
+<div class="flex items-start justify-between gap-2">
+<h3 class="font-bold text-base text-ink group-hover:text-crimson transition-colors line-clamp-1">Toscano Artisan Pizzeria</h3>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-800 text-white text-[11px] font-bold">
+                  4.6 ★
+                </span>
+</div>
+<div class="flex items-center gap-2 text-xs text-ink-muted mt-1">
+<span class="flex items-center gap-1 text-ink font-medium">
+<svg class="w-3.5 h-3.5 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  25–30 mins
+                </span>
+<span class="">•</span>
+<span class="truncate">Pizzas, Italian, Desserts</span>
+</div>
+</div>
+<!-- Card Bottom Meta -->
+<div class="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
+<span class="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Free delivery with Bolt</span>
+<span class="text-ink-muted font-bold tracking-wider uppercase text-[9px]">1.2K+ Ratings</span>
+</div>
+</div>
+</article>
+<!-- Card 2: Meghana Foods -->
+<article class="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col">
+<div class="relative h-48 w-full overflow-hidden bg-oat-200">
+<img alt="Meghana Foods authentic Hyderabadi Dum Biryani" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_fZTjLWEVipIyFY271VoDyURcERuT7j7v5MjcG4TlevSwIu3aRNEnjpOPQE4RUsxLfx3ArF4vuRbKv2-wZceVazVYWWsNjsryP-T4B2ude-T_s_ujxgY5ozov5ff9Irv2ktYa0olHQK0huVhboazkJfSeWKT0S8P2Wzc3RN-OZaZTxePvl8ykn3oK_wRsQTnw2No7r5br-Dda9yQEOdcDJ2TeqjsudclpGst4Uj8la3gsb7-wf2al">
+<button aria-label="Add to wishlist" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-ink-muted hover:text-crimson shadow-sm transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="absolute bottom-3 left-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-crimson/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider">
+<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" fill-rule="evenodd"></path></svg>
+<span class="">FLAT 50% OFF</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+<div>
+<div class="flex items-start justify-between gap-2">
+<h3 class="font-bold text-base text-ink group-hover:text-crimson transition-colors line-clamp-1">Meghana Foods</h3>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-800 text-white text-[11px] font-bold">
+                  4.8 ★
+                </span>
+</div>
+<div class="flex items-center gap-2 text-xs text-ink-muted mt-1">
+<span class="flex items-center gap-1 text-ink font-medium">
+<svg class="w-3.5 h-3.5 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+                  20–25 mins
+                </span>
+<span class="">•</span>
+<span class="truncate">Biryani, Andhra Special</span>
+</div>
+</div>
+<div class="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
+<span class="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Iconic Local Favorite</span>
+<span class="text-ink-muted font-bold tracking-wider uppercase text-[9px]">₹650 for two</span>
+</div>
+</div>
+</article>
+<!-- Card 3: Truffles Burgers -->
+<article class="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col">
+<div class="relative h-48 w-full overflow-hidden bg-oat-200">
+<img alt="Truffles Gourmet burger and fries" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVeGUNJM5HMi_F-WjJZWe4qMc3RQaygn6LlRt-uZF3Nosbf-eEXiMfbnN34gNnQ3hTje549mGzFq_gV5ROjxzaLYjWaPxqMTc28o1kN1zC6_3Xn6nwXk-AsYFObH98axi1147DDYcSNLU0ABNzYL8BQ3MYP9HsuFnuEfSr3VY7kT1AZf2OofHohXnHXoO-o8m6zraChngVaTX2vYj7nHbsG6LQvhvWgJPTXOZsppsd3jZkLix7MuEY">
+<button aria-label="Add to wishlist" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-ink-muted hover:text-crimson shadow-sm transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="absolute bottom-3 left-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-crimson/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider">
+<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" fill-rule="evenodd"></path></svg>
+<span class="">50% OFF UPTO ₹100</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+<div>
+<div class="flex items-start justify-between gap-2">
+<h3 class="font-bold text-base text-ink group-hover:text-crimson transition-colors line-clamp-1">Truffles Cafe &amp; Burgers</h3>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-800 text-white text-[11px] font-bold">
+                  4.7 ★
+                </span>
+</div>
+<div class="flex items-center gap-2 text-xs text-ink-muted mt-1">
+<span class="flex items-center gap-1 text-ink font-medium">
+<svg class="w-3.5 h-3.5 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  25–30 mins
+                </span>
+<span class="">•</span>
+<span class="truncate">Burgers, American, Shakes</span>
+</div>
+</div>
+<div class="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
+<span class="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Trending Gourmet</span>
+<span class="text-ink-muted font-bold tracking-wider uppercase text-[9px]">₹500 for two</span>
+</div>
+</div>
+</article>
+<!-- Card 4: Belgian Waffle & Co -->
+<article class="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col">
+<div class="relative h-48 w-full overflow-hidden bg-oat-200">
+<img alt="Belgian Waffle warm dessert chocolate cake" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA42fgoc5KpinOhqk_j10kDBdfDpDfqtvJVLjolum2cUiNQ-ZFQE2dVroT10kSTbvxNo4DMIh_Z_2nGuxI_coBqW0okZw-uTditpYnAPdaXeglHU30Zd-zwsz2feTH0o_QdBSWnovd9pponS03aPwMK79Hr8k4acFG1t8tV7Us8YWpYBRUollUXhAhH7rVDxrNq5IrFf43XJCEFMA79UL7Mz87FgzVT--yWaQxYC5ZwUSZiqsgedzTy">
+<button aria-label="Add to wishlist" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-ink-muted hover:text-crimson shadow-sm transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="absolute bottom-3 left-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-crimson/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider">
+<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" fill-rule="evenodd"></path></svg>
+<span class="">100% EGGLESS DESSERTS</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+<div>
+<div class="flex items-start justify-between gap-2">
+<h3 class="font-bold text-base text-ink group-hover:text-crimson transition-colors line-clamp-1">Belgian Waffle &amp; Co</h3>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-800 text-white text-[11px] font-bold">
+                  4.9 ★
+                </span>
+</div>
+<div class="flex items-center gap-2 text-xs text-ink-muted mt-1">
+<span class="flex items-center gap-1 text-ink font-medium">
+<svg class="w-3.5 h-3.5 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  15–20 mins
+                </span>
+<span class="">•</span>
+<span class="truncate">Waffles, Ice Creams, Pastry</span>
+</div>
+</div>
+<div class="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
+<span class="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Express Dispatch</span>
+<span class="text-ink-muted font-bold tracking-wider uppercase text-[9px]">₹400 for two</span>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- END: TopRatedRestaurants -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: FloatingBottomCartDock -->
+<aside aria-label="Current Active Cart" class="fixed bottom-6 inset-x-0 z-50 pointer-events-none px-4 flex justify-center">
+<div class="pointer-events-auto bg-ink text-white max-w-lg w-full rounded-2xl shadow-floating p-2.5 pl-4 flex items-center justify-between border border-sandborder/20 backdrop-blur-xl animate-fade-in-up">
+<!-- Cart Icon & Item Details -->
+<div class="flex items-center gap-3 truncate pr-2">
+<div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-oat-200 shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="truncate">
+<div class="text-xs font-bold uppercase tracking-wider text-oat-200">1 Item in Cart</div>
+<div class="text-sm font-medium text-white truncate">Toscano • Smoky BBQ Paneer Pizza</div>
+</div>
+</div>
+<!-- Action Button -->
+<button class="shrink-0 bg-crimson hover:bg-crimson-dark text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-transform active:scale-95 shadow-md">
+<span class="">View Cart</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</aside>
+<!-- END: FloatingBottomCartDock -->
+<!-- BEGIN: MainFooter -->
+<footer class="mt-20 border-t border-sandborder bg-oat-200/60 pt-16 pb-24 text-ink">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-5 gap-10">
+<!-- Column 1: Brand Philosophy -->
+<div class="md:col-span-2 space-y-4">
+<a class="inline-flex items-center gap-2" href="#">
+<span class="text-2xl font-bold tracking-tighter uppercase font-serif text-crimson">ZAYKA</span>
+<span class="w-1.5 h-1.5 rounded-full bg-crimson mb-1"></span>
+</a>
+<p class="text-xs text-ink-soft max-w-sm leading-relaxed">
+            Botanical editorial dining delivered fresh. We curate premier local kitchens, fine roasters, and artisanal patisseries straight to your doorstep across Bengaluru.
+          </p>
+<div class="pt-2 text-[11px] text-ink-muted">
+            © 2025 Zayka Food Technologies Pvt. Ltd. All rights reserved.
+          </div>
+</div>
+<!-- Column 2: Quick Links -->
+<div class="space-y-3">
+<h4 class="text-xs font-bold uppercase tracking-widest text-ink font-sans">Company</h4>
+<ul class="space-y-2 text-xs text-ink-soft font-medium">
+<li class=""><a class="hover:text-crimson transition-colors" href="#">About Us</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Zayka Corporate</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Careers &amp; Kitchens</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Press &amp; Media</a></li>
+</ul>
+</div>
+<!-- Column 3: Culinary Discovery -->
+<div class="space-y-3">
+<h4 class="text-xs font-bold uppercase tracking-widest text-ink font-sans">Available Cities</h4>
+<ul class="space-y-2 text-xs text-ink-soft font-medium">
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Bengaluru Central</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Mumbai Bandra</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Delhi NCR</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Hyderabad Jubilee</a></li>
+</ul>
+</div>
+<!-- Column 4: Newsletter Sign-up -->
+<div class="space-y-3">
+<h4 class="text-xs font-bold uppercase tracking-widest text-ink font-sans">The Epicurean Letter</h4>
+<p class="text-xs text-ink-muted">Receive weekly restaurant spotlights and secret chef codes.</p>
+<div class="flex items-center gap-2 pt-1">
+<input class="w-full text-xs px-3 py-2 rounded-lg bg-white border border-sandborder focus:outline-none focus:ring-1 focus:ring-crimson" placeholder="Your email" type="email">
+<button class="bg-ink text-white px-3 py-2 rounded-lg text-xs font-bold hover:bg-crimson transition-colors shrink-0">
+              Join
+            </button>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- END: MainFooter -->
+
+</body></html>

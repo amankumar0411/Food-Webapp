@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './HeaderNavigation.css';
 import VoiceOrderModal from '../Client/VoiceOrderModal';
 
 export const HeaderNavigationBase = ({ items, brandName, toggleTheme, isDark, searchQuery, setSearchQuery, isHomePage }) => {
     const navigate = useNavigate();
-    const [openDropdown, setOpenDropdown] = useState(null);
+    const location = useLocation();
     const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
 
     const handleLogout = () => {
         localStorage.removeItem("user");
@@ -15,113 +16,107 @@ export const HeaderNavigationBase = ({ items, brandName, toggleTheme, isDark, se
         window.location.href = "/";
     };
 
-    const toggleDropdown = (label) => {
-        setOpenDropdown(openDropdown === label ? null : label);
-    };
-
     return (
-        <nav className="header-nav">
-            <VoiceOrderModal isOpen={isVoiceModalOpen} onClose={() => setIsVoiceModalOpen(false)} />
-            <div className="nav-container">
-                {/* Brand */}
-                <div className="nav-brand" onClick={() => navigate('/')}>
-                    <h2>{brandName}</h2>
-                </div>
-
-                {/* Integrated Search Bar with Quick Voice Order Mic Button */}
-                <div className="nav-search" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div className="search-input-wrapper">
-                        <span className="search-icon">🔍</span>
-                        <input 
-                            type="text" 
-                            placeholder="Search foods..." 
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            style={{ position: 'relative', zIndex: 100 }}
-                        />
+        <>
+            {/* FIXED STITCH TOP HEADER */}
+            <header className="stitch-top-header">
+                <VoiceOrderModal isOpen={isVoiceModalOpen} onClose={() => setIsVoiceModalOpen(false)} />
+                <div className="stitch-header-inner">
+                    {/* Location Pill / Brand */}
+                    <div className="stitch-location-pill" onClick={() => navigate('/')}>
+                        <div className="stitch-icon-circle">
+                            <span className="material-symbols-outlined text-primary" style={{ transform: 'rotate(45deg)' }}>near_me</span>
+                        </div>
+                        <div className="stitch-loc-info">
+                            <div className="stitch-loc-title">
+                                <span>Food Delivery</span>
+                                <span className="material-symbols-outlined text-muted" style={{ fontSize: '18px' }}>expand_more</span>
+                            </div>
+                            <span className="stitch-loc-sub truncate">Indiranagar, 100ft Road, Bengaluru</span>
+                        </div>
                     </div>
-                    <button 
-                        className="btn btn-warning d-flex align-items-center gap-1"
-                        onClick={() => setIsVoiceModalOpen(true)}
-                        title="Quick Voice Order"
-                        style={{
-                            borderRadius: '16px',
-                            fontWeight: '800',
-                            padding: '8px 14px',
-                            backgroundColor: 'var(--primary-color)',
-                            color: '#fff',
-                            border: 'none',
-                            fontSize: '0.88rem',
-                            whiteSpace: 'nowrap',
-                            boxShadow: '0 4px 12px rgba(226,55,68,0.25)'
-                        }}
+
+                    {/* Search & Actions */}
+                    <div className="stitch-header-actions">
+                        <button 
+                            className="stitch-header-btn" 
+                            onClick={() => setIsVoiceModalOpen(true)}
+                            title="Quick Voice Order"
+                        >
+                            <span className="material-symbols-outlined" style={{ color: 'var(--primary-color)' }}>mic</span>
+                        </button>
+                        
+                        <div className="theme-switch-wrapper" style={{ scale: 0.75 }}>
+                            <span className="theme-switch-icon text-warning">☀️</span>
+                            <label className="theme-switch">
+                                <input type="checkbox" checked={isDark} onChange={toggleTheme} />
+                                <span className="theme-switch-slider"></span>
+                            </label>
+                            <span className="theme-switch-icon text-info">🌙</span>
+                        </div>
+
+                        <button 
+                            className="stitch-avatar-btn" 
+                            onClick={() => navigate('/account')}
+                            title={user.username || "Account"}
+                        >
+                            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>person</span>
+                        </button>
+
+                        <button className="stitch-logout-btn" onClick={handleLogout}>
+                            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>logout</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            {/* PERSISTENT STITCH BOTTOM NAVIGATION */}
+            <nav className="stitch-bottom-nav">
+                <div className="stitch-bottom-nav-inner">
+                    {/* 1. Food */}
+                    <Link 
+                        to="/" 
+                        className={`stitch-nav-item ${location.pathname === '/' ? 'active' : ''}`}
                     >
-                        <span>🎙️</span>
-                        <span className="d-none d-md-inline">Voice Order</span>
-                    </button>
-                </div>
+                        <span className="material-symbols-outlined fill">restaurant</span>
+                        <span className="stitch-nav-label">Food</span>
+                    </Link>
 
-                {/* Nav Items (Bottom Capsule on Mobile) */}
-                <div className={`nav-menu ${isHomePage ? 'hide-on-home' : ''}`}>
-                    <ul className="nav-list">
-                        {items.map((item, index) => (
-                            <li key={index} className={`nav-item ${item.items ? 'has-dropdown' : ''}`}>
-                                {item.items ? (
-                                    <>
-                                        <button 
-                                            className="dropdown-toggle" 
-                                            onClick={() => toggleDropdown(item.label)}
-                                        >
-                                            {item.label}
-                                            <span className={`arrow ${openDropdown === item.label ? 'up' : 'down'}`}></span>
-                                        </button>
-                                        <ul className={`dropdown-menu ${openDropdown === item.label ? 'show' : ''}`}>
-                                            {item.items.map((subItem, subIndex) => (
-                                                <li key={subIndex} className="dropdown-item">
-                                                    <Link 
-                                                        to={subItem.href} 
-                                                        className={subItem.current ? 'active' : ''}
-                                                        onClick={() => setOpenDropdown(null)}
-                                                    >
-                                                        {subItem.label}
-                                                    </Link>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </>
-                                ) : (
-                                    <Link 
-                                        to={item.href} 
-                                        className={item.current ? 'active' : ''}
-                                    >
-                                        {item.label}
-                                    </Link>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                    {/* 2. EatRight with NEW Badge */}
+                    <Link 
+                        to="/?filter=eatright" 
+                        className={`stitch-nav-item ${location.search.includes('eatright') ? 'active' : ''}`}
+                    >
+                        <div className="stitch-nav-icon-wrap">
+                            <span className="material-symbols-outlined">eco</span>
+                            <span className="stitch-new-badge">NEW</span>
+                        </div>
+                        <span className="stitch-nav-label">EatRight</span>
+                    </Link>
 
-                {/* Nav Actions (Theme & Logout) */}
-                <div className="nav-actions">
-                    <div className="theme-switch-wrapper">
-                        <span className="theme-switch-icon text-warning">☀️</span>
-                        <label className="theme-switch">
-                            <input 
-                                type="checkbox" 
-                                checked={isDark} 
-                                onChange={toggleTheme} 
-                            />
-                            <span className="theme-switch-slider"></span>
-                        </label>
-                        <span className="theme-switch-icon text-info">🌙</span>
-                    </div>
+                    {/* 3. Reorder / Cart */}
+                    <Link 
+                        to="/account" 
+                        className={`stitch-nav-item ${location.pathname === '/account' ? 'active' : ''}`}
+                    >
+                        <span className="material-symbols-outlined">history</span>
+                        <span className="stitch-nav-label">Reorder</span>
+                    </Link>
 
-                    <button className="logout-button" onClick={handleLogout}>
-                        LOGOUT
-                    </button>
+                    {/* 4. Yellow Offers Flame Button */}
+                    <Link 
+                        to="/?filter=offers" 
+                        className="stitch-offers-flame-btn"
+                    >
+                        <span className="material-symbols-outlined fill">local_fire_department</span>
+                        <div className="stitch-offers-text">
+                            <span className="stitch-offers-sub">OFFERS</span>
+                            <span className="stitch-offers-main">Pick Free!</span>
+                        </div>
+                        <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>auto_awesome</span>
+                    </Link>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </>
     );
 };

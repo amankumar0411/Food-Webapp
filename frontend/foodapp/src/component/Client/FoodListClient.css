@@ -1,359 +1,731 @@
-/* ===== ZOMATO-STYLE FOOD MENU ===== */
-.menu-wrapper {
-  padding: 24px 16px 100px;
-  max-width: 1400px;
+/* ===== STITCH FOOD DELIVERY LAYOUT STYLING ===== */
+
+.stitch-stage {
+  max-width: 480px;
   margin: 0 auto;
-}
-
-.menu-header {
-  text-align: center;
-  margin-bottom: 28px;
-}
-
-.menu-header h2 {
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  font-weight: 900;
-  color: var(--text-color);
-  letter-spacing: -0.5px;
-}
-
-.menu-header p {
-  color: var(--text-muted, #888);
-  font-size: 1rem;
-}
-
-/* ----- Category Filter Tabs (Shop.app Pill Capsule Filter) ----- */
-.category-tabs {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 36px;
-}
-
-.cat-tab {
-  padding: 10px 24px;
-  border-radius: 100px;
-  border: 1px solid var(--border-color);
-  background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  color: var(--text-color);
-  font-weight: 700;
-  font-size: 0.88rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  white-space: nowrap;
-}
-
-.cat-tab:hover {
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15);
-}
-
-.cat-tab.active {
-  background: var(--primary-gradient);
-  border-color: transparent;
-  color: #fff;
-  box-shadow: 0 8px 24px rgba(112, 0, 255, 0.35);
-}
-
-/* ----- Food Cards Grid ----- */
-.food-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 26px;
-}
-
-/* ----- Individual Card (Shop.app Glassmorphic Card Lifts) ----- */
-.food-card {
-  background: var(--card-bg);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-radius: 24px;
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-color), var(--card-border-glow);
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 60px 16px 100px;
   display: flex;
   flex-direction: column;
-  position: relative;
 }
 
-.food-card:hover {
-  transform: translateY(-8px) scale(1.01);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.3), 0 0 24px rgba(139, 92, 246, 0.2);
-  border-color: rgba(139, 92, 246, 0.4);
-}
-
-.food-card-img-wrap {
-  position: relative;
-  height: 200px;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.food-card-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.food-card:hover .food-card-img-wrap img {
-  transform: scale(1.08);
-}
-
-.veg-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  border: 2px solid #10b981;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.veg-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #10b981;
-}
-
-.bestseller-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: #ffffff;
-  font-size: 0.7rem;
-  font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 100px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
-}
-
-.food-card-body {
-  padding: 18px 20px 20px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.food-card-name {
-  font-size: 1.12rem;
-  font-weight: 800;
-  color: var(--text-color);
-  margin: 0;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-}
-
-.food-card-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.82rem;
-  color: var(--text-muted);
-}
-
-.rating-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  background: #10b981;
-  color: #fff;
-  font-size: 0.78rem;
-  font-weight: 800;
-  padding: 3px 9px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-}
-
-.food-card-desc {
-  font-size: 0.84rem;
-  color: var(--text-muted);
-  margin: 0;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.food-card-footer {
+/* User Greeting & Badges */
+.stitch-user-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: auto;
-  padding-top: 14px;
-  border-top: 1px solid var(--border-color);
+  padding: 8px 0 12px;
 }
-
-.food-price {
-  font-size: 1.25rem;
-  font-weight: 900;
+.stitch-user-info {
+  display: flex;
+  flex-direction: column;
+}
+.stitch-user-name {
+  font-size: 22px;
+  font-weight: 800;
   color: var(--text-color);
-  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.stitch-user-sub {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.stitch-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.stitch-gold-badge {
+  background: linear-gradient(90deg, #e79e00, #f5bf2d, #d98200);
+  color: #291600;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 10px rgba(245, 191, 45, 0.3);
+}
+.stitch-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
-.add-btn {
+/* OVERLAPPING TOP SEGMENTED SWITCHER (FOOD vs QUICK ORDER) */
+.stitch-segmented-container {
+  margin: 6px 0 16px;
+}
+.stitch-segmented-pill {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 6px;
+  border-radius: 20px;
+  background: rgba(28, 3, 12, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 6px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+.stitch-seg-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.stitch-seg-btn.active {
+  background: linear-gradient(180deg, #3d1624, #2e0e1a);
+  border-color: rgba(255, 87, 17, 0.4);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+.stitch-active-indicator {
+  position: absolute;
+  bottom: -4px;
+  width: 36px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 999px;
+  box-shadow: 0 0 10px var(--primary-color);
+}
+.stitch-live-dot {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  animation: pulse-ring 2s infinite;
+}
+
+/* SEARCH ROW & VEG TOGGLE */
+.stitch-search-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.stitch-search-bar {
+  flex: 1;
+  height: 46px;
+  background: #faeef1;
+  border-radius: 999px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+.stitch-search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #1b050f;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.stitch-search-bar input::placeholder {
+  color: rgba(27, 5, 15, 0.5);
+}
+.stitch-mic-trigger {
+  background: none;
+  border: none;
+  color: #1b050f;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.stitch-veg-toggle {
+  height: 46px;
+  padding: 0 14px;
+  background: rgba(42, 11, 25, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-color);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.stitch-veg-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stitch-veg-circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* SUB-TABS ROW */
+.stitch-subtabs-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.stitch-subtab-btn {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 6px 4px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.stitch-subtab-btn.active {
+  color: var(--text-color);
+}
+.stitch-subtab-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: var(--primary-color);
+  border-radius: 999px;
+  box-shadow: 0 0 8px var(--primary-color);
+}
+
+/* HERO PROMO BANNER */
+.stitch-promo-banner {
+  position: relative;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #3e1325 0%, #2a0a19 50%, #1e0513 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+.stitch-promo-content {
+  max-width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+.stitch-promo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(245, 191, 45, 0.15);
+  border: 1px solid rgba(245, 191, 45, 0.3);
+  color: var(--tertiary-gold);
+  font-size: 10px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  width: fit-content;
+}
+.stitch-promo-title {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--text-color);
+  margin: 0;
+}
+.stitch-promo-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 6px 0 14px;
+}
+.stitch-promo-cta {
   background: var(--primary-gradient);
   border: none;
   color: #ffffff;
-  border-radius: 100px;
-  padding: 8px 22px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 11px;
   font-weight: 800;
-  font-size: 0.92rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  letter-spacing: 0.3px;
-  box-shadow: 0 6px 18px rgba(112, 0, 255, 0.3);
+  box-shadow: 0 4px 14px rgba(255, 87, 17, 0.4);
+}
+.stitch-promo-img-wrap {
+  position: absolute;
+  right: -10px;
+  top: 10px;
+  bottom: 10px;
+  width: 140px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.stitch-promo-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.add-btn:hover {
-  transform: scale(1.06) translateY(-2px);
-  box-shadow: 0 10px 28px rgba(112, 0, 255, 0.45);
+/* CATEGORY RAIL */
+.stitch-rail-section {
+  margin-bottom: 20px;
+}
+.stitch-rail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.stitch-rail-header h3 {
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0;
+}
+.stitch-rail-link {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--secondary-color);
+  cursor: pointer;
+}
+.stitch-rail-items {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.stitch-rail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.stitch-rail-img-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.stitch-rail-img-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.stitch-rail-item span {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
-/* ----- Empty / No Results ----- */
-.empty-menu {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--text-muted, #999);
+/* FOOD CARDS GRID */
+.stitch-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
-
-.empty-menu .emoji { font-size: 4rem; }
-.empty-menu h4 { margin: 12px 0 6px; color: var(--text-color); }
-
-/* ----- Quantity Modal ----- */
-.qty-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
+.stitch-food-card {
+  background: linear-gradient(180deg, #2a0b1a 0%, #1f0613 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+.stitch-card-img-wrap {
+  position: relative;
+  height: 160px;
+}
+.stitch-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.stitch-discount-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.stitch-heart-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  border: none;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;   /* always above navbar z-index: 1100 */
-  padding: 100px 16px 16px;  /* top padding clears the fixed navbar */
-  animation: fadeIn 0.2s ease;
+  cursor: pointer;
+}
+.stitch-card-body {
+  padding: 14px;
+}
+.stitch-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.stitch-card-title {
+  font-size: 15px;
+  font-weight: 800;
+  margin: 0;
+}
+.stitch-rating-badge {
+  background: #3a1322;
+  padding: 2px 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.stitch-card-meta {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin: 4px 0 12px;
+}
+.stitch-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 10px;
+}
+.stitch-card-price {
+  font-size: 16px;
+  font-weight: 900;
+}
+.stitch-add-btn {
+  background: var(--primary-gradient);
+  border: none;
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(255, 87, 17, 0.4);
+  cursor: pointer;
 }
 
-.qty-modal-card {
-  background: var(--card-bg, #fff);
-  border-radius: 24px;
-  padding: 28px 24px 32px;
-  width: 100%;
-  max-width: 460px;
-  max-height: calc(100vh - 120px);  /* never overflow below screen */
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+/* QUICK VOICE ORDER STAGE */
+.stitch-quick-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 0;
+}
+.stitch-listening-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.stitch-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #35121f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--primary-color);
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.stitch-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  animation: pulse-ring 1.8s infinite;
+}
+.stitch-voice-heading {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0;
+}
+.stitch-voice-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Centered Glowing Mic Stage */
+.stitch-mic-stage {
   position: relative;
+  margin: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stitch-ring-outer {
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: rgba(255, 87, 17, 0.15);
+}
+.stitch-ring-inner {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(255, 87, 17, 0.25);
+}
+.stitch-main-mic-btn {
+  position: relative;
+  z-index: 10;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff4d00, #ff6a1a, #f5bf2d);
+  border: 4px solid rgba(255, 87, 17, 0.3);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 32px rgba(255, 87, 17, 0.55);
+  transition: transform 0.2s ease;
+}
+.stitch-main-mic-btn:active {
+  transform: scale(0.9);
 }
 
-.qty-modal-img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 14px;
+/* Sound Waves */
+.stitch-sound-waves {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(39, 9, 21, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   margin-bottom: 16px;
 }
 
-.qty-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  border: 2px solid var(--border-color, #ddd);
-  border-radius: 12px;
-  overflow: hidden;
-  width: fit-content;
-  margin: 0 auto 20px;
-}
-
-.qty-btn {
-  background: var(--input-bg, #f5f5f5);
-  border: none;
-  padding: 10px 20px;
-  font-size: 1.3rem;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--primary-color, #e23744);
-  transition: background 0.15s;
-}
-
-.qty-btn:hover { background: rgba(226, 55, 68, 0.1); }
-
-.qty-count {
-  padding: 10px 24px;
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: var(--text-color);
-  background: var(--card-bg, #fff);
-  border-left: 2px solid var(--border-color, #ddd);
-  border-right: 2px solid var(--border-color, #ddd);
-  min-width: 60px;
-  text-align: center;
-}
-
-.confirm-btn {
+/* Transcript Card */
+.stitch-transcript-card {
   width: 100%;
-  padding: 15px;
-  background: var(--primary-color, #e23744);
-  color: #fff;
-  border: none;
-  border-radius: 14px;
-  font-size: 1.1rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: var(--card-bg-high);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
-
-.confirm-btn:hover {
-  background: #c9303c;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(226, 55, 68, 0.4);
-}
-
-.modal-close-btn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: var(--input-bg, #f5f5f5);
-  border: none;
+.stitch-eq-icon {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  color: var(--text-color);
+  background: rgba(255, 87, 17, 0.2);
+  color: var(--primary-color);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-/* ----- Responsive ----- */
-@media (max-width: 480px) {
-  .food-grid { grid-template-columns: 1fr; gap: 16px; }
-  .category-tabs { gap: 8px; }
-  .cat-tab { padding: 7px 14px; font-size: 0.82rem; }
+.stitch-transcript-text {
+  flex: 1;
+  font-size: 13.5px;
+  font-weight: 700;
+  margin: 0;
+  text-align: left;
 }
+.stitch-recognized-tag {
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--primary-color);
+  background: rgba(255, 87, 17, 0.15);
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+/* Auto Timer Card */
+.stitch-auto-timer-card {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #30101d, #361321);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 12px;
+}
+.stitch-timer-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--tertiary-gold);
+  background: rgba(245, 191, 45, 0.15);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.stitch-progress-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-top: 8px;
+  overflow: hidden;
+}
+.stitch-progress-bar {
+  height: 100%;
+  width: 80%;
+  background: linear-gradient(90deg, var(--primary-color), var(--tertiary-gold));
+  border-radius: 999px;
+}
+
+/* Matched Item Card */
+.stitch-voice-matched-card {
+  width: 100%;
+  padding: 14px;
+  border-radius: 20px;
+  background: #341320;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.stitch-check-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stitch-matched-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #240a15;
+  padding: 10px;
+  border-radius: 14px;
+}
+.stitch-matched-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+.stitch-qty-stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #3c1725;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.stitch-qty-stepper button {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.stitch-qty-stepper span {
+  font-size: 12px;
+  font-weight: 900;
+}
+.stitch-voice-pay-cta {
+  width: 100%;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--primary-gradient);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  box-shadow: 0 6px 20px rgba(255, 87, 17, 0.4);
+  cursor: pointer;
+}
+
+/* Fallback Suggestions */
+.stitch-suggestions-card {
+  width: 100%;
+  padding: 14px;
+  border-radius: 20px;
+  background: var(--card-bg-high);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+.stitch-suggestion-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+}
+
+/* FLOATING CART CAPSULE */
+.stitch-floating-cart {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  box-shadow: 0 16px 40px rgba(255, 87, 17, 0.5);
+  cursor: pointer;
+  width: 90%;
+  max-width: 440px;
+  animation: slideUp 0.3s ease;
+}
+

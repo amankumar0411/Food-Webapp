@@ -1,0 +1,486 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Zayka — Quick Order &amp; Live Voice Studio</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Space Grotesk, Playfair Display & DM Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,400&amp;family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&amp;family=Space+Grotesk:wght@400;500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,400;1,600&amp;display=swap" rel="stylesheet" class="">
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            crimson: {
+              DEFAULT: '#c20019',
+              dark: '#9e0014',
+              light: '#fdf2f2',
+              muted: '#f8d7da',
+            },
+            botanical: {
+              cream: '#fff8ef',
+              surface: '#faf3e8',
+              card: '#ffffff',
+              border: '#ecdcc8',
+              dark: '#241c19',
+              muted: '#7d7067',
+              olive: '#48563b',
+              accent: '#d89b6c',
+            }
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['DM Sans', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['Space Mono', 'monospace'],
+          },
+          boxShadow: {
+            'warm-sm': '0 2px 8px rgba(36, 28, 25, 0.04)',
+            'warm-md': '0 8px 24px rgba(36, 28, 25, 0.06)',
+            'warm-lg': '0 16px 36px rgba(36, 28, 25, 0.08)',
+            'orb-glow': '0 0 50px rgba(194, 0, 25, 0.25), 0 0 100px rgba(216, 155, 108, 0.2)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- Core Layout Styles -->
+<style data-purpose="custom-animations">
+    @keyframes pulse-ring {
+      0% { transform: scale(0.92); opacity: 0.8; }
+      50% { transform: scale(1.06); opacity: 0.4; }
+      100% { transform: scale(0.92); opacity: 0.8; }
+    }
+    @keyframes wave-bounce {
+      0%, 100% { height: 6px; }
+      50% { height: 26px; }
+    }
+    .animate-pulse-ring {
+      animation: pulse-ring 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    .wave-bar {
+      animation: wave-bounce 1.2s ease-in-out infinite;
+    }
+    .wave-bar:nth-child(2) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.4s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.3s; }
+  </style>
+<!-- Dot Matrix Canvas & Background Graphics Style -->
+<style data-purpose="matrix-patterns">
+    .bg-matrix-dots {
+      background-image: radial-gradient(#d3beab 1.5px, transparent 1.5px);
+      background-size: 20px 20px;
+    }
+    .subtle-border {
+      border-color: rgba(216, 155, 108, 0.3);
+    }
+  </style>
+<script data-extension-id="cebmnlammjhancocbbnfcglifgdpfejc" src="chrome-extension://cebmnlammjhancocbbnfcglifgdpfejc/js/tb_remapper.js"></script></head>
+<body class="bg-[#fff8ef] text-botanical-dark font-sans antialiased selection:bg-crimson selection:text-white min-h-screen flex flex-col justify-between">
+<!-- BEGIN: SiteNavigation -->
+<header class="sticky top-0 z-40 bg-[#fff8ef]/95 backdrop-blur-md border-b border-botanical-border"><div class="max-w-[1440px] mx-auto px-8 h-20 flex items-center justify-between gap-6">
+  <!-- Brand & Location -->
+  <div class="flex items-center gap-6">
+    <!-- Logo: ZAYKA • -->
+    <a aria-label="Zayka Home" class="flex items-center gap-2 group" href="#"><span class="font-serif text-2xl font-bold tracking-tight text-crimson" style="font-family: Newsreader, &quot;Playfair Display&quot;, serif;">ZAYKA</span><span class="w-2 h-2 rounded-full bg-crimson inline-block mb-1"></span></a>
+    <!-- Divider -->
+    <div class="h-6 w-px bg-botanical-border"></div>
+    <!-- Location Selector -->
+    <button class="flex items-center gap-2.5 text-left px-2 py-1 rounded-xl hover:bg-botanical-surface transition-colors">
+      <div class="w-8 h-8 rounded-full bg-crimson/10 flex items-center justify-center text-crimson flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+      </div>
+      <div>
+        <div class="flex items-center gap-1 text-xs font-bold font-display uppercase tracking-wider text-botanical-dark">
+          <span class="">INDIRANAGAR, BENGALURU</span>
+          <svg class="w-3.5 h-3.5 text-botanical-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        </div>
+        <p class="text-[12px] text-botanical-muted truncate max-w-[190px]">12th Main, HAL 2nd Stage</p>
+      </div>
+    </button>
+  </div>
+
+  <!-- Search Bar with ⌘K and Mic Icon -->
+  <div class="flex-1 max-w-xl mx-4">
+    <div class="relative flex items-center">
+      <div class="absolute left-3.5 text-botanical-muted pointer-events-none">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+      </div>
+      <input class="w-full bg-white border border-botanical-border/80 rounded-full pl-11 pr-24 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-crimson/20 focus:border-crimson placeholder:text-botanical-muted/70 transition-all shadow-warm-sm" placeholder="Search dish or restaurant..." type="text">
+      <div class="absolute right-3 flex items-center gap-2">
+        
+        <button class="p-1 rounded-full text-crimson hover:bg-crimson/10 transition-colors" title="Voice Search">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Navigation Controls -->
+  <div class="flex items-center gap-5">
+    <!-- VEG Toggle Switch -->
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-bold uppercase tracking-wider text-botanical-dark">VEG</span>
+      <button aria-checked="false" class="w-9 h-5 bg-botanical-border rounded-full p-0.5 transition-colors relative flex items-center cursor-pointer" role="switch">
+        <span class="w-4 h-4 rounded-full bg-white shadow-sm block transform translate-x-0 transition-transform"></span>
+      </button>
+    </div>
+    <!-- Cart with 1 badge -->
+    <button aria-label="Cart with 1 item" class="relative p-2 rounded-xl text-botanical-dark hover:text-crimson transition-colors">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path>
+      </svg>
+      <span class="absolute top-0.5 right-0.5 w-4 h-4 bg-crimson text-white rounded-full text-[10px] font-bold flex items-center justify-center shadow-sm">1</span>
+    </button>
+    <!-- User Profile Avatar with Chevron -->
+    <button class="flex items-center gap-2 py-1 pl-1 pr-2 rounded-full hover:bg-botanical-surface transition-colors">
+      <div class="w-8 h-8 rounded-full bg-crimson text-white flex items-center justify-center font-bold text-xs tracking-wider">
+        AM
+      </div>
+      <span class="text-xs font-semibold font-display text-botanical-dark">Aman V.</span>
+      <svg class="w-3.5 h-3.5 text-botanical-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+      </svg>
+    </button>
+  </div>
+</div></header><section class="border-b border-[#E8DFC8]/60 bg-[#FAF4E8]/90 backdrop-blur-md">
+  <div class="max-w-[1440px] mx-auto px-8 h-16 flex items-center justify-between gap-4">
+    <!-- Left: Segmented Toggle Pill Container (elongated pill shape matching Food Tab) -->
+    <div class="inline-flex items-center p-1.5 bg-white rounded-full border border-[#E8DFC8] shadow-sm">
+  <button class="flex items-center gap-2.5 px-5 py-2 rounded-full text-xs font-semibold text-stone-500 hover:text-stone-800 transition-colors">
+    <span class="w-2 h-2 rounded-full bg-crimson"></span>
+    <span class="tracking-wider uppercase">FOOD DELIVERY</span>
+    <span class="h-3 w-px bg-stone-300"></span>
+    <span class="text-stone-400 font-normal">25 mins</span>
+  </button>
+  <button class="flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold text-stone-800 bg-[#FAF4E8] shadow-xs border border-[#E8DFC8]/60 transition-colors">
+    <svg class="w-3.5 h-3.5 text-crimson" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+    </svg>
+    <span class="tracking-wider uppercase">QUICK ORDER</span>
+    <span class="px-1.5 py-0.5 text-[10px] font-bold text-crimson bg-crimson/10 rounded-full uppercase tracking-wider">VOICE</span>
+  </button>
+</div>
+
+    <!-- Right: Filter Pills -->
+    <div class="flex items-center gap-2.5">
+      <!-- Active 'All' Pill -->
+      <button class="px-5 py-2 rounded-full bg-[#1F1E1C] text-white text-xs font-semibold shadow-sm hover:bg-black transition-all">
+        All
+      </button>
+      <!-- 'Fast Delivery (<25 mins)' Pill -->
+      <button class="px-5 py-2 rounded-full bg-[#FFFFFF] border border-[#E8DFC8] text-xs font-medium text-[#1F1E1C] hover:bg-[#FAF4E8] transition-colors shadow-sm">
+        Fast Delivery (&lt;25 mins)
+      </button>
+    </div>
+  </div>
+</section>
+<!-- END: SiteNavigation -->
+<!-- BEGIN: SubheaderDualModeSwitcher -->
+
+<!-- END: SubheaderDualModeSwitcher -->
+<!-- BEGIN: MainStudioContent -->
+<main class="max-w-[1440px] mx-auto px-8 py-8 flex-1 w-full space-y-12">
+<!-- 2-Column Voice Studio & Live Order Resolution Grid -->
+<div class="grid grid-cols-12 gap-8">
+<!-- LEFT COLUMN: Voice Orb & Live Transcript Studio (7 Cols) -->
+<section class="col-span-12 lg:col-span-7 bg-white rounded-3xl border border-botanical-border shadow-warm-md p-8 relative overflow-hidden flex flex-col justify-between min-h-[640px]" data-purpose="voice-interactive-orb">
+<!-- Subtle matrix dot radial background -->
+<div class="absolute inset-0 bg-matrix-dots opacity-40 pointer-events-none"></div>
+<!-- Voice Studio Top Bar -->
+<div class="relative z-10 flex items-center justify-between border-b border-botanical-border/60 pb-5">
+<div class="flex items-center gap-2">
+<span class="px-3 py-1 rounded-full bg-crimson/10 text-crimson text-[11px] font-mono font-bold tracking-wider uppercase">
+              Live Conversational Ordering
+            </span>
+
+</div>
+<!-- Mic Sensitivity Switch -->
+<div class="flex items-center gap-2 text-xs text-botanical-muted font-mono">
+
+
+</div>
+</div>
+<!-- Voice Prompt Header -->
+<div class="relative z-10 text-center pt-4 pb-2 space-y-2">
+<h1 class="font-serif text-3xl md:text-4xl text-botanical-dark font-semibold tracking-tight" style="font-family: Newsreader, &quot;Playfair Display&quot;, serif;">Tap &amp; speak your craving</h1>
+<p class="font-serif italic text-botanical-muted text-base md:text-lg max-w-lg mx-auto" style="font-family: Newsreader, &quot;Playfair Display&quot;, serif;">“Add one artisanal pepperoni pizza with stuffed crust and extra parmesan...”</p>
+</div>
+<!-- Concentric Dot-Matrix Voice Orb Display -->
+<div class="relative z-10 flex flex-col items-center justify-center my-6">
+<div class="relative w-80 h-80 flex items-center justify-center">
+<!-- Outer Glow Rings -->
+<div class="absolute inset-0 rounded-full bg-gradient-to-tr from-crimson/10 via-amber-200/20 to-crimson/5 animate-pulse-ring"></div>
+<!-- Concentric SVG Dot Matrix Radiating Pattern -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 320 320">
+<!-- Outer concentric circle of dots -->
+<g fill="#d89b6c" opacity="0.45">
+<circle cx="160" cy="20" r="3"></circle>
+<circle cx="230" cy="38" r="3"></circle>
+<circle cx="282" cy="90" r="3"></circle>
+<circle cx="300" cy="160" r="3"></circle>
+<circle cx="282" cy="230" r="3"></circle>
+<circle cx="230" cy="282" r="3"></circle>
+<circle cx="160" cy="300" r="3"></circle>
+<circle cx="90" cy="282" r="3"></circle>
+<circle cx="38" cy="230" r="3"></circle>
+<circle cx="20" cy="160" r="3"></circle>
+<circle cx="38" cy="90" r="3"></circle>
+<circle cx="90" cy="38" r="3"></circle>
+</g>
+<!-- Middle concentric dots ring -->
+<g fill="#c20019" opacity="0.6">
+<circle cx="160" cy="55" r="3.5"></circle>
+<circle cx="215" cy="70" r="3.5"></circle>
+<circle cx="255" cy="115" r="3.5"></circle>
+<circle cx="265" cy="160" r="3.5"></circle>
+<circle cx="255" cy="205" r="3.5"></circle>
+<circle cx="215" cy="250" r="3.5"></circle>
+<circle cx="160" cy="265" r="3.5"></circle>
+<circle cx="105" cy="250" r="3.5"></circle>
+<circle cx="65" cy="205" r="3.5"></circle>
+<circle cx="55" cy="160" r="3.5"></circle>
+<circle cx="65" cy="115" r="3.5"></circle>
+<circle cx="105" cy="70" r="3.5"></circle>
+</g>
+<!-- Inner ring dots -->
+<g fill="#c20019" opacity="0.8">
+<circle cx="160" cy="90" r="4"></circle>
+<circle cx="195" cy="100" r="4"></circle>
+<circle cx="225" cy="130" r="4"></circle>
+<circle cx="230" cy="160" r="4"></circle>
+<circle cx="225" cy="190" r="4"></circle>
+<circle cx="195" cy="220" r="4"></circle>
+<circle cx="160" cy="230" r="4"></circle>
+<circle cx="125" cy="220" r="4"></circle>
+<circle cx="95" cy="190" r="4"></circle>
+<circle cx="90" cy="160" r="4"></circle>
+<circle cx="95" cy="130" r="4"></circle>
+<circle cx="125" cy="100" r="4"></circle>
+</g>
+</svg>
+<!-- Center Voice Mic Orb Button -->
+<button aria-label="Trigger Listening State" class="relative group w-36 h-36 rounded-full bg-gradient-to-br from-crimson to-crimson-dark flex flex-col items-center justify-center text-white shadow-orb-glow transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-crimson/30">
+<!-- Audio Wave Visualizer Bars inside center button -->
+<div class="flex items-center gap-1.5 h-7 mb-1">
+<span class="w-1 bg-white rounded-full wave-bar"></span>
+<span class="w-1 bg-white rounded-full wave-bar"></span>
+<span class="w-1 bg-white rounded-full wave-bar"></span>
+<span class="w-1 bg-white rounded-full wave-bar"></span>
+<span class="w-1 bg-white rounded-full wave-bar"></span>
+</div>
+<span class="text-[11px] font-mono font-bold tracking-wider uppercase">Listening</span>
+</button>
+</div>
+<!-- Status Indicator Pill -->
+<div class="mt-4 flex items-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-botanical-surface border border-botanical-border text-[11px] font-mono text-botanical-dark">
+<span class="w-2 h-2 rounded-full bg-crimson animate-pulse"></span>
+              LISTENING • INDIRANAGAR KITCHEN
+            </span>
+</div>
+<p class="text-[11px] text-botanical-muted font-mono mt-2">
+            Tap or hit Spacebar to switch: <span class="text-botanical-dark font-medium">Listening · Thinking · Idle</span>
+</p>
+</div>
+<!-- Live Transcript Card Container -->
+<div class="relative z-10 bg-botanical-surface rounded-2xl p-4 border border-botanical-border shadow-warm-sm space-y-3">
+<div class="flex items-center justify-between text-xs">
+<div class="flex items-center gap-2">
+<span class="font-display font-bold uppercase tracking-wider text-botanical-dark">Live Transcript</span>
+<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-mono font-semibold">98.4% Confidence</span>
+</div>
+<button class="text-crimson hover:underline text-xs font-medium flex items-center gap-1">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              Edit text
+            </button>
+</div>
+<!-- Verbatim recognized text -->
+<p class="font-serif italic text-base text-botanical-dark leading-relaxed">
+            “Add one medium artisanal pepperoni pizza with stuffed crust and check for truffle cake...”
+          </p>
+<!-- Realtime breakdown metadata tags -->
+<div class="flex flex-wrap items-center gap-2 pt-1 border-t border-botanical-border/50 text-[11px] font-mono text-botanical-muted">
+
+
+
+</div>
+</div>
+</section>
+<!-- RIGHT COLUMN: Real-Time Order Resolution & Predictive Cart (5 Cols) -->
+<section class="col-span-12 lg:col-span-5 space-y-6 h-full flex flex-col" data-purpose="order-resolution-and-suggestions">
+<!-- CARD 1: Confirmed Added Product Card -->
+<article class="bg-white rounded-3xl border border-botanical-border shadow-warm-md space-y-5 h-full flex flex-col justify-between p-8">
+<!-- Card Header status -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<h2 class="font-serif font-bold text-lg text-botanical-dark">Got it! Adding to order...</h2>
+</div>
+<span class="px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-full font-mono text-xs font-semibold border border-emerald-200">
+              1x Added
+            </span>
+</div>
+<!-- Product Detailed Box -->
+<div class="flex gap-4 p-3.5 bg-botanical-surface rounded-2xl border border-botanical-border/80">
+<!-- Product Image -->
+<div class="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-botanical-border/40">
+<img alt="Artisanal Pepperoni Pizza" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1Ui_cOF5_kyu5jYWSYHLw0VHAGEQm019f7ZqZeJQhX9QF7PwcyobJB-LsMa7UqbXRvQ7qLgvE8vnRCeVV_bxErTPL1lL7_sAUmwze8qAMMwR79uGtOyjLELrsBqidP4n32kCmvoBDRoTNOckfcaew9_gBXu2O7p5vU6hOS0IvXjceDBq5tHYeyQqsKN67rxW_mw9ok56OwazEoqS3Lq8W8zeCVJ8EdNzofatZQnldM1zMBV7RcdDZQwPa4">
+<div class="absolute top-1.5 left-1.5 w-4 h-4 bg-white/90 rounded flex items-center justify-center p-0.5 shadow-sm">
+<!-- Non-veg red square mark -->
+<span class="w-2.5 h-2.5 rounded-full bg-crimson block"></span>
+</div>
+</div>
+<!-- Product Information -->
+<div class="flex-1 min-w-0 flex flex-col justify-between">
+<div>
+<h3 class="font-display font-bold text-sm text-botanical-dark truncate">Artisanal Pepperoni Pizza</h3>
+<p class="text-xs text-botanical-muted truncate">Crust &amp; Co. Pizzeria • 11.5 inch medium</p>
+<div class="mt-1 flex items-center gap-1.5 text-[11px] font-mono text-botanical-muted">
+<svg class="w-3 h-3 text-crimson" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-botanical-dark font-medium">Customizing: Stuffed Crust Cheese Burst</span>
+</div>
+</div>
+<!-- Pricing line -->
+<div class="flex items-center gap-2 mt-2">
+<span class="font-mono font-bold text-crimson text-base">₹399</span>
+<span class="font-mono text-xs text-botanical-muted line-through">₹499</span>
+<span class="text-[10px] font-mono bg-crimson/10 text-crimson px-1.5 py-0.5 rounded font-bold">20% OFF</span>
+</div>
+</div>
+</div>
+<!-- Progress Countdown Bar -->
+<div class="space-y-1.5 pt-1">
+<div class="flex items-center justify-between text-xs font-mono">
+<span class="text-botanical-muted flex items-center gap-1.5">
+<svg class="w-3.5 h-3.5 text-botanical-muted animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                Auto-confirming in 2s...
+              </span>
+<button class="text-crimson font-bold hover:underline">Cancel</button>
+</div>
+<!-- Progress Line -->
+<div class="w-full bg-botanical-border h-2 rounded-full overflow-hidden">
+<div class="bg-crimson h-full rounded-full transition-all duration-1000" style="width: 75%"></div>
+</div>
+</div>
+<!-- Interactive Action Buttons -->
+<div class="grid grid-cols-2 gap-3 pt-2">
+<button class="w-full py-2.5 rounded-xl border border-botanical-border text-botanical-dark text-xs font-bold hover:bg-botanical-surface transition-colors flex items-center justify-center gap-1.5">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              Keep Talking
+            </button>
+<button class="w-full py-2.5 rounded-xl bg-crimson hover:bg-crimson-dark text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-warm-sm">
+              Checkout Now →
+            </button>
+</div>
+</article>
+<!-- CARD 2: Intelligent Disambiguation & Suggestions -->
+
+<!-- CARD 2: Intelligent Disambiguation & Suggested Pairings -->
+
+
+<!-- CARD 3: Kitchen Stream & Live Dispatch Estimate -->
+</section>
+</div>
+<!-- BEGIN: QuickVoiceShortcuts -->
+
+<!-- END: QuickVoiceShortcuts -->
+</main>
+<!-- END: MainStudioContent -->
+<!-- BEGIN: FloatingStickyBottomDock -->
+<aside aria-label="Quick Voice and Cart Dock" class="sticky bottom-4 z-40 max-w-4xl mx-auto w-full px-6">
+
+</aside>
+<!-- END: FloatingStickyBottomDock -->
+<!-- BEGIN: MainEditorialFooter -->
+<footer class="bg-botanical-surface border-t border-botanical-border mt-16 pt-12 pb-8 text-botanical-muted text-xs">
+<div class="max-w-[1440px] mx-auto px-8">
+<!-- 4 Columns Editorial Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-botanical-border">
+<!-- Column 1: Brand Lore -->
+<div class="space-y-3">
+<div class="flex items-center gap-1.5"><span class="font-serif text-2xl font-bold tracking-tight text-crimson" style="font-family: Newsreader, &quot;Playfair Display&quot;, serif;">ZAYKA</span><span class="w-2 h-2 rounded-full bg-crimson inline-block mb-1"></span></div>
+<p class="text-botanical-muted leading-relaxed">
+Botanical editorial dining delivered fresh. We curate premier local kitchens, fine roasters, and artisanal patisseries straight to your doorstep across Bengaluru.
+</p>
+</div>
+<!-- Column 2: Company -->
+<div class="space-y-2">
+<h3 class="font-display font-bold text-xs uppercase tracking-wider text-botanical-dark">Company</h3>
+<ul class="space-y-1.5 text-botanical-muted">
+<li class=""><a class="hover:text-crimson transition-colors" href="#">About Us</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Zayka Corporate</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Careers &amp; Kitchens</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Press &amp; Media</a></li>
+</ul>
+</div>
+<!-- Column 3: Available Cities -->
+<div class="space-y-2">
+<h3 class="font-display font-bold text-xs uppercase tracking-wider text-botanical-dark">Available Cities</h3>
+<ul class="space-y-1.5 text-botanical-muted">
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Bengaluru Central</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Mumbai Bandra</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Delhi NCR</a></li>
+<li class=""><a class="hover:text-crimson transition-colors" href="#">Hyderabad Jubilee</a></li>
+</ul>
+</div>
+<!-- Column 4: Newsletter & Contact -->
+<div class="space-y-3">
+<h3 class="font-display font-bold text-xs uppercase tracking-wider text-botanical-dark">The Epicurean Letter</h3>
+<p class="text-botanical-muted leading-relaxed">Receive weekly restaurant spotlights and secret chef codes.</p>
+<div class="flex gap-2">
+<input class="w-full bg-white border border-botanical-border rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-crimson focus:border-crimson placeholder:text-botanical-muted/60" placeholder="Your email" type="email">
+<button class="px-4 py-2 bg-botanical-dark hover:bg-black text-white rounded-xl font-bold font-display text-xs transition-colors">
+Join
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Bar -->
+<div class="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] font-mono">
+<div class="">
+© 2025 Zayka Food Technologies Pvt. Ltd. All rights reserved.
+</div>
+</div>
+</div>
+</footer>
+<!-- END: MainEditorialFooter -->
+<!-- Voice Canvas / Keyboard Interaction Listener -->
+<script data-purpose="voice-orb-interaction">
+    document.addEventListener('keydown', function(event) {
+      if (event.code === 'Space' && event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+        event.preventDefault();
+        const micButton = document.querySelector('[aria-label="Trigger Listening State"]');
+        if (micButton) {
+          micButton.classList.toggle('ring-8');
+          micButton.classList.toggle('ring-crimson/30');
+        }
+      }
+    });
+  </script>
+</body></html>
