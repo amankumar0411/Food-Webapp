@@ -42,19 +42,41 @@ function Login({ syncAuth }) {
       setOtpSent(false);
       return;
     }
-    const cleanPhone = phoneNumber.trim();
-    if (!cleanPhone) {
-      toast.error("Please enter a valid mobile number");
+    const cleanPhone = phoneNumber.replace(/\D/g, '');
+    if (cleanPhone.length < 10) {
+      toast.error("Please enter a valid 10-digit mobile number");
       return;
     }
-    setOtpSent(true);
-    setResendCountdown(28);
-    toast.success(`6-digit passcode dispatched to +91 ${cleanPhone}`);
+    const loadingToast = toast.loading("Dispatching verification passcode...");
+    axiosInstance.post("/register/otp/request", { identifier: cleanPhone })
+      .then((res) => {
+        toast.dismiss(loadingToast);
+        setOtpSent(true);
+        setResendCountdown(28);
+        const demoOtp = res.data?.demoOtp;
+        if (demoOtp) {
+          setOtpCode(demoOtp);
+          toast.success(`Passcode dispatched! (Dev Code: ${demoOtp})`, { duration: 5000 });
+        } else {
+          toast.success(`6-digit passcode dispatched to +91 ${cleanPhone}`);
+        }
+      })
+      .catch((err) => {
+        toast.dismiss(loadingToast);
+        toast.error(err.response?.data?.error || "Failed to dispatch verification code");
+      });
   };
 
   const handleResendOtp = () => {
-    setResendCountdown(28);
-    toast.success("New cryptographic passcode dispatched via SMS & WhatsApp");
+    const cleanPhone = phoneNumber.replace(/\D/g, '');
+    axiosInstance.post("/register/otp/request", { identifier: cleanPhone })
+      .then((res) => {
+        setResendCountdown(28);
+        const demoOtp = res.data?.demoOtp;
+        if (demoOtp) setOtpCode(demoOtp);
+        toast.success(`New passcode dispatched! ${demoOtp ? `(Dev: ${demoOtp})` : ''}`);
+      })
+      .catch((err) => toast.error(err.response?.data?.error || "Failed to resend passcode"));
   };
 
   const handleVerifyOtp = () => {
@@ -64,20 +86,25 @@ function Login({ syncAuth }) {
       return;
     }
 
+    const cleanPhone = phoneNumber.replace(/\D/g, '');
     const loadingToast = toast.loading("Verifying cryptographic passcode...");
-    setTimeout(() => {
-      toast.dismiss(loadingToast);
-      // Create authenticated patron session
-      const patronName = `Patron_${phoneNumber.slice(-4) || "Zayka"}`;
-      localStorage.setItem("token", "jwt_botanical_patron_" + Date.now());
-      localStorage.setItem("user", patronName);
-      localStorage.setItem("role", "user");
+    axiosInstance.post("/register/otp/verify", { identifier: cleanPhone, otpCode: code })
+      .then((res) => {
+        toast.dismiss(loadingToast);
+        const { token, username, role, name } = res.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", username);
+        localStorage.setItem("role", role || "user");
+        localStorage.setItem("fullName", name || username);
 
-      if (syncAuth) syncAuth();
-
-      toast.success(`Welcome to the Zayka Guild, ${patronName}! 🌿`);
-      navigate('/');
-    }, 600);
+        if (syncAuth) syncAuth();
+        toast.success(`Welcome to the Zayka Guild, ${name || username}! 🌿`);
+        navigate('/');
+      })
+      .catch((err) => {
+        toast.dismiss(loadingToast);
+        toast.error(err.response?.data?.error || "Invalid or expired verification code");
+      });
   };
 
   const performLogin = () => {
@@ -88,7 +115,7 @@ function Login({ syncAuth }) {
 
     const loadingToast = toast.loading("Authenticating patron credentials...");
 
-    // Wire to existing auth API endpoint: /register/login
+    // Wire to real auth API endpoint: /register/login
     axiosInstance.post("/register/login", creds)
       .then((res) => {
         toast.dismiss(loadingToast);
@@ -117,14 +144,7 @@ function Login({ syncAuth }) {
         } else if (err.response && err.response.status === 401) {
           toast.error("Invalid Username/Email or Password");
         } else {
-          // Demo fallback if backend is offline
-          const demoUsername = creds.uname.split('@')[0] || "Patron";
-          localStorage.setItem("token", "jwt_demo_token_" + Date.now());
-          localStorage.setItem("user", demoUsername);
-          localStorage.setItem("role", "user");
-          if (syncAuth) syncAuth();
-          toast.success(`Welcome back, ${demoUsername}! (Local Mode)`);
-          navigate("/");
+          toast.error(err.response?.data?.error || "Authentication failed. Please check credentials.");
         }
       });
   };

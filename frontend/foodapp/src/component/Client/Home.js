@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../api/axiosInstance';
+import toast from 'react-hot-toast';
 import VoiceOrderModal from './VoiceOrderModal';
 import DesktopNavbarAndModeBar from './desktop/DesktopNavbarAndModeBar';
 import DesktopFoodContent from './desktop/DesktopFoodContent';
@@ -20,9 +22,30 @@ function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [favorites, setFavorites] = useState({});
 
-  // Matrix Orb Canvas State for Mobile Quick Order Tab
-  const [orbStateIndex, setOrbStateIndex] = useState(0); // 0: listening, 1: thinking, 2: idle
+  // Matrix Orb Canvas State & Voice Logic for Mobile Quick Order Tab
+  const [orbStateIndex, setOrbStateIndex] = useState(2); // 0: listening, 1: thinking, 2: idle
+  const [mobileTranscript, setMobileTranscript] = useState("Tap orb to speak or enter your craving");
+  const [mobileMatchedItem, setMobileMatchedItem] = useState({
+    fid: "F101",
+    fname: "Artisanal Pepperoni Pizza (Medium)",
+    qty: 1,
+    unitPrice: 399.0,
+    totalPrice: 399.0,
+    originalPrice: 499.0,
+    customization: "Customizing: Stuffed Crust Cheese Burst",
+    veg: false,
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuALTjgUzSzn9bovRKCGYz-KLdWKW8EanwJaO7D4b2PjZe8CaTILOkdN973GuNhDR267TCtgsYPRX8CcYzFRJ-aVF7R9IAluJdtpWnSA0PbtI2odNuJ27ROJGQKWj9ltPP_KfTfaOHL9TGfN0i33IKagitxkt_FBSow9NrrT9-7pQYRSwcP0Lm7Rj_vsdEh4hbmwX-0U3lgjQ50FrAs8fA7V2LcSpu_mDw5_uyTUzFXN7pppHPGTaH9c"
+  });
+  const [isMobileAutoConfirmActive, setIsMobileAutoConfirmActive] = useState(false);
+  const [mobileAutoConfirmCanceled, setMobileAutoConfirmCanceled] = useState(false);
+  const [mobileAutoConfirmProgress, setMobileAutoConfirmProgress] = useState(100);
+
   const canvasRef = useRef(null);
+  const mobileRecognitionRef = useRef(null);
+  const mobileTranscriptRef = useRef(mobileTranscript);
+  useEffect(() => {
+    mobileTranscriptRef.current = mobileTranscript;
+  }, [mobileTranscript]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -46,9 +69,182 @@ function Home() {
     }
   };
 
-  const cycleOrbState = () => {
-    setOrbStateIndex(prev => (prev + 1) % 3);
+  const submitMobileVoiceOrder = (text) => {
+    if (!text || !text.trim() || text.startsWith("Listening...") || text.startsWith("Tap orb")) return;
+    setOrbStateIndex(1); // Thinking
+    setMobileTranscript(text);
+
+    toast.loading("Finding matches in kitchen menu...", { id: 'mobile-voice' });
+
+    axiosInstance.post("/api/voice-order/text", {
+      transcript: text,
+      uname: userNameDisplay
+    })
+    .then((res) => {
+      toast.dismiss('mobile-voice');
+      setOrbStateIndex(2); // Return to idle/matched
+      if (res.data?.matchedItems && res.data.matchedItems.length > 0) {
+        const item = res.data.matchedItems[0];
+        setMobileMatchedItem({
+          fid: item.fid || "F101",
+          fname: item.fname || text,
+          qty: item.qty || 1,
+          unitPrice: item.unitPrice || 399.0,
+          totalPrice: item.totalPrice || (item.unitPrice ? item.unitPrice * (item.qty || 1) : 399.0),
+          originalPrice: (item.totalPrice ? item.totalPrice + 100 : 499.0),
+          customization: item.customization || "Customizing: Chef Special Seasoning",
+          veg: item.veg !== undefined ? item.veg : false,
+          image: item.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuALTjgUzSzn9bovRKCGYz-KLdWKW8EanwJaO7D4b2PjZe8CaTILOkdN973GuNhDR267TCtgsYPRX8CcYzFRJ-aVF7R9IAluJdtpWnSA0PbtI2odNuJ27ROJGQKWj9ltPP_KfTfaOHL9TGfN0i33IKagitxkt_FBSow9NrrT9-7pQYRSwcP0Lm7Rj_vsdEh4hbmwX-0U3lgjQ50FrAs8fA7V2LcSpu_mDw5_uyTUzFXN7pppHPGTaH9c"
+        });
+        toast.success(`Matched: ${item.fname}! Added to cart 🌿`);
+        setMobileAutoConfirmCanceled(false);
+        setMobileAutoConfirmProgress(100);
+        setIsMobileAutoConfirmActive(true);
+      } else {
+        toast.error("Could not match dish in menu. Try saying Pizza, Biryani, or Burger.");
+      }
+    })
+    .catch((err) => {
+      toast.dismiss('mobile-voice');
+      setOrbStateIndex(2); // Idle
+      toast.error("Could not process voice order. Please try again.");
+    });
   };
+
+  const startMobileListening = async () => {
+    // Stop any existing instance
+    if (mobileRecognitionRef.current) {
+      try { mobileRecognitionRef.current.stop(); } catch (e) {}
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      toast("Voice recognition not supported in this browser. Tap text to enter order.", { id: 'mobile-unsupported' });
+      return;
+    }
+
+    // Request microphone permission first so browser prompt appears reliably
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (err) {
+        console.warn("Microphone access prompt error:", err);
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          toast.error("Microphone permission denied. Please allow microphone in browser bar.");
+          setOrbStateIndex(2);
+          return;
+        }
+      }
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      // On mobile devices, non-continuous single utterance recognition is standard and reliable
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+      recognition.lang = (navigator.language && navigator.language.startsWith('en')) ? navigator.language : 'en-US';
+
+      recognition.onstart = () => {
+        setOrbStateIndex(0); // Listening
+        setMobileTranscript("Listening... Speak your craving 🎙️");
+        toast("Listening to your craving... Speak now 🎙️", { id: 'mobile-listening' });
+      };
+
+      recognition.onresult = (event) => {
+        let interim = '';
+        let final = '';
+        for (let i = 0; i < event.results.length; i++) {
+          const res = event.results[i];
+          if (res.isFinal) {
+            final += res[0].transcript + ' ';
+          } else {
+            interim += res[0].transcript;
+          }
+        }
+        const fullText = (final + interim).trim();
+        if (fullText) {
+          setMobileTranscript(fullText);
+        }
+      };
+
+      recognition.onerror = (event) => {
+        console.warn("Mobile recognition error:", event.error);
+        if (event.error === 'not-allowed' || event.error === 'permission-denied') {
+          toast.error("Microphone permission denied. Tap text to type craving.");
+        } else if (event.error === 'no-speech') {
+          toast("No voice detected. Speak closer to your microphone or tap text.", { id: 'no-speech-mobile' });
+        } else if (event.error === 'network') {
+          toast.error("Speech service network error. Tap text to enter craving.");
+        }
+        setOrbStateIndex(2);
+      };
+
+      recognition.onend = () => {
+        const text = mobileTranscriptRef.current;
+        if (text && !text.startsWith("Listening...") && !text.startsWith("Tap orb") && text.trim().length > 2) {
+          // Automatically submit recognized voice craving!
+          submitMobileVoiceOrder(text.trim());
+        } else {
+          setOrbStateIndex(2);
+        }
+      };
+
+      mobileRecognitionRef.current = recognition;
+      recognition.start();
+    } catch (e) {
+      console.warn("Mobile recognition start error:", e);
+      toast.error("Could not start microphone. Tap text to type craving.");
+      setOrbStateIndex(2);
+    }
+  };
+
+  const cycleOrbState = () => {
+    if (orbStateIndex === 0) {
+      // currently listening -> stop and submit
+      if (mobileRecognitionRef.current) {
+        try { mobileRecognitionRef.current.stop(); } catch (e) {}
+      }
+      const text = mobileTranscriptRef.current;
+      if (text && !text.startsWith("Listening...") && !text.startsWith("Tap orb")) {
+        submitMobileVoiceOrder(text);
+      } else {
+        setOrbStateIndex(1);
+        submitMobileVoiceOrder("1 Farmhouse Pizza and 2 Cold Coffees");
+      }
+    } else if (orbStateIndex === 1) {
+      // thinking -> switch to idle
+      setOrbStateIndex(2);
+    } else {
+      // idle -> start listening
+      startMobileListening();
+    }
+  };
+
+  // Clean up any ongoing recognition on unmount
+  useEffect(() => {
+    return () => {
+      if (mobileRecognitionRef.current) {
+        try { mobileRecognitionRef.current.stop(); } catch (e) {}
+      }
+    };
+  }, []);
+
+  // Mobile auto-confirm countdown timer
+  useEffect(() => {
+    if (!isMobile || activeTab !== 'quick' || !isMobileAutoConfirmActive || mobileAutoConfirmCanceled) return;
+    const interval = setInterval(() => {
+      setMobileAutoConfirmProgress(prev => {
+        if (prev <= 5) {
+          clearInterval(interval);
+          navigate('/billing');
+          return 0;
+        }
+        return prev - 5;
+      });
+    }, 200);
+    return () => clearInterval(interval);
+  }, [isMobile, activeTab, isMobileAutoConfirmActive, mobileAutoConfirmCanceled, navigate]);
 
   // MatrixOrb Canvas Animation Engine
   useEffect(() => {
@@ -587,7 +783,18 @@ function Home() {
                         <span className="font-label-sm text-[10px] uppercase tracking-wider font-bold">Live Voice Order</span>
                       </div>
                       <h1 className="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold tracking-tight">Tap &amp; speak your craving</h1>
-                      <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">“1 Farmhouse Pizza and 2 Cold Coffees”</p>
+                      <p 
+                        className="font-body-sm text-body-sm text-on-surface-variant mt-1 cursor-pointer hover:text-primary transition-colors underline decoration-dotted underline-offset-4"
+                        onClick={() => {
+                          const userCraving = window.prompt("Type your craving (e.g. 1 Farmhouse Pizza and 2 Cold Coffees):", mobileTranscript.startsWith("Listening...") || mobileTranscript.startsWith("Tap orb") ? "" : mobileTranscript);
+                          if (userCraving && userCraving.trim()) {
+                            submitMobileVoiceOrder(userCraving.trim());
+                          }
+                        }}
+                        title="Tap to type craving"
+                      >
+                        “{mobileTranscript}”
+                      </p>
                     </div>
                     {/* MatrixOrb Interactive Voice Visualizer */}
                     <div className="relative flex flex-col items-center justify-center my-space-xs">
@@ -600,11 +807,13 @@ function Home() {
                         <button className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container border border-surface-dim/80 shadow-xs hover:bg-surface-container-high transition-all active:scale-95 cursor-pointer" id="orb-state-toggle" type="button" onClick={cycleOrbState}>
                           <span className={`w-2 h-2 rounded-full ${orbStateIndex === 0 ? 'bg-primary animate-pulse' : orbStateIndex === 1 ? 'bg-raw-ochre animate-ping' : 'bg-surface-dim'}`} id="orb-status-indicator"></span>
                           <span className={`font-label-md text-[11px] font-bold tracking-wider ${orbStateIndex === 0 ? 'text-primary' : orbStateIndex === 1 ? 'text-raw-ochre' : 'text-on-surface-variant'}`} id="orb-status-text">
-                            {orbStateIndex === 0 ? 'LISTENING...' : orbStateIndex === 1 ? 'THINKING...' : 'IDLE (TAP TO ACTIVATE)'}
+                            {orbStateIndex === 0 ? 'LISTENING... (TAP TO PROCESS)' : orbStateIndex === 1 ? 'THINKING...' : 'TAP TO SPEAK 🎙️'}
                           </span>
                           <span className="material-symbols-outlined text-[14px] text-on-surface-variant">sync_alt</span>
                         </button>
-                        <span className="font-body-sm text-[11px] text-on-surface-variant/80 mt-1">Tap orb to switch: Listening · Thinking · Idle</span>
+                        <span className="font-body-sm text-[11px] text-on-surface-variant/80 mt-1">
+                          {orbStateIndex === 0 ? 'Tap orb when done speaking' : orbStateIndex === 1 ? 'Matching dish with kitchen menu...' : 'Tap orb to start voice order · Tap text to type'}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -612,7 +821,7 @@ function Home() {
 
                 {/* Live Cart Detection State (Botanical Sage / Terracotta Accents) */}
                 <section className="px-margin pb-space-md">
-                  <div className="rounded-2xl bg-surface-container-lowest p-space-md shadow-[0_4px_16px_rgba(30,27,21,0.05)] border border-surface-dim/60">
+                  <div className="rounded-2xl bg-surface-container-lowest p-space-md shadow-[0_4px_16px_rgba(30,27,21,0.05)] border border-surface-dim/60 cursor-pointer" onClick={() => navigate('/billing')}>
                     {/* Status Bar */}
                     <div className="flex items-center justify-between pb-space-sm border-b border-surface-dim/40">
                       <div className="flex items-center gap-space-xs">
@@ -626,38 +835,69 @@ function Home() {
                     {/* Item Preview Row */}
                     <div className="flex items-center gap-space-md pt-space-sm pb-space-sm">
                       <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-surface-container border border-surface-dim/50">
-                        <img alt="Artisanal Pepperoni Pizza" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALTjgUzSzn9bovRKCGYz-KLdWKW8EanwJaO7D4b2PjZe8CaTILOkdN973GuNhDR267TCtgsYPRX8CcYzFRJ-aVF7R9IAluJdtpWnSA0PbtI2odNuJ27ROJGQKWj9ltPP_KfTfaOHL9TGfN0i33IKagitxkt_FBSow9NrrT9-7pQYRSwcP0Lm7Rj_vsdEh4hbmwX-0U3lgjQ50FrAs8fA7V2LcSpu_mDw5_uyTUzFXN7pppHPGTaH9c" />
+                        <img 
+                          alt={mobileMatchedItem.fname} 
+                          className="w-full h-full object-cover" 
+                          src={mobileMatchedItem.image}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://lh3.googleusercontent.com/aida-public/AB6AXuALTjgUzSzn9bovRKCGYz-KLdWKW8EanwJaO7D4b2PjZe8CaTILOkdN973GuNhDR267TCtgsYPRX8CcYzFRJ-aVF7R9IAluJdtpWnSA0PbtI2odNuJ27ROJGQKWj9ltPP_KfTfaOHL9TGfN0i33IKagitxkt_FBSow9NrrT9-7pQYRSwcP0Lm7Rj_vsdEh4hbmwX-0U3lgjQ50FrAs8fA7V2LcSpu_mDw5_uyTUzFXN7pppHPGTaH9c";
+                          }}
+                        />
                         {/* Non-veg indicator */}
                         <div className="absolute top-1 left-1 bg-surface-container-lowest/90 backdrop-blur-xs p-0.5 rounded-sm shadow-xs">
-                          <div className="w-2.5 h-2.5 rounded-[2px] border border-error flex items-center justify-center">
-                            <div className="w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-b-[5px] border-b-error"></div>
-                          </div>
+                          {mobileMatchedItem.veg ? (
+                            <div className="w-2.5 h-2.5 rounded-[2px] border border-tertiary flex items-center justify-center">
+                              <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                            </div>
+                          ) : (
+                            <div className="w-2.5 h-2.5 rounded-[2px] border border-error flex items-center justify-center">
+                              <div className="w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-b-[5px] border-b-error"></div>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h2 className="font-headline-sm text-[14px] font-semibold text-on-surface truncate">Artisanal Pepperoni Pizza (Medium)</h2>
+                        <h2 className="font-headline-sm text-[14px] font-semibold text-on-surface truncate">{mobileMatchedItem.fname}</h2>
                         <div className="flex items-center gap-space-xs mt-0.5">
-                          <span className="font-headline-sm text-[15px] font-bold text-primary">₹399</span>
-                          <span className="font-body-sm text-[12px] text-on-surface-variant line-through">₹499</span>
+                          <span className="font-headline-sm text-[15px] font-bold text-primary">₹{mobileMatchedItem.totalPrice}</span>
+                          <span className="font-body-sm text-[12px] text-on-surface-variant line-through">₹{mobileMatchedItem.originalPrice}</span>
                         </div>
                         <div className="flex items-center gap-1 mt-1 text-tertiary">
                           <span className="material-symbols-outlined text-[14px]">tune</span>
-                          <span className="font-body-sm text-[12px] truncate font-medium">Customizing: Stuffed Crust Cheese Burst</span>
+                          <span className="font-body-sm text-[12px] truncate font-medium">{mobileMatchedItem.customization}</span>
                         </div>
                       </div>
                     </div>
                     {/* Auto-Proceed Countdown Banner */}
-                    <div className="mt-space-xs p-space-sm rounded-xl bg-surface-container-low border border-surface-dim/40">
+                    <div className="mt-space-xs p-space-sm rounded-xl bg-surface-container-low border border-surface-dim/40" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-between mb-1.5">
                         <div className="flex items-center gap-1.5">
                           <span className="material-symbols-outlined text-raw-ochre text-[16px]">timer</span>
-                          <span className="font-label-sm text-[11px] text-on-surface font-medium" id="countdown-text">Auto-proceeding to Checkout in 2s...</span>
+                          <span className="font-label-sm text-[11px] text-on-surface font-medium" id="countdown-text">
+                            {isMobileAutoConfirmActive ? (mobileAutoConfirmCanceled ? 'Auto-proceed paused' : 'Auto-proceeding to Checkout in 3s...') : 'Auto-proceeding to Checkout in 3s...'}
+                          </span>
                         </div>
-                        <button className="font-label-sm text-[11px] text-primary font-bold hover:underline cursor-pointer" type="button" onClick={() => setIsVoiceModalOpen(true)}>Cancel</button>
+                        <button 
+                          className="font-label-sm text-[11px] text-primary font-bold hover:underline cursor-pointer" 
+                          type="button" 
+                          onClick={() => {
+                            if (isMobileAutoConfirmActive) {
+                              setMobileAutoConfirmCanceled(!mobileAutoConfirmCanceled);
+                            } else {
+                              setIsVoiceModalOpen(true);
+                            }
+                          }}
+                        >
+                          {isMobileAutoConfirmActive ? (mobileAutoConfirmCanceled ? 'Resume' : 'Pause') : 'Pause'}
+                        </button>
                       </div>
                       {/* Progress Bar Indicator */}
                       <div className="w-full bg-surface-dim/60 h-1.5 rounded-full overflow-hidden">
-                        <div className="bg-gradient-to-r from-clay-terracotta to-primary h-full rounded-full w-3/4 animate-pulse"></div>
+                        <div 
+                          className="bg-gradient-to-r from-clay-terracotta to-primary h-full rounded-full transition-all duration-1000"
+                          style={{ width: isMobileAutoConfirmActive ? (mobileAutoConfirmCanceled ? '0%' : `${mobileAutoConfirmProgress}%`) : '100%' }}
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -695,7 +935,7 @@ function Home() {
         /* ========================================================================= */
         /* 2. DESKTOP VERSION (MATCHING STITCH DESKTOP MOCKUPS PIXEL-FOR-PIXEL)      */
         /* ========================================================================= */
-        <div className="min-h-screen bg-[#FAF3E8] flex flex-col selection:bg-crimson selection:text-white">
+        <div className={`min-h-screen ${desktopTab === 'quick' ? 'bg-[#fff8ef] text-botanical-dark' : 'bg-[#FAF3E8]'} flex flex-col selection:bg-crimson selection:text-white`}>
           <DesktopNavbarAndModeBar
             desktopTab={desktopTab}
             setDesktopTab={setDesktopTab}

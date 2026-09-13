@@ -55,12 +55,12 @@ public class SecurityConfig {
             // ── ROUTE AUTHORISATION ───────────────────────────────────────────────
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers("/register/**").permitAll();
-                auth.requestMatchers("/food/fetch/**").permitAll();
+                auth.requestMatchers("/api/voice-order/**").permitAll();
                 auth.requestMatchers("/reviews/food/**").permitAll();
-                auth.requestMatchers("/api/voice-order").permitAll();
 
                 // Admin & Merchant endpoints
                 auth.requestMatchers("/food/add", "/food/del/**", "/food/upd/**").hasAnyRole("ADMIN", "MERCHANT");
+                auth.requestMatchers("/food/**").permitAll();
                 auth.requestMatchers("/orders/all").hasAnyRole("ADMIN", "MERCHANT");
                 auth.requestMatchers("/order-dtls/all", "/order-dtls/status/**").hasAnyRole("ADMIN", "MERCHANT");
 

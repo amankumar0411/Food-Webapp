@@ -42,10 +42,16 @@ public class VoiceOrderService {
      * Main entry point to process an uploaded audio order file.
      */
     public VoiceOrderResponse processVoiceOrder(MultipartFile audioFile, String uname) {
-        String username = (uname != null && !uname.isBlank()) ? uname : "guest";
-
-        // 1. Speech-to-Text: Convert audio file to transcript string
         String transcript = transcribeAudio(audioFile);
+        return processTranscript(transcript, uname);
+    }
+
+    /**
+     * Core processing engine for voice/text order transcript.
+     * Matches against database food catalog, updates order_table (cart), and computes totals.
+     */
+    public VoiceOrderResponse processTranscript(String transcript, String uname) {
+        String username = (uname != null && !uname.isBlank()) ? uname : "guest";
 
         if (transcript == null || transcript.isBlank()) {
             return new VoiceOrderResponse("", Collections.emptyList(), Collections.emptyList(), null);

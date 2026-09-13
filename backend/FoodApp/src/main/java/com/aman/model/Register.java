@@ -17,16 +17,17 @@ private String uname;
 	@Column(length = 100, nullable = false)
 	@Size(min=6, max=100, message="PASSWORD MUST BE AT LEAST 6 CHARACTERS")
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@com.fasterxml.jackson.annotation.JsonAlias({"password", "psw"})
 private String pass;
 	@Column(length = 10, nullable = false)
 private String role = "user";
-	@Column(length = 25)
+	@Column(length = 100)
 	@NotBlank(message="NAME CAN'T BLANK")
 private String nm;
-	@Column(length = 30)
+	@Column(length = 100)
 	@Email(message = "PROPER FORMAT OF EMAIL GIVEN")
 private String email;
-	@Column(length = 10)
+	@Column(length = 20)
 	@NotBlank(message="PHONE NO MUST BE GIVEN")
 private String phno;
     public Register() {

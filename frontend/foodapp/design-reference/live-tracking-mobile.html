@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="en" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-secondary-fixed-variant": "#703626", "botanical-sage": "#8E9982", "secondary-container": "#ffad96", "clay-terracotta": "#C36953", "surface-dim": "#e0d9cf", "primary-fixed": "#ffdad6", "tertiary-fixed-dim": "#bdcbae", "surface-container": "#f4ede2", "on-surface-variant": "#5d3f3d", "error-container": "#ffdad6", "tertiary-fixed": "#d9e7c9", "secondary-fixed": "#ffdbd1", "outline-variant": "#e6bdb9", "background": "#fff8ef", "on-secondary-fixed": "#380c02", "on-primary-fixed-variant": "#930010", "surface-tint": "#c00019", "on-tertiary-fixed-variant": "#3e4a34", "secondary": "#8d4d3b", "on-primary-fixed": "#410003", "surface-container-lowest": "#ffffff", "on-error": "#ffffff", "primary": "#950010", "on-surface": "#1e1b15", "surface-bright": "#fff8ef", "surface": "#fff8ef", "surface-variant": "#e8e2d7", "on-primary-container": "#ffcfca", "inverse-surface": "#333029", "surface-container-high": "#eee7dc", "tertiary": "#3f4b35", "on-tertiary-fixed": "#141e0c", "soft-cream": "#F4EDE0", "secondary-fixed-dim": "#ffb5a0", "error": "#ba1a1a", "on-primary": "#ffffff", "tertiary-container": "#57634c", "on-secondary": "#ffffff", "raw-ochre": "#C98E57", "primary-container": "#c20019", "primary-fixed-dim": "#ffb3ac", "on-secondary-container": "#7a3e2d", "inverse-primary": "#ffb3ac", "charcoal-ink": "#191816", "on-background": "#1e1b15", "inverse-on-surface": "#f7f0e5", "outline": "#916f6b", "surface-container-highest": "#e8e2d7", "on-tertiary-container": "#d1dfc1", "on-tertiary": "#ffffff", "surface-container-low": "#faf3e8", "on-error-container": "#93000a" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "margin-sm": "1rem", "space-xs": "0.25rem", "gutter": "1.5rem", "space-xl": "2.5rem", "margin-lg": "4rem", "space-lg": "1.5rem", "gutter-sm": "1rem", "space-md": "1rem", "margin": "1.5rem", "gutter-lg": "2.5rem" }, "fontFamily": { "headline-sm": ["Space Grotesk"], "display-lg-mobile": ["Space Grotesk"], "label-sm": ["Space Mono"], "label-md": ["Space Mono"], "headline-lg-mobile": ["Space Grotesk"], "headline-lg": ["Space Grotesk"], "display-lg": ["Space Grotesk"], "headline-md": ["Space Grotesk"], "body-lg": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"] }, "fontSize": { "headline-sm": ["1.25rem", { "lineHeight": "1.625rem", "letterSpacing": "-0.01em", "fontWeight": "500" }], "display-lg-mobile": ["2.25rem", { "lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "500" }], "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.08em", "fontWeight": "400" }], "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.05em", "fontWeight": "400" }], "headline-lg-mobile": ["1.75rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "500" }], "headline-lg": ["2.5rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "500" }], "display-lg": ["3.5rem", { "lineHeight": "3.75rem", "letterSpacing": "-0.03em", "fontWeight": "500" }], "headline-md": ["1.75rem", { "lineHeight": "2.125rem", "letterSpacing": "-0.015em", "fontWeight": "500" }], "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }], "body-sm": ["0.875rem", { "lineHeight": "1.375rem", "fontWeight": "400" }], "body-md": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-gutter-sm flex items-center justify-between"><button aria-label="Go back" class="w-11 h-11 flex items-center justify-center text-on-surface hover:text-primary transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><div class="flex flex-col items-center justify-center flex-1"><h1 class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">Live Order Tracking</h1></div></div></header><main class="flex flex-col relative w-full pt-16 pb-safe bg-surface min-h-screen"><div class="flex flex-col w-full px-gutter-sm space-y-4 pb-12">
+<!-- Status Chip & Live Pulse Header -->
+
+<!-- Section 1: Stylized Delivery Route Map -->
+<div class="relative w-full h-60 rounded-3xl overflow-hidden shadow-sm bg-surface-container">
+<div class="w-full h-full bg-cover bg-center" data-location="Indiranagar 100 Feet Road Bangalore India" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAxB0Gt40C-1QpJX0cL17-Lk56Plj5YkZvbn-CcDmuw0jNXmJbItq1IUB7GT5WRRg6n592l69CNk4UGje0lC_a_bLbxsStsQs80KHWHb8SKD4QUEQ7uJ8Khv_zaZJ16-y7ILa6t3gr90M3szw1BX0VvMASbKpyDYwHaKRYgZRKec7lIlXg8Jbz5RRT1dD5JegNPguMoFomXoymwy8TIBM_f60rrONmvITpqzMCCI6g24AQd9H7_tRwo')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-charcoal-ink/40 via-transparent to-transparent pointer-events-none"></div>
+<!-- Interactive/Live Route Canvas Visual Overlay -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" fill="none" viewBox="0 0 360 240">
+<!-- Route shadow -->
+<path d="M 60 170 C 120 170, 140 100, 210 110 S 270 50, 305 60" opacity="0.9" stroke="#FAF3E8" stroke-linecap="round" stroke-width="6"></path>
+<!-- Route path line -->
+<path class="animate-pulse" d="M 60 170 C 120 170, 140 100, 210 110 S 270 50, 305 60" id="routePath" stroke="#C20019" stroke-dasharray="4 4" stroke-linecap="round" stroke-width="3"></path>
+<!-- Restaurant Anchor -->
+<g transform="translate(60, 170)">
+<circle class="shadow-sm" fill="#FAF3E8" r="12"></circle>
+<circle fill="#191816" r="6"></circle>
+</g>
+<!-- Destination Anchor -->
+<g transform="translate(305, 60)">
+<circle class="shadow-sm" fill="#FAF3E8" r="12"></circle>
+<circle fill="#C20019" r="6"></circle>
+</g>
+</svg>
+<!-- Moving Vehicle Marker -->
+<div class="absolute transition-all duration-700 ease-out transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none" id="liveRiderPin" style="top: 104px; left: 180px; transform: translate(calc(-50% + 1.72861px), calc(-50% - 3.63803px));">
+<div class="px-2 py-0.5 bg-charcoal-ink text-surface font-label-sm text-label-sm rounded-full shadow-md flex items-center space-x-1 mb-1 whitespace-nowrap">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-fixed animate-ping"></span>
+<span class="">Rider on way</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-[18px]">two_wheeler</span>
+</div>
+</div>
+<!-- Map Floating Controls -->
+<div class="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-auto">
+<div class="flex items-center space-x-2 bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">near_me</span>
+<span class="font-label-sm text-label-sm text-on-surface">1.8 km away • 100ft Rd</span>
+</div>
+<button aria-label="Center Map" class="w-8 h-8 bg-surface-container-lowest/90 backdrop-blur-md text-charcoal-ink rounded-full flex items-center justify-center shadow-sm active:scale-95 transition-transform" id="recenterBtn">
+<span class="material-symbols-outlined text-[18px]">my_location</span>
+</button>
+</div>
+</div>
+<!-- Section 2: ETA Countdown Banner Card -->
+<div class="w-full bg-surface-container-lowest rounded-3xl p-5 shadow-sm relative overflow-hidden">
+<div class="flex items-start justify-between">
+<div class="space-y-1">
+<span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase block font-semibold">Estimated Arrival</span>
+<div class="flex items-baseline space-x-2">
+<h2 class="font-display-lg-mobile text-display-lg-mobile text-charcoal-ink leading-tight">22</h2>
+<span class="font-headline-sm text-headline-sm text-charcoal-ink">mins</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium tracking-normal">(08:42 PM)</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-2xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[26px]">skillet</span>
+</div>
+</div>
+<!-- Animated Dynamic Progress Bar -->
+<div class="mt-4 pt-1">
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style="width: 48%"></div>
+</div>
+<div class="mt-2.5 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="inline-block w-2 h-2 rounded-full bg-primary"></span>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold">Kitchen Preparing Your Order</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Step 2 of 4</span>
+</div>
+</div>
+</div>
+<!-- Section 3: Editorial Step-by-Step Progress Timeline -->
+<div class="w-full bg-surface-container-lowest rounded-3xl p-5 shadow-sm">
+<h3 class="font-headline-sm text-headline-sm text-charcoal-ink mb-4">Milestones</h3>
+<div class="space-y-0 relative">
+<!-- Step 1: Completed -->
+<div class="flex items-start group">
+<div class="flex flex-col items-center mr-4">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed shadow-sm z-10">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div class="w-0.5 h-10 bg-tertiary-fixed my-0.5"></div>
+</div>
+<div class="pt-1 flex-1 flex justify-between items-baseline">
+<div>
+<p class="font-body-md text-body-md text-charcoal-ink font-semibold">Order Confirmed</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Payment authenticated via UPI</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">08:18 PM</span>
+</div>
+</div>
+<!-- Step 2: Active / Kitchen Preparing -->
+<div class="flex items-start group">
+<div class="flex flex-col items-center mr-4">
+<div class="relative w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm z-10">
+<span class="w-2.5 h-2.5 rounded-full bg-surface-container-lowest"></span>
+<span class="animate-ping absolute inset-0 rounded-full bg-primary opacity-30"></span>
+</div>
+<div class="w-0.5 h-10 bg-surface-container-highest my-0.5"></div>
+</div>
+<div class="pt-1 flex-1 flex justify-between items-baseline">
+<div>
+<div class="flex items-center space-x-2">
+<p class="font-body-md text-body-md text-primary font-bold">Kitchen Preparing</p>
+<span class="px-1.5 py-0.2 bg-secondary-fixed text-on-secondary-fixed font-label-sm text-[10px] rounded uppercase font-semibold">Now</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Flame roasting artisanal flatbreads</p>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold">In Progress</span>
+</div>
+</div>
+<!-- Step 3: Pending Rider Picked Up -->
+<div class="flex items-start group">
+<div class="flex flex-col items-center mr-4">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant z-10">
+<span class="material-symbols-outlined text-[16px]">sports_motorsports</span>
+</div>
+<div class="w-0.5 h-10 bg-surface-container-highest my-0.5"></div>
+</div>
+<div class="pt-1 flex-1 flex justify-between items-baseline opacity-60">
+<div>
+<p class="font-body-md text-body-md text-charcoal-ink font-medium">Rider Picked Up</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Thermal insulated bag dispatched</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. 08:31</span>
+</div>
+</div>
+<!-- Step 4: Pending Delivered -->
+<div class="flex items-start group">
+<div class="flex flex-col items-center mr-4">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant z-10">
+<span class="material-symbols-outlined text-[16px]">home_pin</span>
+</div>
+</div>
+<div class="pt-1 flex-1 flex justify-between items-baseline opacity-60">
+<div>
+<p class="font-body-md text-body-md text-charcoal-ink font-medium">Delivered to Penthouse</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Handover at doorstep</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. 08:42</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 4: Delivery Partner Card -->
+<div class="w-full bg-surface-container-lowest rounded-3xl p-5 shadow-sm space-y-4">
+<div class="flex items-center space-x-3.5">
+<div class="relative">
+<div class="w-14 h-14 rounded-2xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A smiling Indian male delivery courier in early thirties wearing a neat maroon windbreaker helmet clipped by side, natural warm golden hour outdoor lighting, editorial portrait style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7ytosoi0uDkk1T1cCtNDGOwDCHdxOem49Ier_CBhB-OQYwYKMfMw0WAPC3NETe5bp8ofsgH--kT_ikW4ZuSZmCkh-Ontuhmv6-kYzev6m0ZdG_9N9oi52mAI1bK8aL8zxjFJt1Ea2hpD7bALIKmIPShuEImOb-bOtUFVHsWYnyM_bAhbKoafTMoW0vnhqrmBcbr79hj-aEopGcXexGWs30oRFXnUiC3pX4l000O0VfcOJFxv_LYCB">
+</div>
+<div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-botanical-sage text-surface-container-lowest flex items-center justify-center text-[11px] shadow-sm">
+<span class="material-symbols-outlined text-[13px]">eco</span>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-1.5">
+<h4 class="font-headline-sm text-headline-sm text-charcoal-ink truncate">Ramesh Kumar</h4>
+<span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex items-center space-x-2 mt-0.5 text-on-surface-variant">
+<div class="flex items-center text-raw-ochre">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md font-semibold text-charcoal-ink ml-1">4.9</span>
+</div>
+<span class="text-surface-dim">•</span>
+<span class="font-body-sm text-body-sm truncate">Electric Bike</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Buttons -->
+<div class="grid grid-cols-2 gap-3 pt-1">
+<button class="h-11 rounded-2xl bg-surface-container-high hover:bg-surface-container active:scale-[0.98] transition-all flex items-center justify-center space-x-2 text-charcoal-ink" id="callBtn">
+<span class="material-symbols-outlined text-[19px] text-secondary">call</span>
+<span class="font-label-md text-label-md uppercase font-semibold">Call Rider</span>
+</button>
+<button class="h-11 rounded-2xl bg-charcoal-ink hover:bg-primary active:scale-[0.98] transition-all flex items-center justify-center space-x-2 text-surface-container-lowest" id="msgBtn">
+<span class="material-symbols-outlined text-[19px]">chat</span>
+<span class="font-label-md text-label-md uppercase font-semibold">Message</span>
+</button>
+</div>
+</div>
+<!-- Section 5: Delivery Address Card -->
+<div class="w-full bg-surface-container-lowest rounded-3xl p-5 shadow-sm space-y-3.5">
+<div class="flex items-start space-x-3">
+<div class="w-10 h-10 rounded-2xl bg-surface-container flex items-center justify-center text-charcoal-ink flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">apartment</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded bg-surface-container-high font-label-sm text-[10px] uppercase font-bold text-charcoal-ink tracking-wider">Home</span>
+<h4 class="font-body-md text-body-md font-semibold text-charcoal-ink truncate">Penthouse 402, Indiranagar</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Casa Bella Residences, 12th Main Road, HAL 2nd Stage</p>
+</div>
+</div>
+<!-- Special instructions pill banner -->
+<div class="bg-surface-container-low p-3 rounded-2xl flex items-center space-x-2.5">
+<span class="material-symbols-outlined text-[18px] text-clay-terracotta flex-shrink-0">doorbell</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">
+        Instruction: <span class="text-charcoal-ink font-semibold">Leave at door • Don't ring bell</span>
+</p>
+</div>
+</div>
+<!-- Section 6: Order Summary Snippet -->
+
+<!-- Need Assistance Mini Action -->
+<div class="flex items-center justify-center pt-2">
+<button class="inline-flex items-center space-x-1.5 text-on-surface-variant hover:text-charcoal-ink transition-colors font-label-sm text-label-sm">
+
+
+</button>
+</div>
+</div>
+<script>
+  // Simple micro-interactions for live rider tracking delight
+  (function() {
+    const rider = document.getElementById('liveRiderPin');
+    const recenterBtn = document.getElementById('recenterBtn');
+    const callBtn = document.getElementById('callBtn');
+    const msgBtn = document.getElementById('msgBtn');
+    
+    // Simulate gentle live movement along route
+    let angle = 0;
+    const baseX = 180;
+    const baseY = 104;
+
+    function floatRider() {
+      angle += 0.05;
+      if (rider) {
+        const deltaX = Math.sin(angle) * 7;
+        const deltaY = Math.cos(angle * 0.8) * 4;
+        rider.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
+      }
+      requestAnimationFrame(floatRider);
+    }
+    requestAnimationFrame(floatRider);
+
+    // Recenter tap micro-feedback
+    if (recenterBtn) {
+      recenterBtn.addEventListener('click', () => {
+        recenterBtn.classList.add('rotate-45');
+        setTimeout(() => recenterBtn.classList.remove('rotate-45'), 300);
+      });
+    }
+
+    // Call and message mock notifications
+    if (callBtn) {
+      callBtn.addEventListener('click', () => {
+        const origText = callBtn.innerHTML;
+        callBtn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span class="font-label-md text-label-md font-semibold">Connecting...</span>';
+        setTimeout(() => { callBtn.innerHTML = origText; }, 1400);
+      });
+    }
+
+    if (msgBtn) {
+      msgBtn.addEventListener('click', () => {
+        const origText = msgBtn.innerHTML;
+        msgBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">done</span><span class="font-label-md text-label-md font-semibold">Chat Opened</span>';
+        setTimeout(() => { msgBtn.innerHTML = origText; }, 1400);
+      });
+    }
+  })();
+</script></main>
+
+</body></html>

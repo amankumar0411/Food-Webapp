@@ -3,7 +3,11 @@ import React from 'react';
 function DesktopFoodContent({
   favorites,
   toggleFavorite,
-  navigate
+  navigate,
+  cartCount,
+  cartTotal,
+  cartItems,
+  handleAddToCart
 }) {
   return (
     <div className="flex-grow flex flex-col justify-between">
@@ -174,7 +178,16 @@ function DesktopFoodContent({
                 </div>
                 <div className="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
                   <span className="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Free delivery with Bolt</span>
-                  <span className="text-ink-muted font-bold tracking-wider uppercase text-[9px]">1.2K+ Ratings</span>
+                  <button 
+                    className="bg-crimson hover:bg-crimson-dark text-white px-3 py-1 rounded-lg font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (handleAddToCart) handleAddToCart({ fid: "F101", fname: "Woodfired Margherita Sourdough", price: 420.0 });
+                    }}
+                    type="button"
+                  >
+                    ADD +
+                  </button>
                 </div>
               </div>
             </article>
@@ -212,7 +225,16 @@ function DesktopFoodContent({
                 </div>
                 <div className="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
                   <span className="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Iconic Local Favorite</span>
-                  <span className="text-ink-muted font-bold tracking-wider uppercase text-[9px]">₹650 for two</span>
+                  <button 
+                    className="bg-crimson hover:bg-crimson-dark text-white px-3 py-1 rounded-lg font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (handleAddToCart) handleAddToCart({ fid: "F107", fname: "Slow Cooked Awadhi Biryani", price: 480.0 });
+                    }}
+                    type="button"
+                  >
+                    ADD +
+                  </button>
                 </div>
               </div>
             </article>
@@ -250,7 +272,16 @@ function DesktopFoodContent({
                 </div>
                 <div className="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
                   <span className="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Trending Gourmet</span>
-                  <span className="text-ink-muted font-bold tracking-wider uppercase text-[9px]">₹500 for two</span>
+                  <button 
+                    className="bg-crimson hover:bg-crimson-dark text-white px-3 py-1 rounded-lg font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (handleAddToCart) handleAddToCart({ fid: "F104", fname: "Smoked Provolone Panini", price: 360.0 });
+                    }}
+                    type="button"
+                  >
+                    ADD +
+                  </button>
                 </div>
               </div>
             </article>
@@ -288,7 +319,16 @@ function DesktopFoodContent({
                 </div>
                 <div className="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
                   <span className="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Express Dispatch</span>
-                  <span className="text-ink-muted font-bold tracking-wider uppercase text-[9px]">₹400 for two</span>
+                  <button 
+                    className="bg-crimson hover:bg-crimson-dark text-white px-3 py-1 rounded-lg font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (handleAddToCart) handleAddToCart({ fid: "F105", fname: "Artisanal Tiramisu Rustico", price: 290.0 });
+                    }}
+                    type="button"
+                  >
+                    ADD +
+                  </button>
                 </div>
               </div>
             </article>
@@ -299,30 +339,34 @@ function DesktopFoodContent({
       {/* END: MainContent */}
 
       {/* BEGIN: FloatingBottomCartDock */}
-      <aside aria-label="Current Active Cart" className="fixed bottom-6 inset-x-0 z-50 pointer-events-none px-4 flex justify-center">
-        <div className="pointer-events-auto bg-ink text-white max-w-lg w-full rounded-2xl shadow-floating p-2.5 pl-4 flex items-center justify-between border border-sandborder/20 backdrop-blur-xl animate-fade-in-up">
-          <div className="flex items-center gap-3 truncate pr-2">
-            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-oat-200 shrink-0">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+      {cartCount > 0 && (
+        <aside aria-label="Current Active Cart" className="fixed bottom-6 inset-x-0 z-50 pointer-events-none px-4 flex justify-center">
+          <div className="pointer-events-auto bg-ink text-white max-w-lg w-full rounded-2xl shadow-floating p-2.5 pl-4 flex items-center justify-between border border-sandborder/20 backdrop-blur-xl animate-fade-in-up">
+            <div className="flex items-center gap-3 truncate pr-2">
+              <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-oat-200 shrink-0">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+                </svg>
+              </div>
+              <div className="truncate">
+                <div className="text-xs font-bold uppercase tracking-wider text-oat-200 font-mono">{cartCount} {cartCount === 1 ? 'Item' : 'Items'} in Cart • ₹{cartTotal || 0}</div>
+                <div className="text-sm font-medium text-white truncate">
+                  {cartItems && cartItems.length > 0 ? (cartItems[cartItems.length - 1].fname || cartItems[cartItems.length - 1].name) : "Artisanal Order"}
+                </div>
+              </div>
+            </div>
+            <button 
+              className="shrink-0 bg-crimson hover:bg-crimson-dark text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-transform active:scale-95 shadow-md cursor-pointer"
+              onClick={() => navigate('/billing')}
+            >
+              <span>View Cart</span>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
               </svg>
-            </div>
-            <div className="truncate">
-              <div className="text-xs font-bold uppercase tracking-wider text-oat-200">1 Item in Cart</div>
-              <div className="text-sm font-medium text-white truncate">Toscano • Smoky BBQ Paneer Pizza</div>
-            </div>
+            </button>
           </div>
-          <button 
-            className="shrink-0 bg-crimson hover:bg-crimson-dark text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-transform active:scale-95 shadow-md cursor-pointer"
-            onClick={() => navigate('/billing')}
-          >
-            <span>View Cart</span>
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-            </svg>
-          </button>
-        </div>
-      </aside>
+        </aside>
+      )}
       {/* END: FloatingBottomCartDock */}
 
       {/* BEGIN: MainFooter */}

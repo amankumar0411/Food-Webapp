@@ -34,9 +34,49 @@ public class RegisterController {
 
     // ── REGISTRATION ──────────────────────────────────────────────────────────
     @PostMapping("/add")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody Register reg) {
-        rservice.addData(reg);
-        return new ResponseEntity<>("USER REGISTERED SUCCESSFULLY", HttpStatus.CREATED);
+    public ResponseEntity<?> registerUser(@Valid @RequestBody Register reg) {
+        try {
+            rservice.addData(reg);
+            return new ResponseEntity<>(Map.of("message", "USER REGISTERED SUCCESSFULLY"), HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // ── OTP ENDPOINTS ─────────────────────────────────────────────────────────
+    @PostMapping("/otp/request")
+    public ResponseEntity<?> requestOtp(@RequestBody Map<String, String> payload) {
+        String identifier = payload.get("identifier");
+        if (identifier == null || identifier.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Phone number or email required"));
+        }
+        String code = rservice.requestOtp(identifier);
+        return ResponseEntity.ok(Map.of(
+            "message", "Verification code dispatched successfully",
+            "identifier", identifier,
+            "demoOtp", code // For easy local developer testing
+        ));
+    }
+
+    @PostMapping("/otp/verify")
+    public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> payload) {
+        String identifier = payload.get("identifier");
+        String otpCode = payload.get("otpCode");
+        if (identifier == null || otpCode == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Identifier and OTP code are required"));
+        }
+
+        Register patron = rservice.verifyOtpAndGetPatron(identifier, otpCode);
+        if (patron != null) {
+            String token = jwtUtils.generateToken(patron.getUname(), patron.getRole());
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            response.put("username", patron.getUname());
+            response.put("role", patron.getRole());
+            response.put("name", patron.getNm() != null ? patron.getNm() : patron.getUname());
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid or expired verification code"));
     }
 
     // ── LOGIN ─────────────────────────────────────────────────────────────────

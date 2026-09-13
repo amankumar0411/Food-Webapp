@@ -75,4 +75,50 @@ public class OrderDtlsService {
             "trips", orders
         );
     }
+
+    public Map<String, Object> getUserStats(String uname) {
+        List<Map<String, Object>> orders = repo.findByUnameNative(uname);
+        int totalOrders = orders.size();
+        double totalSpent = 0.0;
+        java.util.Map<String, Integer> itemFrequency = new java.util.HashMap<>();
+
+        for (Map<String, Object> o : orders) {
+            Object grandTotalObj = o.get("grandTotal");
+            Object totalPriceObj = o.get("totalPrice");
+            if (grandTotalObj instanceof Number) {
+                totalSpent += ((Number) grandTotalObj).doubleValue();
+            } else if (totalPriceObj instanceof Number) {
+                totalSpent += ((Number) totalPriceObj).doubleValue();
+            }
+
+            Object fname = o.get("fname");
+            if (fname != null) {
+                String fn = fname.toString();
+                itemFrequency.put(fn, itemFrequency.getOrDefault(fn, 0) + 1);
+            }
+        }
+
+        String favoriteItem = "Woodfired Margherita Sourdough";
+        int maxFreq = 0;
+        for (java.util.Map.Entry<String, Integer> entry : itemFrequency.entrySet()) {
+            if (entry.getValue() > maxFreq) {
+                maxFreq = entry.getValue();
+                favoriteItem = entry.getKey();
+            }
+        }
+
+        int rewardPoints = (int) (totalSpent * 0.1);
+        if (totalOrders == 0) {
+            rewardPoints = 250; // Welcome reward points
+        }
+
+        return Map.of(
+            "uname", uname,
+            "totalOrders", totalOrders,
+            "totalSpent", Math.round(totalSpent * 100.0) / 100.0,
+            "rewardsPoints", rewardPoints,
+            "favoriteCuisine", favoriteItem,
+            "tier", totalOrders >= 10 ? "Zayka Elite Gold" : "Zayka Connoisseur"
+        );
+    }
 }

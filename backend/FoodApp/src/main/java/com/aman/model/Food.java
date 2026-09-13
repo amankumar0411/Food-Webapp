@@ -12,7 +12,7 @@ public class Food {
     @Column(length = 10)
     private String fid;
 
-    @Column(length = 25)
+    @Column(length = 100)
     @NotBlank(message = "FNAME MUST BE GIVEN")
     private String fname;
 

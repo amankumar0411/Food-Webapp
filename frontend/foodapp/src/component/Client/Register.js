@@ -50,9 +50,11 @@ function Register() {
 
     const loadingToast = toast.loading("Creating your Zayka patron profile...");
 
+    const cleanUname = formData.emailAddress.split('@')[0].replace(/[^a-zA-Z0-9]/g, '') + '_' + cleanPhone.slice(-4);
+
     // Payload formatted for backend: /register/add
     const payload = {
-      uname: formData.emailAddress.split('@')[0],
+      uname: cleanUname,
       pass: formData.password,
       nm: formData.fullName,
       email: formData.emailAddress,
@@ -68,10 +70,8 @@ function Register() {
       })
       .catch((err) => {
         toast.dismiss(loadingToast);
-        // Fallback for local development or demo
-        console.warn("Backend /register/add unavailable, using local fallback:", err);
-        toast.success("Account registered in Zayka circle! Please Sign In 🌿");
-        navigate('/login');
+        const errorMsg = err.response?.data?.error || err.response?.data?.message || "Registration failed. Please try again.";
+        toast.error(errorMsg);
       });
   };
 

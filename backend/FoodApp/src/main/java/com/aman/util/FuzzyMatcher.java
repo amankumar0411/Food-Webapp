@@ -69,7 +69,41 @@ public class FuzzyMatcher {
                 continue;
             }
 
-            // 2. Levenshtein similarity distance
+            // 2. Token overlap match (e.g. "margherita" in "woodfired margherita sourdough")
+            String[] targetTokens = target.split("\\s+");
+            String[] candidateTokens = candidate.split("\\s+");
+            int commonTokens = 0;
+            for (String tt : targetTokens) {
+                if (tt.length() < 3) continue;
+                for (String ct : candidateTokens) {
+                    if (ct.length() < 3) continue;
+                    if (ct.equals(tt) || ct.startsWith(tt) || tt.startsWith(ct)) {
+                        commonTokens++;
+                        break;
+                    }
+                }
+            }
+            if (commonTokens > 0) {
+                double tokenScore = 0.70 + (0.15 * commonTokens);
+                if (tokenScore > maxScore) {
+                    maxScore = tokenScore;
+                    bestMatch = food;
+                }
+            }
+
+            // 3. Category matching bonus
+            if (food.getCategory() != null && !food.getCategory().isBlank()) {
+                String cat = normalizeText(food.getCategory());
+                if (target.contains(cat) || (cat.contains("pizza") && target.contains("pizza")) || (cat.contains("pasta") && target.contains("pasta"))) {
+                    double catScore = 0.65;
+                    if (catScore > maxScore) {
+                        maxScore = catScore;
+                        bestMatch = food;
+                    }
+                }
+            }
+
+            // 4. Levenshtein similarity distance
             int maxLen = Math.max(target.length(), candidate.length());
             if (maxLen == 0) continue;
 

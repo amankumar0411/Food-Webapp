@@ -35,4 +35,22 @@ public class VoiceOrderController {
         VoiceOrderResponse response = voiceOrderService.processVoiceOrder(file, uname);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping(value = "/voice-order/text")
+    public ResponseEntity<VoiceOrderResponse> handleVoiceOrderText(
+            @RequestBody java.util.Map<String, String> payload) {
+
+        String transcript = payload.get("transcript");
+        String uname = payload.get("uname");
+
+        if (uname == null || uname.isBlank()) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+                uname = auth.getName();
+            }
+        }
+
+        VoiceOrderResponse response = voiceOrderService.processTranscript(transcript, uname);
+        return ResponseEntity.ok(response);
+    }
 }

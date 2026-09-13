@@ -42,6 +42,12 @@ public class OrderDtlsController {
         return service.getByUser(uname);
     }
 
+    /** Customer: get aggregated lifetime order stats, points, and favorite cuisine */
+    @GetMapping("/stats/{uname}")
+    public Map<String, Object> getUserStats(@PathVariable String uname) {
+        return service.getUserStats(uname);
+    }
+
     /** Admin / Merchant: view ALL paid orders */
     @GetMapping("/all")
     public List<Map<String, Object>> getAll() {

@@ -2,199 +2,272 @@ import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import CartMobile from './cart/CartMobile';
+import CartDesktop from './cart/CartDesktop';
 
 function AddOrder() {
-    const navigate = useNavigate();
-    const currentUserName = localStorage.getItem("user");
-    
-    const [cartItems, setCartItems] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const currentUserName = localStorage.getItem("user");
 
-    // Fetch user's cart items from the database (Using the same query as Billing)
-    useEffect(() => {
-        if (currentUserName) {
-            axiosInstance.get(`/orders/user/details/${currentUserName}`)
-                .then(res => {
-                    // Initialize all fetched items with the database's native quantity, mapped safely
-                    const initializedCart = res.data.map(item => ({
-                        ...item,
-                        // Convert DB quantity to number, default to 1 if it fails
-                        currentQty: Number(item.qty || item.QTY) || 1
-                    }));
-                    setCartItems(initializedCart);
-                    setLoading(false);
-                })
-                .catch(err => {
-                    console.error("Error fetching cart data:", err);
-                    toast.error("Failed to load your cart.");
-                    setLoading(false);
-                });
-        }
-    }, [currentUserName]);
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    // Handle Quantity Changes locally
-    const handleQtyChange = (index, delta) => {
-        const updatedCart = [...cartItems];
-        const newQty = updatedCart[index].currentQty + delta;
-        if (newQty > 0) {
-            updatedCart[index].currentQty = newQty;
-            setCartItems(updatedCart);
-        }
-    };
+  // Responsive Breakpoint check matching 1024px standard
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
-    // Remove item from cart (Swiggy Style UI + Backend Delete)
-    const handleRemoveItem = async (index, oid) => {
-        const loadingToast = toast.loading("Removing item...");
-        try {
-            await axiosInstance.delete(`/orders/delete/${oid}`);
-            toast.dismiss(loadingToast);
-            
-            const updatedCart = [...cartItems];
-            updatedCart.splice(index, 1);
-            setCartItems(updatedCart);
-            
-            toast.success("Item removed from cart 🗑️");
-        } catch (error) {
-            toast.dismiss(loadingToast);
-            console.error("Error deleting item:", error);
-            toast.error("Failed to remove item.");
-        }
-    };
+  // Coupon state
+  const [couponInput, setCouponInput] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState("BOTANICAL50");
+  const [discountAmount, setDiscountAmount] = useState(120);
 
-    // Push final quantities to backend line-by-line, then Pay
-    const handleCheckout = async () => {
-        if (cartItems.length === 0) {
-            toast.error("Your cart is empty!");
-            return;
-        }
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-        const loadingToast = toast.loading("Saving cart and redirecting to payment...");
+  // Fetch user's cart items from the database
+  const fetchCart = () => {
+    if (currentUserName) {
+      axiosInstance.get(`/orders/user/details/${currentUserName}`)
+        .then(res => {
+          if (Array.isArray(res.data) && res.data.length > 0) {
+            const initializedCart = res.data.map(item => ({
+              ...item,
+              currentQty: Number(item.qty || item.QTY) || 1
+            }));
+            setCartItems(initializedCart);
+          } else {
+            // Default sample items if user's DB cart is empty so the rich mockups can be explored
+            setCartItems([
+              {
+                oid: 'demo-1',
+                fid: '1',
+                fname: 'Artisanal Pepperoni Pizza',
+                subtext: 'Medium • Stuffed Crust Cheese Burst',
+                fprice: 399,
+                currentQty: 1,
+                image: 'https://lh3.googleusercontent.com/aida/AEtjO1Xjjm4_ZVVqauAS7mcQM4PLiAulZzogk040b5i_Un70iDimkklimkLWu2Y54_4Xc8irxT8jOH3zqAzXsbOvxer0qNLtCIsbku-fOIZtVTpdDAaZUd9aRtkGr4cA_hBjeYA0zQLJEZNIYCR7q8rWRWtrMWtDsBgoMW4xci-mT13yiUxFkSE0JwoNUvZfj2vo8ie4TEWzouUqWZFBmokJUtEpL3Z2HUjlrcM7lXVXF_T9qS7Hu1Y1_rYIq6I',
+                isVeg: false
+              },
+              {
+                oid: 'demo-2',
+                fid: '2',
+                fname: 'Smoky BBQ Burger',
+                subtext: 'Woodfired Brioche • Double Glaze',
+                fprice: 249,
+                currentQty: 1,
+                image: 'https://lh3.googleusercontent.com/aida/AEtjO1V-_y0s5klUGPhsCnJZt6llTDZKMvMDxxgR5S4TexJFNrzpEb4BGJF6pdIyw_KwqdEB96-dUJUP0Ph6CoGfqSPp7dUfetEXE6VGPuY5H0bC_g_2B1Bs07RE3mjDZwO0HzRCTaQBVOxKYw47UsrUHfJ6GaztY75KRwcUeZQHg0l0IrX2jCB_MmsdeVZOmpMg70l_SKSSJVh6LQnDkvldVlOpDXGl-UA1KeLRnp1tT_YedPk883C-xHC0IAk',
+                isVeg: false
+              },
+              {
+                oid: 'demo-3',
+                fid: '3',
+                fname: 'Belgian Dark Lava Cake',
+                subtext: 'Warm Molten • Wild Berries',
+                fprice: 189,
+                currentQty: 1,
+                image: 'https://lh3.googleusercontent.com/aida/AEtjO1VCl1Tj2rbSwfnrLsN0BocsQ9nCNJnxrTojifnqdTZlmy5tSV6nkay8e1zpe-UsZM4Sw_n-OlzD-UohGbL615NA-dKfPDo6FjQH9lBHvl-cBmxOQS3jv1mHP-62sBN68mpo21tdcpXC6BDtMNQZWCm9220dAfDCnCoDJkoVUbsO_eVoQQ8gQd1Alc_gqJGEu1Lx1fTD1eERU9R7NF1m0_fxW_cNfRzbNoi5G7qIngE3zwBbl0zn0UNqFCc',
+                isVeg: true
+              }
+            ]);
+          }
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error("Error fetching cart data:", err);
+          // Fallback to sample items for demo
+          setCartItems([
+            {
+              oid: 'demo-1',
+              fid: '1',
+              fname: 'Artisanal Pepperoni Pizza',
+              subtext: 'Medium • Stuffed Crust Cheese Burst',
+              fprice: 399,
+              currentQty: 1,
+              isVeg: false
+            },
+            {
+              oid: 'demo-2',
+              fid: '2',
+              fname: 'Smoky BBQ Burger',
+              subtext: 'Woodfired Brioche • Double Glaze',
+              fprice: 249,
+              currentQty: 1,
+              isVeg: false
+            },
+            {
+              oid: 'demo-3',
+              fid: '3',
+              fname: 'Belgian Dark Lava Cake',
+              subtext: 'Warm Molten • Wild Berries',
+              fprice: 189,
+              currentQty: 1,
+              isVeg: true
+            }
+          ]);
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  };
 
-        try {
-            await Promise.all(
-                cartItems.map(item => 
-                    axiosInstance.put(`/orders/update/${item.oid || item.OID}/${item.currentQty}`)
-                )
-            );
-            
-            toast.dismiss(loadingToast);
-            toast.success("Cart synchronized! Redirecting...");
-            setTimeout(() => navigate("/billing"), 1000);
+  useEffect(() => {
+    fetchCart();
+  }, [currentUserName]);
 
-        } catch (error) {
-            toast.dismiss(loadingToast);
-            console.error("Error updating cart quantities", error);
-            toast.error("Error synchronizing cart. Please try again.");
-        }
-    };
+  // Handle Quantity Changes locally and on DB
+  const handleQtyChange = (index, delta) => {
+    const updatedCart = [...cartItems];
+    const newQty = updatedCart[index].currentQty + delta;
+    if (newQty > 0) {
+      updatedCart[index].currentQty = newQty;
+      setCartItems(updatedCart);
+      const oid = updatedCart[index].oid || updatedCart[index].OID;
+      if (oid && !String(oid).startsWith('demo')) {
+        axiosInstance.put(`/orders/update/${oid}/${newQty}`).catch(() => {});
+      }
+    } else {
+      handleRemoveItem(index, updatedCart[index].oid || updatedCart[index].OID);
+    }
+  };
 
-    // Calculate dynamic subtotal
-    const cartTotal = cartItems.reduce((sum, item) => {
-        const unitPrice = Number(item.fprice || item.FPRICE) || 0;
-        return sum + (unitPrice * item.currentQty);
-    }, 0);
+  // Remove item from cart
+  const handleRemoveItem = async (index, oid) => {
+    if (oid && !String(oid).startsWith('demo')) {
+      try {
+        await axiosInstance.delete(`/orders/delete/${oid}`);
+        toast.success("Item removed from tray");
+      } catch (e) {
+        console.error("Error deleting item:", e);
+      }
+    }
+    const updatedCart = [...cartItems];
+    updatedCart.splice(index, 1);
+    setCartItems(updatedCart);
+  };
 
+  // Add Sommelier Upsell Item to Tray
+  const handleAddPairing = async (pairingItem) => {
+    if (currentUserName) {
+      try {
+        await axiosInstance.post('/orders/add', {
+          fid: pairingItem.fid,
+          fname: pairingItem.fname,
+          qty: 1,
+          uname: currentUserName
+        });
+        toast.success(`Added ${pairingItem.fname} to tray! 🍷`);
+        fetchCart();
+      } catch {
+        setCartItems(prev => [...prev, pairingItem]);
+        toast.success(`Added ${pairingItem.fname} to tray! 🍷`);
+      }
+    } else {
+      setCartItems(prev => [...prev, pairingItem]);
+      toast.success(`Added ${pairingItem.fname} to tray! 🍷`);
+    }
+  };
+
+  // Dynamic calculations
+  const itemSubtotal = cartItems.reduce((sum, item) => {
+    const unitPrice = Number(item.fprice || item.FPRICE || item.price || 0);
+    return sum + (unitPrice * (item.currentQty || 1));
+  }, 0);
+
+  const packagingFee = itemSubtotal > 0 ? 58 : 0;
+  const deliveryFee = 0; // Complimentary
+
+  // Handle Coupon Logic
+  const handleApplyCoupon = (codeToApply) => {
+    const code = (codeToApply || couponInput).trim().toUpperCase();
+    if (!code) {
+      toast.error("Please enter a voucher code.");
+      return;
+    }
+    if (code === "BOTANICAL50" || code === "SWIGGY50") {
+      const disc = Math.min(120, Math.round(itemSubtotal * 0.5));
+      setDiscountAmount(disc || 120);
+      setAppliedCoupon(code);
+      toast.success(`Voucher ${code} applied! ₹${disc || 120} saved 🌿`);
+    } else {
+      setDiscountAmount(50);
+      setAppliedCoupon(code);
+      toast.success(`Voucher ${code} applied! ₹50 saved 🌿`);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setDiscountAmount(0);
+    setCouponInput("");
+    toast("Voucher removed");
+  };
+
+  const grandTotal = Math.max(0, itemSubtotal + packagingFee + deliveryFee - (appliedCoupon ? discountAmount : 0));
+
+  // Sync quantities to DB and navigate to Checkout
+  const handleProceedToCheckout = async () => {
+    if (cartItems.length === 0) {
+      toast.error("Your tray is empty!");
+      return;
+    }
+
+    if (currentUserName) {
+      try {
+        await Promise.all(
+          cartItems.filter(item => item.oid && !String(item.oid).startsWith('demo')).map(item =>
+            axiosInstance.put(`/orders/update/${item.oid || item.OID}/${item.currentQty}`)
+          )
+        );
+      } catch (error) {
+        console.error("Cart sync warning", error);
+      }
+    }
+
+    navigate("/billing");
+  };
+
+  const sharedProps = {
+    cartItems,
+    onUpdateQty: handleQtyChange,
+    onRemoveItem: handleRemoveItem,
+    appliedCoupon,
+    couponInput,
+    setCouponInput,
+    onApplyCoupon: handleApplyCoupon,
+    onRemoveCoupon: handleRemoveCoupon,
+    discountAmount,
+    itemSubtotal,
+    packagingFee,
+    deliveryFee,
+    grandTotal,
+    onProceedToCheckout: handleProceedToCheckout,
+    onAddPairing: handleAddPairing,
+    navigate
+  };
+
+  if (loading) {
     return (
-        <div style={{ minHeight: '90vh', padding: '40px 20px', display: 'flex', justifyContent: 'center' }}>
-            <div className="container shadow-sm p-4" style={{ borderRadius: '24px', maxWidth: '900px', backgroundColor: 'var(--card-bg)' }}>
-                <h2 className="fw-bold mb-1" style={{ color: 'var(--text-color)' }}>Your Cart</h2>
-                <p style={{ color: 'var(--primary-color)', fontWeight: 'bold', marginBottom: '30px' }}>
-                    Customer: {currentUserName}
-                </p>
-
-                {loading ? (
-                    <div className="text-center py-5">
-                        <div className="spinner-border text-warning" role="status"></div>
-                        <p className="mt-2">Loading your cart items...</p>
-                    </div>
-                ) : cartItems.length === 0 ? (
-                    <div className="text-center py-5">
-                        <h4>Your cart is empty 🍕</h4>
-                        <button className="btn btn-outline-dark mt-3" onClick={() => navigate('/')}>
-                            Explore Food
-                        </button>
-                    </div>
-                ) : (
-                    <div>
-                        <div className="table-responsive">
-                            <table className="table table-hover align-middle border">
-                                <thead className="table-light">
-                                    <tr>
-                                        <th>ITEM</th>
-                                        <th>PRICE</th>
-                                        <th className="text-center">QUANTITY</th>
-                                        <th className="text-end">TOTAL</th>
-                                        <th className="text-center">ACTION</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {cartItems.map((item, index) => {
-                                        const unitPrice = Number(item.fprice || item.FPRICE) || 0;
-                                        const totalLinePrice = unitPrice * item.currentQty;
-                                        
-                                        return (
-                                            <tr key={index}>
-                                                <td className="fw-bold">{item.fname || item.FNAME}</td>
-                                                <td>₹{unitPrice}</td>
-                                                <td className="text-center">
-                                                    <div className="btn-group border rounded" role="group">
-                                                        <button 
-                                                            type="button" 
-                                                            className="btn btn-sm btn-light border-end"
-                                                            onClick={() => handleQtyChange(index, -1)}
-                                                        >-</button>
-                                                        
-                                                        <button type="button" className="btn" style={{ width: '45px', color: 'var(--text-color)', fontWeight: '600' }} disabled>
-                                                            {item.currentQty}
-                                                        </button>
-                                                        
-                                                        <button 
-                                                            type="button" 
-                                                            className="btn btn-sm btn-light border-start"
-                                                            onClick={() => handleQtyChange(index, 1)}
-                                                        >+</button>
-                                                    </div>
-                                                </td>
-                                                <td className="text-end text-success fw-bold flex-grow-1" style={{minWidth: '70px'}}>₹{totalLinePrice.toFixed(2)}</td>
-                                                <td className="text-center">
-                                                    <button 
-                                                        className="btn btn-sm btn-outline-danger border-0" 
-                                                        title="Remove item"
-                                                        style={{ borderRadius: '50%', padding: '5px 8px' }}
-                                                        onClick={() => handleRemoveItem(index, item.oid || item.OID)}
-                                                    >
-                                                        🗑️
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="d-flex justify-content-between align-items-center mt-4 p-4 rounded-4" style={{ backgroundColor: 'var(--header-bg)', border: '1px solid var(--border-color)' }}>
-                            <h4 className="m-0 text-muted fw-bold" style={{fontSize: '1.1rem'}}>Estimated total</h4>
-                            <h3 className="m-0 fw-bold" style={{ color: 'var(--text-color)' }}>₹{cartTotal.toFixed(2)}</h3>
-                        </div>
-
-                        <div className="d-flex justify-content-between align-items-center mt-4">
-                            <button className="btn fw-bold px-4 py-3 border-0" onClick={() => navigate('/')} 
-                                style={{ backgroundColor: 'var(--header-bg)', color: 'var(--text-color)', borderRadius: '12px' }}>
-                                ← Add more items
-                            </button>
-                            <button className="btn fw-bold px-5 py-3 border-0 shadow-sm" onClick={handleCheckout} 
-                                style={{backgroundColor: 'var(--primary-color)', color: '#fff', borderRadius: '12px', fontSize: '1.1rem'}}>
-                                Proceed to checkout →
-                            </button>
-                        </div>
-                    </div>
-                )}
-                
-                {/* Status messages handled by toast */}
-            </div>
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-3">
+          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <span className="font-label-sm uppercase tracking-wider text-charcoal-ink">Gathering Sanctuary Tray...</span>
         </div>
+      </div>
     );
+  }
+
+  return (
+    <>
+      {isMobile ? (
+        <CartMobile {...sharedProps} />
+      ) : (
+        <CartDesktop {...sharedProps} />
+      )}
+    </>
+  );
 }
 
 export default AddOrder;

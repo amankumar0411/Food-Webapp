@@ -27,6 +27,8 @@ import DriverDashboard from './component/Client/DriverDashboard';
 import Account from './component/Client/Account';
 import ProtectedRoute from './component/common/ProtectedRoute';
 import Home from './component/Client/Home';
+import OrderConfirmation from './component/Client/checkout/OrderConfirmation';
+import OrderTracking from './component/Client/checkout/OrderTracking';
 
 import { Toaster } from 'react-hot-toast';
 
@@ -76,10 +78,18 @@ function App() {
     }
   }, []);
 
-  // Selective background logic: Grainient on inner pages (excluding home)
+  // Selective background logic: Grainient on inner pages (excluding home, auth, account, cart, checkout, confirmation, tracking)
   const isHomePage = location.pathname === "/" || location.pathname === "/home";
   const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
-  const showGrainient = auth && !isHomePage && !isAuthPage;
+  const isAccountPage = location.pathname === "/account";
+  const isCartOrCheckoutPage = [
+    "/addorder", "/cart", 
+    "/billing", "/checkout", 
+    "/order-confirmation", 
+    "/tracking", "/live-order-tracking"
+  ].includes(location.pathname);
+
+  const showGrainient = auth && !isHomePage && !isAuthPage && !isAccountPage && !isCartOrCheckoutPage;
 
   // THEME STATE LOGIC (Default to Light Mode, Check LocalStorage)
   const [isDarkTheme, setIsDarkTheme] = useState(() => {
@@ -133,19 +143,19 @@ function App() {
         </div>
       )}
 
-      {/* 2. DYNAMIC NAVIGATION SELECTION (Inner pages only) */}
-      {(auth && !isHomePage) && (isMerchantOrAdmin ?
+      {/* 2. DYNAMIC NAVIGATION SELECTION (Inner pages only, excluding Home, Account, Cart, and Checkout) */}
+      {(auth && !isHomePage && !isAccountPage && !isCartOrCheckoutPage) && (isMerchantOrAdmin ?
         <Nav toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} /> :
         <NavClient toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} />
       )}
 
       <div className="container-fluid main-content-area" style={{ 
-        paddingTop: auth ? (isHomePage ? '0' : '180px') : '0', 
-        paddingLeft: (isHomePage || isAuthPage) ? '0' : '15px',
-        paddingRight: (isHomePage || isAuthPage) ? '0' : '15px',
+        paddingTop: auth ? ((isHomePage || isAccountPage || isCartOrCheckoutPage) ? '0' : '180px') : '0', 
+        paddingLeft: (isHomePage || isAuthPage || isAccountPage || isCartOrCheckoutPage) ? '0' : '15px',
+        paddingRight: (isHomePage || isAuthPage || isAccountPage || isCartOrCheckoutPage) ? '0' : '15px',
         position: 'relative', 
         zIndex: 1, 
-        minHeight: isHomePage ? '100vh' : 'auto' 
+        minHeight: (isHomePage || isAccountPage || isCartOrCheckoutPage) ? '100vh' : 'auto' 
       }}>
         <Routes>
           {/* PUBLIC ROUTES */}
@@ -157,6 +167,15 @@ function App() {
           <Route path="/merchant/register" element={<MerchantRegister />} />
           <Route path="/driver/login" element={<DriverLogin syncAuth={syncAuth} />} />
           <Route path="/driver/register" element={<DriverRegister />} />
+
+          {/* CART, CHECKOUT, CONFIRMATION & TRACKING ROUTES */}
+          <Route path="/cart" element={<AddOrder />} />
+          <Route path="/addorder" element={<AddOrder />} />
+          <Route path="/billing" element={<Billing />} />
+          <Route path="/checkout" element={<Billing />} />
+          <Route path="/order-confirmation" element={<OrderConfirmation />} />
+          <Route path="/tracking" element={<OrderTracking />} />
+          <Route path="/live-order-tracking" element={<OrderTracking />} />
 
           {/* AUTHENTICATED USER ROUTES */}
           <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
@@ -178,8 +197,6 @@ function App() {
           {(auth && !isMerchantOrAdmin && !isDriver) && (
             <>
               <Route path="/foodlistclient" element={<FoodListClient searchQuery={searchQuery} />} />
-              <Route path="/addorder" element={<AddOrder />} />
-              <Route path="/billing" element={<Billing />} />
             </>
           )}
 
