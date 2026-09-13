@@ -257,7 +257,6 @@ function DesktopQuickOrderContent({
     return () => clearInterval(interval);
   }, [isAutoConfirmActive, autoConfirmCanceled, navigate]);
 
-  // Keyboard shortcut: Spacebar toggles listening state when not typing in inputs
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.code === 'Space' && event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
@@ -267,6 +266,7 @@ function DesktopQuickOrderContent({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isListening, isProcessing]);
 
   const handleEditTextClick = () => {

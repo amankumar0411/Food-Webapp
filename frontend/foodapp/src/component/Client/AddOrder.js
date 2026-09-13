@@ -115,6 +115,7 @@ function AddOrder() {
 
   useEffect(() => {
     fetchCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserName]);
 
   // Handle Quantity Changes locally and on DB
