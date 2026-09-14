@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import toast from 'react-hot-toast';
-import VoiceOrderModal from './VoiceOrderModal';
 import DesktopNavbarAndModeBar from './desktop/DesktopNavbarAndModeBar';
 import DesktopFoodContent from './desktop/DesktopFoodContent';
 import DesktopQuickOrderContent from './desktop/DesktopQuickOrderContent';
 
 function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
   const auth = localStorage.getItem("user");
   const parsedUser = auth ? (auth.startsWith("{") ? JSON.parse(auth) : { username: auth }) : null;
   const userNameDisplay = parsedUser?.username ? parsedUser.username : "Aman";
@@ -17,7 +17,6 @@ function Home() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [activeTab, setActiveTab] = useState("food"); // Mobile tab: 'food' | 'quick'
   const [desktopTab, setDesktopTab] = useState("food"); // Desktop tab: 'food' | 'quick'
-  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
   const [isVegOnly, setIsVegOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [favorites, setFavorites] = useState({});
@@ -54,6 +53,15 @@ function Home() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Listen to tab query parameter (?tab=quick)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('tab') === 'quick') {
+      setActiveTab('quick');
+      setDesktopTab('quick');
+    }
+  }, [location.search]);
 
   const toggleFavorite = (id) => {
     setFavorites(prev => ({ ...prev, [id]: !prev[id] }));
@@ -366,8 +374,6 @@ function Home() {
 
   return (
     <>
-      <VoiceOrderModal isOpen={isVoiceModalOpen} onClose={() => setIsVoiceModalOpen(false)} />
-
       {/* ========================================================================= */}
       {/* 1. MOBILE VERSION                                                         */}
       {/* ========================================================================= */}
@@ -448,7 +454,7 @@ function Home() {
                     />
                     <div className="flex items-center gap-1.5 text-on-surface-variant pl-1">
                       <span className="w-px h-4 bg-surface-dim"></span>
-                      <button aria-label="Voice Search" className="p-1 text-secondary hover:text-primary transition-colors cursor-pointer" type="button" onClick={() => setIsVoiceModalOpen(true)}>
+                      <button aria-label="Voice Search" className="p-1 text-secondary hover:text-primary transition-colors cursor-pointer" type="button" onClick={() => { setActiveTab('quick'); startMobileListening(); }}>
                         <span className="material-symbols-outlined text-[18px]">mic</span>
                       </button>
                     </div>
@@ -882,11 +888,7 @@ function Home() {
                           className="font-label-sm text-[11px] text-primary font-bold hover:underline cursor-pointer" 
                           type="button" 
                           onClick={() => {
-                            if (isMobileAutoConfirmActive) {
-                              setMobileAutoConfirmCanceled(!mobileAutoConfirmCanceled);
-                            } else {
-                              setIsVoiceModalOpen(true);
-                            }
+                            setMobileAutoConfirmCanceled(prev => !prev);
                           }}
                         >
                           {isMobileAutoConfirmActive ? (mobileAutoConfirmCanceled ? 'Resume' : 'Pause') : 'Pause'}

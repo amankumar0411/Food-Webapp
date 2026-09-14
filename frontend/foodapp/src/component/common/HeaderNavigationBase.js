@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './HeaderNavigation.css';
-import VoiceOrderModal from '../Client/VoiceOrderModal';
 
 export const HeaderNavigationBase = ({ items, brandName, toggleTheme, isDark, searchQuery, setSearchQuery, isHomePage }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
     const user = JSON.parse(localStorage.getItem("user") || "{}");
 
     const handleLogout = () => {
@@ -20,7 +18,6 @@ export const HeaderNavigationBase = ({ items, brandName, toggleTheme, isDark, se
         <>
             {/* FIXED STITCH TOP HEADER */}
             <header className="stitch-top-header">
-                <VoiceOrderModal isOpen={isVoiceModalOpen} onClose={() => setIsVoiceModalOpen(false)} />
                 <div className="stitch-header-inner">
                     {/* Location Pill / Brand */}
                     <div className="stitch-location-pill" onClick={() => navigate('/')}>
@@ -40,7 +37,7 @@ export const HeaderNavigationBase = ({ items, brandName, toggleTheme, isDark, se
                     <div className="stitch-header-actions">
                         <button 
                             className="stitch-header-btn" 
-                            onClick={() => setIsVoiceModalOpen(true)}
+                            onClick={() => navigate('/?tab=quick')}
                             title="Quick Voice Order"
                         >
                             <span className="material-symbols-outlined" style={{ color: 'var(--primary-color)' }}>mic</span>
