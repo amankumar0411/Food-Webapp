@@ -53,4 +53,33 @@ public class FoodService {
             frepo.delete(f);
         }
     }
+
+    // FETCH BY CATEGORY (Dynamic slug & keyword matching)
+    public List<Food> getByCategory(String categoryId) {
+        if (categoryId == null || categoryId.trim().isEmpty()) {
+            return frepo.findAll();
+        }
+        String clean = categoryId.trim().toLowerCase();
+        String root = clean;
+        if (clean.endsWith("s") && clean.length() > 3) {
+            root = clean.substring(0, clean.length() - 1);
+        }
+        final String searchRoot = root;
+        List<Food> results = frepo.findByCategoryContainingIgnoreCase(searchRoot);
+        if (results.isEmpty()) {
+            results = frepo.findAll().stream()
+                    .filter(f -> (f.getCategory() != null && f.getCategory().toLowerCase().contains(searchRoot)) ||
+                                 (f.getFname() != null && f.getFname().toLowerCase().contains(searchRoot)))
+                    .toList();
+        }
+        return results;
+    }
+
+    // FETCH BY RESTAURANT ID
+    public List<Food> getByRestaurant(String restaurantId) {
+        if (restaurantId == null || restaurantId.trim().isEmpty()) {
+            return frepo.findAll();
+        }
+        return frepo.findByRestaurantId(restaurantId.trim().toLowerCase());
+    }
 }

@@ -5,7 +5,15 @@ import './HeaderNavigation.css';
 export const HeaderNavigationBase = ({ items, brandName, toggleTheme, isDark, searchQuery, setSearchQuery, isHomePage }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const rawUser = localStorage.getItem("user");
+    let user = { username: rawUser || "" };
+    if (rawUser && (rawUser.startsWith('{') || rawUser.startsWith('['))) {
+        try {
+            user = JSON.parse(rawUser);
+        } catch (e) {
+            user = { username: rawUser };
+        }
+    }
 
     const handleLogout = () => {
         localStorage.removeItem("user");

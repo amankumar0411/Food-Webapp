@@ -13,4 +13,5 @@ public interface RegisterRepository extends JpaRepository<Register, String> {
     boolean existsByUname(String uname);
     boolean existsByEmail(String email);
     boolean existsByPhno(String phno);
+    boolean existsByFssaiNumber(String fssaiNumber);
 }

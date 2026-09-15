@@ -30,6 +30,7 @@ public class GlobalExceptionHandler {
     // HELPFUL: Adding a general handler so other errors don't cause CORS/Network issues
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception ex) {
-        return new ResponseEntity<>("An unexpected error occurred. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
+        ex.printStackTrace();
+        return new ResponseEntity<>("An unexpected error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -73,56 +73,56 @@ function DesktopFoodContent({
           {/* Cuisine Round Elements Grid */}
           <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4 sm:gap-6 text-center">
             {/* Pizzas */}
-            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/foodlistclient?category=Pizzas" onClick={(e) => { e.preventDefault(); navigate('/foodlistclient?category=Pizzas'); }}>
+            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/category/pizzas" onClick={(e) => { e.preventDefault(); navigate('/category/pizzas'); }}>
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white">
                 <img alt="Pizzas" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB-KiIQVIVWDwSUO98G728FZY5yUj1zc5A2bByDJLaWIdiD_sGLZpKThOLZbNJ84NAjQ0V6VZQ5H9AvBitSL9_B4QRrZTO-CsURTQ-De3lJhBW8CxVsPKLF-HsyfemQ073Z2ERXx4digo-7n7TeLFbcqlplb6Jq-jhP-VXitNSpq52B68djc2CBwP-y8gF5H71gLkyMTf2TZ-WKZ2Xfzn-gaFDMuMuEluuxkloimSAFxxfBhpYWkV2" />
               </div>
               <span className="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Pizzas</span>
             </a>
             {/* Biryani */}
-            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/foodlistclient?category=Biryani" onClick={(e) => { e.preventDefault(); navigate('/foodlistclient?category=Biryani'); }}>
+            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/category/biryani" onClick={(e) => { e.preventDefault(); navigate('/category/biryani'); }}>
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white">
                 <img alt="Biryani" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcFugny5y-BAB93-dEbgIcN9TVt0aJFwaGfX5rNMvIrFjaQIxwF4_Jp-EWY8elrHhJ3iHiGlTZDrwFwl9WwNTFGT-riLGbwEgp1pL0J1h1h93ygdGoYgP_3nu_aSwXp0NuE6YkDZuHqQ8zqg82YcADOBTAOMZE6JUL58vWyTyERB8KSqGtlmZSsHsF9Agm5mXsvDB-n1fqBm1_kfRQwe6vtZ86iERfEy2yaQhQMJ-zFQ4RixB4HKB5" />
               </div>
               <span className="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Biryani</span>
             </a>
             {/* Burgers */}
-            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/foodlistclient?category=Burgers" onClick={(e) => { e.preventDefault(); navigate('/foodlistclient?category=Burgers'); }}>
+            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/category/burgers" onClick={(e) => { e.preventDefault(); navigate('/category/burgers'); }}>
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
                 <img alt="Burgers" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnTvAs90fjgBXkAyDu4rwlkbjGlSalr6guUk9sdFS17qibfPd-kKv2UYiDdIfdyakx9G6c4VpHGf5oKWWzmC1ZnzRfSKYanCLIfDJa_uKnZXZL7dzkAFr3KzOEIl_ZAtZYTL9fchggAcvbV_qAzIp6RsfjdODiqpLM0gwSUscKEOcUVaWl-FH22ZevDbNZIzKY7sgPifAsnDJDX-2uelpZLgUn7g7aIThHX1eA9OJyPRbJB9oilAiv" />
               </div>
               <span className="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Burgers</span>
             </a>
             {/* Cakes & Pastries */}
-            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/foodlistclient?category=Cakes" onClick={(e) => { e.preventDefault(); navigate('/foodlistclient?category=Cakes'); }}>
+            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/category/cakes" onClick={(e) => { e.preventDefault(); navigate('/category/cakes'); }}>
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
                 <img alt="Cakes and Desserts" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWK15IdkufWwyj_ciHSz4M7fhVTUdh5atsvEMt65ALnWD0AfxoWamtqUeftWYnuJkmVRK-o2w5ZTsBkzoQCwHSB8ShN9bTdktZEB5brmEtecnEgH8dWVmfyrSA9uoXHTZ-J3YkSFyyKxq-kKYubqdMkrbra2hnP1gbL3wj2WfkV2f_b8cmUSB_LXtLxC4mg2y4bALKd4VfDR9zobwikjN1CEAK2tgrCsBElcluLybsRXtxpb6lq73D" />
               </div>
               <span className="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Cakes</span>
             </a>
             {/* Rolls & Wraps */}
-            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/foodlistclient?category=Rolls" onClick={(e) => { e.preventDefault(); navigate('/foodlistclient?category=Rolls'); }}>
+            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/category/rolls" onClick={(e) => { e.preventDefault(); navigate('/category/rolls'); }}>
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
                 <img alt="Rolls and Wraps" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADSFB1Fx2cl2ErMxv3L3-2lee1oUbw683amEMC1-N5zlVU3H_sztmKtrtHBs2vK4f9eStKJBinSlocuH_npNTUxIjluN8taTJoCQDpnpZnPdTgg0uoRKS57Zx4hBLnkK6SFQH_Bjh_cUPw7SvIpvefgtYEE4C3cFqHj2527t8rBnA79mQTznvwi9oI_uL_8qZkLIHi2FP1Co4IdbSJkR9X-wdwbvUpLrQ4HZv5dNq7EGSbeHzX8xxL" />
               </div>
               <span className="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Rolls</span>
             </a>
             {/* Pastas */}
-            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/foodlistclient?category=Pastas" onClick={(e) => { e.preventDefault(); navigate('/foodlistclient?category=Pastas'); }}>
+            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/category/pastas" onClick={(e) => { e.preventDefault(); navigate('/category/pastas'); }}>
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
                 <img alt="Pastas" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAPBNcoCG6gPAse0zns0lu4i5AZrMFn3l1qC2m2kvsXgrt2z73kWkDUQ-hjiqxD6QlBWoQQGS6h87WB5G___gXGMj2Pn4fB8UFh62KRpIha-kdLDC78M9mu127SQXDfE8DW_bXUIwEWxUPV0oHuW943UTQ07WWD0WXgLP1Hz8P_EkAKLn3S5erX0X-po0rpRP_ndE-seUts5t4-YTFRXZa2sVkFKspEh9VNLs3i7EOGn2MYvjMfIWI" />
               </div>
               <span className="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Pastas</span>
             </a>
             {/* Gelato & Ice Creams */}
-            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/foodlistclient?category=Gelato" onClick={(e) => { e.preventDefault(); navigate('/foodlistclient?category=Gelato'); }}>
+            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/category/gelato" onClick={(e) => { e.preventDefault(); navigate('/category/gelato'); }}>
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
                 <img alt="Gelato and desserts" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ4rE7W4ptwQLHJ0EoSQ8vLZNxysY47nCzqYzrGDLeG6b0c0Pkvy3OcJTuIwfzwFaVsZP7DOJmR8jG6NLXuUa7JFLNfHcWe72BCW2GmTOjx9Un4VG49ryTxmlQsbU7SbhnBeShrMKw5JkocvXGAs7NIbv20Rg4aGfmByds7q7X4Les398QBagHMy-b3ujYvuQ4RC3N9pYKi97sk_qOJApRh2DmC5oF7I5_wz-rEPPRWJxRaOONETDi" />
               </div>
               <span className="text-xs font-semibold text-ink group-hover:text-crimson transition-colors">Gelato</span>
             </a>
             {/* Grain & Salad Bowls */}
-            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/foodlistclient?category=Bowls" onClick={(e) => { e.preventDefault(); navigate('/foodlistclient?category=Bowls'); }}>
+            <a className="group flex flex-col items-center space-y-2 cursor-pointer" href="/category/bowls" onClick={(e) => { e.preventDefault(); navigate('/category/bowls'); }}>
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-transparent group-hover:border-crimson group-hover:scale-105 transition-all shadow-subtle bg-white overflow-hidden">
                 <img alt="Healthy Bowls" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfLbQu8uPbsDN7HRpyrHZ_MMtK5iAnGo1QOEJ6i23ZH9I9P1tM9gY4SdUp7kuLOGF_bTXkFSjGpBKmT6g4zUqFAc6DGzWEO2c9HwRT1lU-pwXUpZcmmK3hspERTRFt8cXck7RwAsmjYtSyVYNZTwTIoDoJSxyX6OXkxiJDZMXY42ixmaMsaD6vsmwdPSyDmvu37qVc2wOtXeuJBsOt_yUnR-9m5njTcci9EHQT7Z4LzGhq0Z1ksqO6" />
               </div>
@@ -146,13 +146,16 @@ function DesktopFoodContent({
           {/* Restaurant Cards Grid: 4 Columns on Desktop */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Card 1: Toscano Artisan Pizzeria */}
-            <article className="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col">
+            <article 
+              className="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col cursor-pointer"
+              onClick={() => navigate('/restaurant/toscano/menu')}
+            >
               <div className="relative h-48 w-full overflow-hidden bg-oat-200">
                 <img alt="Toscano Artisan Pizzeria wood-fired pizza" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuwD-4csL15oSZLbYVafbr4_eqD3x9qr6gioUfG5xoOsYyvixS0vwmF06FrG-EJyf2zslZPOZzcZwF2waME8glfGUJtZRQMEEp57G-yH1FvrgoCdkBNT9QK8An2P46A4HFGtyBymWiDapI3vdm-taiTgjDkg42JHujfpgDYvdhz663xWzojkPX_Zvr4vdJTW8eoXGqH9K45Hn6Qo181BEJVvrHAOmkLIB2H-lPylus5Jy1ItBicpmS" />
                 <button 
                   aria-label="Add to wishlist" 
                   className={`absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center ${favorites['toscano'] ? 'text-crimson' : 'text-ink-muted'} hover:text-crimson shadow-sm transition-colors cursor-pointer`}
-                  onClick={() => toggleFavorite('toscano')}
+                  onClick={(e) => { e.stopPropagation(); toggleFavorite('toscano'); }}
                 >
                   <svg className="w-4 h-4" fill={favorites['toscano'] ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
                 </button>
@@ -176,30 +179,33 @@ function DesktopFoodContent({
                     <span className="truncate">Pizzas, Italian, Desserts</span>
                   </div>
                 </div>
-                <div className="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
-                  <span className="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Free delivery with Bolt</span>
+                <div className="pt-2 border-t border-sandborder">
                   <button 
-                    className="bg-crimson hover:bg-crimson-dark text-white px-3 py-1 rounded-lg font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm cursor-pointer"
+                    className="w-full border border-sandborder hover:border-ink hover:bg-sandborder/10 py-1.5 rounded-lg font-bold text-[10px] tracking-wider uppercase text-ink hover:text-crimson transition-colors cursor-pointer text-center flex items-center justify-center gap-1"
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (handleAddToCart) handleAddToCart({ fid: "F101", fname: "Woodfired Margherita Sourdough", price: 420.0 });
+                      navigate('/restaurant/toscano/menu');
                     }}
                     type="button"
                   >
-                    ADD +
+                    <span>View Menu</span>
+                    <span>→</span>
                   </button>
                 </div>
               </div>
             </article>
 
             {/* Card 2: Meghana Foods */}
-            <article className="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col">
+            <article 
+              className="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col cursor-pointer"
+              onClick={() => navigate('/restaurant/meghana/menu')}
+            >
               <div className="relative h-48 w-full overflow-hidden bg-oat-200">
                 <img alt="Meghana Foods authentic Hyderabadi Dum Biryani" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_fZTjLWEVipIyFY271VoDyURcERuT7j7v5MjcG4TlevSwIu3aRNEnjpOPQE4RUsxLfx3ArF4vuRbKv2-wZceVazVYWWsNjsryP-T4B2ude-T_s_ujxgY5ozov5ff9Irv2ktYa0olHQK0huVhboazkJfSeWKT0S8P2Wzc3RN-OZaZTxePvl8ykn3oK_wRsQTnw2No7r5br-Dda9yQEOdcDJ2TeqjsudclpGst4Uj8la3gsb7-wf2al" />
                 <button 
                   aria-label="Add to wishlist" 
                   className={`absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center ${favorites['meghana'] ? 'text-crimson' : 'text-ink-muted'} hover:text-crimson shadow-sm transition-colors cursor-pointer`}
-                  onClick={() => toggleFavorite('meghana')}
+                  onClick={(e) => { e.stopPropagation(); toggleFavorite('meghana'); }}
                 >
                   <svg className="w-4 h-4" fill={favorites['meghana'] ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
                 </button>
@@ -223,30 +229,33 @@ function DesktopFoodContent({
                     <span className="truncate">Biryani, Andhra Special</span>
                   </div>
                 </div>
-                <div className="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
-                  <span className="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Iconic Local Favorite</span>
+                <div className="pt-2 border-t border-sandborder">
                   <button 
-                    className="bg-crimson hover:bg-crimson-dark text-white px-3 py-1 rounded-lg font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm cursor-pointer"
+                    className="w-full border border-sandborder hover:border-ink hover:bg-sandborder/10 py-1.5 rounded-lg font-bold text-[10px] tracking-wider uppercase text-ink hover:text-crimson transition-colors cursor-pointer text-center flex items-center justify-center gap-1"
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (handleAddToCart) handleAddToCart({ fid: "F107", fname: "Slow Cooked Awadhi Biryani", price: 480.0 });
+                      navigate('/restaurant/meghana/menu');
                     }}
                     type="button"
                   >
-                    ADD +
+                    <span>View Menu</span>
+                    <span>→</span>
                   </button>
                 </div>
               </div>
             </article>
 
             {/* Card 3: Truffles Burgers */}
-            <article className="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col">
+            <article 
+              className="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col cursor-pointer"
+              onClick={() => navigate('/restaurant/truffles/menu')}
+            >
               <div className="relative h-48 w-full overflow-hidden bg-oat-200">
                 <img alt="Truffles Gourmet burger and fries" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVeGUNJM5HMi_F-WjJZWe4qMc3RQaygn6LlRt-uZF3Nosbf-eEXiMfbnN34gNnQ3hTje549mGzFq_gV5ROjxzaLYjWaPxqMTc28o1kN1zC6_3Xn6nwXk-AsYFObH98axi1147DDYcSNLU0ABNzYL8BQ3MYP9HsuFnuEfSr3VY7kT1AZf2OofHohXnHXoO-o8m6zraChngVaTX2vYj7nHbsG6LQvhvWgJPTXOZsppsd3jZkLix7MuEY" />
                 <button 
                   aria-label="Add to wishlist" 
                   className={`absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center ${favorites['truffles'] ? 'text-crimson' : 'text-ink-muted'} hover:text-crimson shadow-sm transition-colors cursor-pointer`}
-                  onClick={() => toggleFavorite('truffles')}
+                  onClick={(e) => { e.stopPropagation(); toggleFavorite('truffles'); }}
                 >
                   <svg className="w-4 h-4" fill={favorites['truffles'] ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
                 </button>
@@ -270,30 +279,33 @@ function DesktopFoodContent({
                     <span className="truncate">Burgers, American, Shakes</span>
                   </div>
                 </div>
-                <div className="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
-                  <span className="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Trending Gourmet</span>
+                <div className="pt-2 border-t border-sandborder">
                   <button 
-                    className="bg-crimson hover:bg-crimson-dark text-white px-3 py-1 rounded-lg font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm cursor-pointer"
+                    className="w-full border border-sandborder hover:border-ink hover:bg-sandborder/10 py-1.5 rounded-lg font-bold text-[10px] tracking-wider uppercase text-ink hover:text-crimson transition-colors cursor-pointer text-center flex items-center justify-center gap-1"
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (handleAddToCart) handleAddToCart({ fid: "F104", fname: "Smoked Provolone Panini", price: 360.0 });
+                      navigate('/restaurant/truffles/menu');
                     }}
                     type="button"
                   >
-                    ADD +
+                    <span>View Menu</span>
+                    <span>→</span>
                   </button>
                 </div>
               </div>
             </article>
 
             {/* Card 4: Belgian Waffle & Co */}
-            <article className="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col">
+            <article 
+              className="group bg-white rounded-2xl border border-sandborder overflow-hidden hover:shadow-card transition-all duration-300 flex flex-col cursor-pointer"
+              onClick={() => navigate('/restaurant/chocolateroom/menu')}
+            >
               <div className="relative h-48 w-full overflow-hidden bg-oat-200">
                 <img alt="Belgian Waffle warm dessert chocolate cake" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA42fgoc5KpinOhqk_j10kDBdfDpDfqtvJVLjolum2cUiNQ-ZFQE2dVroT10kSTbvxNo4DMIh_Z_2nGuxI_coBqW0okZw-uTditpYnAPdaXeglHU30Zd-zwsz2feTH0o_QdBSWnovd9pponS03aPwMK79Hr8k4acFG1t8tV7Us8YWpYBRUollUXhAhH7rVDxrNq5IrFf43XJCEFMA79UL7Mz87FgzVT--yWaQxYC5ZwUSZiqsgedzTy" />
                 <button 
                   aria-label="Add to wishlist" 
                   className={`absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center ${favorites['waffle'] ? 'text-crimson' : 'text-ink-muted'} hover:text-crimson shadow-sm transition-colors cursor-pointer`}
-                  onClick={() => toggleFavorite('waffle')}
+                  onClick={(e) => { e.stopPropagation(); toggleFavorite('waffle'); }}
                 >
                   <svg className="w-4 h-4" fill={favorites['waffle'] ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
                 </button>
@@ -317,17 +329,17 @@ function DesktopFoodContent({
                     <span className="truncate">Waffles, Ice Creams, Pastry</span>
                   </div>
                 </div>
-                <div className="pt-2 border-t border-sandborder flex items-center justify-between text-[11px]">
-                  <span className="text-ink-soft bg-oat-100 px-2 py-0.5 rounded font-medium">Express Dispatch</span>
+                <div className="pt-2 border-t border-sandborder">
                   <button 
-                    className="bg-crimson hover:bg-crimson-dark text-white px-3 py-1 rounded-lg font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm cursor-pointer"
+                    className="w-full border border-sandborder hover:border-ink hover:bg-sandborder/10 py-1.5 rounded-lg font-bold text-[10px] tracking-wider uppercase text-ink hover:text-crimson transition-colors cursor-pointer text-center flex items-center justify-center gap-1"
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (handleAddToCart) handleAddToCart({ fid: "F105", fname: "Artisanal Tiramisu Rustico", price: 290.0 });
+                      navigate('/restaurant/chocolateroom/menu');
                     }}
                     type="button"
                   >
-                    ADD +
+                    <span>View Menu</span>
+                    <span>→</span>
                   </button>
                 </div>
               </div>

@@ -12,7 +12,9 @@ function CheckoutMobile({
   couponCode,
   setCouponCode,
   appliedCoupon,
+  isCouponApplying,
   onApplyCoupon,
+  onRemoveCoupon,
   discountAmount,
   itemSubtotal,
   taxFee = 58,
@@ -32,7 +34,8 @@ function CheckoutMobile({
   };
 
   const handleApplyPromo = () => {
-    onApplyCoupon(couponCode || 'BOTANICA120');
+    if (!couponCode?.trim()) return;
+    onApplyCoupon(couponCode);
     setPromoNoticePulse(true);
     setTimeout(() => setPromoNoticePulse(false), 1000);
   };
@@ -346,33 +349,49 @@ function CheckoutMobile({
               })}
 
               {/* Promo Code Bar */}
-              <div className="mt-space-xs flex gap-2">
-                <div className="relative flex-1">
-                  <input 
-                    className="w-full bg-surface-container-low text-charcoal-ink px-3 py-2.5 font-label-md text-label-md uppercase tracking-wider focus:outline-none focus:bg-surface-container-lowest rounded" 
-                    placeholder="Enter coupon voucher..." 
-                    type="text" 
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
-                  />
-                  <span className="absolute right-3 top-2.5 material-symbols-outlined text-botanical-sage text-[18px]">verified</span>
+              {appliedCoupon ? (
+                <div className={`bg-tertiary-fixed/40 px-3.5 py-2 flex items-center justify-between rounded-lg ${promoNoticePulse ? 'animate-pulse' : ''}`}>
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-tertiary text-[18px]">verified</span>
+                    <div className="flex flex-col">
+                      <span className="font-label-sm uppercase font-bold text-tertiary tracking-wider">{appliedCoupon}</span>
+                      <span className="font-body-sm text-[0.75rem] text-on-tertiary-container font-medium">Saved ₹{discountAmount} on this order</span>
+                    </div>
+                  </div>
+                  <button 
+                    type="button" 
+                    onClick={onRemoveCoupon}
+                    className="text-[11px] font-bold uppercase tracking-wider text-primary hover:underline px-2 py-1 cursor-pointer"
+                  >
+                    Remove
+                  </button>
                 </div>
-                <button 
-                  className="bg-charcoal-ink text-soft-cream px-4 font-label-sm text-label-sm uppercase tracking-wider hover:bg-primary transition-colors rounded cursor-pointer" 
-                  onClick={handleApplyPromo}
-                  type="button"
-                >
-                  {appliedCoupon ? 'Applied' : 'Apply'}
-                </button>
-              </div>
-
-              {appliedCoupon && (
-                <div className={`bg-tertiary-fixed/40 px-3 py-1.5 flex items-center gap-2 rounded ${promoNoticePulse ? 'animate-pulse' : ''}`}>
-                  <span className="material-symbols-outlined text-tertiary text-[16px]">eco</span>
-                  <span className="font-body-sm text-[0.8125rem] text-on-tertiary-container font-medium">
-                    Seasonal patron blessing applied: Saved ₹{discountAmount}
-                  </span>
+              ) : (
+                <div className="mt-space-xs flex gap-2">
+                  <div className="relative flex-1">
+                    <input 
+                      className="w-full bg-surface-container-low text-charcoal-ink px-3 py-2.5 font-label-md text-label-md uppercase tracking-wider focus:outline-none focus:bg-surface-container-lowest rounded" 
+                      placeholder="Enter coupon voucher..." 
+                      type="text" 
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
+                      disabled={isCouponApplying}
+                    />
+                    <span className="absolute right-3 top-2.5 material-symbols-outlined text-botanical-sage text-[18px]">local_offer</span>
+                  </div>
+                  <button 
+                    className="bg-charcoal-ink text-soft-cream px-4 font-label-sm text-label-sm uppercase tracking-wider hover:bg-primary transition-colors rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[75px]" 
+                    onClick={handleApplyPromo}
+                    disabled={isCouponApplying || !couponCode?.trim()}
+                    type="button"
+                  >
+                    {isCouponApplying ? (
+                      <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    ) : (
+                      'Apply'
+                    )}
+                  </button>
                 </div>
               )}
 

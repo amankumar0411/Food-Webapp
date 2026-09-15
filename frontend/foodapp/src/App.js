@@ -29,6 +29,9 @@ import ProtectedRoute from './component/common/ProtectedRoute';
 import Home from './component/Client/Home';
 import OrderConfirmation from './component/Client/checkout/OrderConfirmation';
 import OrderTracking from './component/Client/checkout/OrderTracking';
+import CategoryMenu from './component/Client/CategoryMenu';
+import RestaurantMenu from './component/Client/RestaurantMenu';
+import AdminCoupons from './component/Admin/AdminCoupons';
 
 import { Toaster } from 'react-hot-toast';
 
@@ -78,9 +81,11 @@ function App() {
     }
   }, []);
 
-  // Selective background logic: Grainient on inner pages (excluding home, auth, account, cart, checkout, confirmation, tracking)
+  // Selective background logic: Grainient on inner pages (excluding home, auth, account, cart, checkout, confirmation, tracking, category, restaurant)
   const isHomePage = location.pathname === "/" || location.pathname === "/home";
-  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register" ||
+    location.pathname === "/merchant/login" || location.pathname === "/merchant/register" ||
+    location.pathname === "/driver/login" || location.pathname === "/driver/register";
   const isAccountPage = location.pathname === "/account";
   const isCartOrCheckoutPage = [
     "/addorder", "/cart", 
@@ -88,8 +93,9 @@ function App() {
     "/order-confirmation", 
     "/tracking", "/live-order-tracking"
   ].includes(location.pathname);
+  const isMenuPage = location.pathname.startsWith("/category/") || location.pathname.startsWith("/restaurant/");
 
-  const showGrainient = auth && !isHomePage && !isAuthPage && !isAccountPage && !isCartOrCheckoutPage;
+  const showGrainient = auth && !isHomePage && !isAuthPage && !isAccountPage && !isCartOrCheckoutPage && !isMenuPage;
 
   // THEME STATE LOGIC (Default to Light Mode, Check LocalStorage)
   const [isDarkTheme, setIsDarkTheme] = useState(() => {
@@ -143,19 +149,19 @@ function App() {
         </div>
       )}
 
-      {/* 2. DYNAMIC NAVIGATION SELECTION (Inner pages only, excluding Home, Account, Cart, and Checkout) */}
-      {(auth && !isHomePage && !isAccountPage && !isCartOrCheckoutPage) && (isMerchantOrAdmin ?
+      {/* 2. DYNAMIC NAVIGATION SELECTION (Inner pages only, excluding Home, Account, Cart, Checkout, and dedicated Menus) */}
+      {(auth && !isHomePage && !isAccountPage && !isCartOrCheckoutPage && !isMenuPage) && (isMerchantOrAdmin ?
         <Nav toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} /> :
         <NavClient toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} />
       )}
 
       <div className="container-fluid main-content-area" style={{ 
-        paddingTop: auth ? ((isHomePage || isAccountPage || isCartOrCheckoutPage) ? '0' : '180px') : '0', 
-        paddingLeft: (isHomePage || isAuthPage || isAccountPage || isCartOrCheckoutPage) ? '0' : '15px',
-        paddingRight: (isHomePage || isAuthPage || isAccountPage || isCartOrCheckoutPage) ? '0' : '15px',
+        paddingTop: auth ? ((isHomePage || isAccountPage || isCartOrCheckoutPage || isMenuPage) ? '0' : '180px') : '0', 
+        paddingLeft: (isHomePage || isAuthPage || isAccountPage || isCartOrCheckoutPage || isMenuPage) ? '0' : '15px',
+        paddingRight: (isHomePage || isAuthPage || isAccountPage || isCartOrCheckoutPage || isMenuPage) ? '0' : '15px',
         position: 'relative', 
         zIndex: 1, 
-        minHeight: (isHomePage || isAccountPage || isCartOrCheckoutPage) ? '100vh' : 'auto' 
+        minHeight: (isHomePage || isAccountPage || isCartOrCheckoutPage || isMenuPage) ? '100vh' : 'auto' 
       }}>
         <Routes>
           {/* PUBLIC ROUTES */}
@@ -167,6 +173,11 @@ function App() {
           <Route path="/merchant/register" element={<MerchantRegister />} />
           <Route path="/driver/login" element={<DriverLogin syncAuth={syncAuth} />} />
           <Route path="/driver/register" element={<DriverRegister />} />
+
+          {/* DYNAMIC CATEGORY & RESTAURANT MENU ROUTES */}
+          <Route path="/category/:categoryId" element={<CategoryMenu />} />
+          <Route path="/restaurant/:restaurantId/menu" element={<RestaurantMenu />} />
+          <Route path="/restaurant/:restaurantId" element={<RestaurantMenu />} />
 
           {/* CART, CHECKOUT, CONFIRMATION & TRACKING ROUTES */}
           <Route path="/cart" element={<AddOrder />} />
@@ -182,6 +193,7 @@ function App() {
           <Route path="/driver/dashboard" element={<ProtectedRoute allowedRoles={['driver', 'admin']}><DriverDashboard /></ProtectedRoute>} />
 
           {/* 2. MERCHANT / ADMIN ROUTES */}
+          <Route path="/admin/coupons" element={<ProtectedRoute allowedRoles={['admin', 'merchant']}><AdminCoupons /></ProtectedRoute>} />
           {isMerchantOrAdmin && (
             <>
               <Route path="/addfood" element={<Addfood />} />

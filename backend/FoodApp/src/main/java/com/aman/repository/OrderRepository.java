@@ -14,7 +14,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
                    "COALESCE(o.fname, f.fname) AS fname, " +
                    "f.price AS fprice, o.qty AS qty, (f.price * o.qty) AS totalprice " +
                    "FROM order_table o " +
-                   "INNER JOIN food f ON o.fid = f.fid " +
+                   "INNER JOIN main_food_menu f ON o.fid = f.fid " +
                    "WHERE o.uname = ?1", nativeQuery = true)
     List<Map<String, Object>> getDetailedOrders(String uname);
 }

@@ -5,6 +5,7 @@ function CartMobile({
   onUpdateQty,
   onRemoveItem,
   appliedCoupon,
+  isCouponApplying,
   couponInput,
   setCouponInput,
   onApplyCoupon,
@@ -225,6 +226,7 @@ function CartMobile({
                       value={couponInput}
                       onChange={(e) => setCouponInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && onApplyCoupon(couponInput)}
+                      disabled={isCouponApplying}
                     />
                   </div>
                 )}
@@ -239,11 +241,16 @@ function CartMobile({
                 </button>
               ) : (
                 <button 
-                  className="px-3 py-1 rounded-xl bg-primary text-on-primary font-label-sm text-label-sm tracking-wider uppercase hover:bg-primary-container transition-colors cursor-pointer" 
-                  onClick={() => onApplyCoupon(couponInput || 'BOTANICAL50')}
+                  className="px-3 py-1 rounded-xl bg-primary text-on-primary font-label-sm text-label-sm tracking-wider uppercase hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[65px]" 
+                  onClick={() => onApplyCoupon(couponInput)}
+                  disabled={isCouponApplying || !couponInput?.trim()}
                   type="button"
                 >
-                  APPLY
+                  {isCouponApplying ? (
+                    <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  ) : (
+                    'APPLY'
+                  )}
                 </button>
               )}
             </div>

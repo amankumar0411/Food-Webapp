@@ -57,6 +57,16 @@ private FoodService fservice;
 		fservice.updateData(fid, newfood);
 		return new ResponseEntity<String>(msg,HttpStatus.OK);
 	}
-	
-	
+
+	@GetMapping("/category/{categoryId}")
+	public ResponseEntity<List<Food>> getByCategory(@PathVariable String categoryId) {
+		List<Food> list = fservice.getByCategory(categoryId);
+		return ResponseEntity.ok(list);
+	}
+
+	@GetMapping("/restaurant/{restaurantId}")
+	public ResponseEntity<List<Food>> getByRestaurant(@PathVariable String restaurantId) {
+		List<Food> list = fservice.getByRestaurant(restaurantId);
+		return ResponseEntity.ok(list);
+	}
 }

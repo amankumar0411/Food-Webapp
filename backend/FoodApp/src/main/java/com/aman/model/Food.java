@@ -3,10 +3,12 @@ package com.aman.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
+@Table(name = "main_food_menu")
 public class Food {
     @Id
     @Column(length = 10)
@@ -27,6 +29,12 @@ public class Food {
 
     private Boolean isVeg = true; // Default to true
 
+    @Column(length = 50)
+    private String restaurantId; // e.g. "toscano", "meghana", "truffles", "chocolateroom"
+
+    @Column(length = 100)
+    private String restaurantName; // Display name of restaurant
+
     public Food() { super(); }
 
     public Food(String fid, String fname, Double price, String imageUrl) {
@@ -46,6 +54,24 @@ public class Food {
         this.category = category != null ? category : "Main Course";
         this.isVeg = isVeg != null ? isVeg : true;
     }
+
+    public Food(String fid, String fname, Double price, String imageUrl, String category, Boolean isVeg, String restaurantId, String restaurantName) {
+        super();
+        this.fid = fid;
+        this.fname = fname;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category != null ? category : "Main Course";
+        this.isVeg = isVeg != null ? isVeg : true;
+        this.restaurantId = restaurantId;
+        this.restaurantName = restaurantName;
+    }
+
+    public String getRestaurantId() { return restaurantId; }
+    public void setRestaurantId(String restaurantId) { this.restaurantId = restaurantId; }
+
+    public String getRestaurantName() { return restaurantName; }
+    public void setRestaurantName(String restaurantName) { this.restaurantName = restaurantName; }
 
     public String getFid() { return fid; }
     public void setFid(String fid) { this.fid = fid; }

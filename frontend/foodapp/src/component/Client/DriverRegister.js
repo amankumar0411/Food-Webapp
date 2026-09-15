@@ -74,7 +74,7 @@ function DriverRegister() {
                     <input 
                         type="text" 
                         className="form-control" 
-                        style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
+                        style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)', color: 'var(--text-color)' }}
                         placeholder="Driver Username" 
                         value={user.uname}
                         onChange={(e) => setUser({...user, uname: e.target.value})} 
@@ -84,7 +84,7 @@ function DriverRegister() {
                     <input 
                         type="password" 
                         className="form-control" 
-                        style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
+                        style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)', color: 'var(--text-color)' }}
                         placeholder="Password" 
                         value={user.pass}
                         onChange={(e) => setUser({...user, pass: e.target.value})} 
@@ -94,7 +94,7 @@ function DriverRegister() {
                     <input 
                         type="text" 
                         className="form-control" 
-                        style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
+                        style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)', color: 'var(--text-color)' }}
                         placeholder="Full Name" 
                         value={user.nm}
                         onChange={(e) => setUser({...user, nm: e.target.value})} 
@@ -104,7 +104,7 @@ function DriverRegister() {
                     <input 
                         type="email" 
                         className="form-control" 
-                        style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
+                        style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)', color: 'var(--text-color)' }}
                         placeholder="Email Address" 
                         value={user.email}
                         onChange={(e) => setUser({...user, email: e.target.value})} 
@@ -114,7 +114,7 @@ function DriverRegister() {
                     <input 
                         type="text" 
                         className="form-control" 
-                        style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
+                        style={{ height: '52px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)', color: 'var(--text-color)' }}
                         placeholder="Mobile Phone Number" 
                         value={user.phno}
                         onChange={(e) => setUser({...user, phno: e.target.value})} 

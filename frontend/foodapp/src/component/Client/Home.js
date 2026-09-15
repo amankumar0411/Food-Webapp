@@ -490,7 +490,7 @@ function Home() {
                   {/* Category Circular Carousel */}
                   <div className="flex items-center gap-space-md overflow-x-auto px-margin pt-space-md pb-2 no-scrollbar">
                     {/* Pizzas */}
-                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/foodlistclient?category=Pizzas')}>
+                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/category/pizzas')}>
                       <div className="w-16 h-16 rounded-full p-1 bg-surface-container-lowest shadow-sm border border-surface-dim/60 group-hover:border-secondary transition-colors">
                         <div className="w-full h-full rounded-full overflow-hidden">
                           <img alt="Pizzas" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1Ui_cOF5_kyu5jYWSYHLw0VHAGEQm019f7ZqZeJQhX9QF7PwcyobJB-LsMa7UqbXRvQ7qLgvE8vnRCeVV_bxErTPL1lL7_sAUmwze8qAMMwR79uGtOyjLELrsBqidP4n32kCmvoBDRoTNOckfcaew9_gBXu2O7p5vU6hOS0IvXjceDBq5tHYeyQqsKN67rxW_mw9ok56OwazEoqS3Lq8W8zeCVJ8EdNzofatZQnldM1zMBV7RcdDZQwPa4" />
@@ -499,7 +499,7 @@ function Home() {
                       <span className="font-body-sm text-[13px] font-medium text-on-surface">Pizzas</span>
                     </div>
                     {/* Biryani */}
-                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/foodlistclient?category=Biryani')}>
+                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/category/biryani')}>
                       <div className="w-16 h-16 rounded-full p-1 bg-surface-container-lowest shadow-sm border border-surface-dim/60 group-hover:border-secondary transition-colors">
                         <div className="w-full h-full rounded-full overflow-hidden">
                           <img alt="Biryani" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1U4XGlam0qgUODevjdR-on30nyrJHlnQaZ2toPSPifUsEYDTxaBm47uBWuKP5WaD81SSPTyBdrvHspguUnesKEgXKjfXX3ZC_f6hZ4MsvMiiGZ5Nlpp9NtJmS4PbYtIVDO3yXdKC3Fd-LMPF6tPvX0vJEq2Jzb8p1kzyZCUCWXCNZrV3FSj_F8mKZRMVRwwcBGXzX1goUVubrcAKyyJu0gvHvezD5Fpky1a5YtFSflJnoMUYQ3-22cnER4" />
@@ -508,7 +508,7 @@ function Home() {
                       <span className="font-body-sm text-[13px] font-medium text-on-surface">Biryani</span>
                     </div>
                     {/* Burgers */}
-                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/foodlistclient?category=Burgers')}>
+                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/category/burgers')}>
                       <div className="w-16 h-16 rounded-full p-1 bg-surface-container-lowest shadow-sm border border-surface-dim/60 group-hover:border-secondary transition-colors">
                         <div className="w-full h-full rounded-full overflow-hidden">
                           <img alt="Burgers" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1Uh8vPHaa957jH_ybx62VW-h30Efz_7c3x7elPRCfYYXU-iN6KyA07dSz8TuptMpSjqKBJiJTlhRFI1MzEWgwVZH4uX9tvXaNoZ6opw5wUJWaR0ZqTkoZzm0tKzr8vuuOqzSoxlya51Js7Or4Is5TPCcrYZkxYywfpe-lX_bjpXbjBTY1Hrrr3CJ4bVL1XQ2Yj8E3Wa9OFr6r5Pkc_KgvgnA1DRHrIGroa0aGHfGNWD1QhStwESVn9XVaE" />
@@ -517,7 +517,7 @@ function Home() {
                       <span className="font-body-sm text-[13px] font-medium text-on-surface">Burgers</span>
                     </div>
                     {/* Cakes */}
-                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/foodlistclient?category=Cakes')}>
+                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/category/cakes')}>
                       <div className="w-16 h-16 rounded-full p-1 bg-surface-container-lowest shadow-sm border border-surface-dim/60 group-hover:border-secondary transition-colors">
                         <div className="w-full h-full rounded-full overflow-hidden">
                           <img alt="Cakes" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1U48K4NkA9_YjeBZjEi6UUjsMpvAtAJ7JsbltRihM3EP5gQ__3OUJfGiKZtPFZC9vQ02UKkq7XeLiP1wULgEdWQfbIO6_Hj1FQqZ--8VmpgYnTdmSuD66BCZpeJUMuzhoax3HHSd1K_-_z3VwJNyiOQcsoBGDrV7uVXfI7WUI-Nbnu4-i2hL4mAElbXOVU3ys6S5uixJoUSj5CYPwOUwxY3hgVvyvuSU9sOt3bXU3BqbX7K7anXXZyDuwU" />
@@ -526,7 +526,7 @@ function Home() {
                       <span className="font-body-sm text-[13px] font-medium text-on-surface">Cakes</span>
                     </div>
                     {/* Rolls */}
-                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/foodlistclient?category=Rolls')}>
+                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/category/rolls')}>
                       <div className="w-16 h-16 rounded-full p-1 bg-surface-container-lowest shadow-sm border border-surface-dim/60 group-hover:border-secondary transition-colors">
                         <div className="w-full h-full rounded-full overflow-hidden bg-surface-container flex items-center justify-center">
                           <span className="material-symbols-outlined text-secondary text-[26px]">kebab_dining</span>
@@ -535,7 +535,7 @@ function Home() {
                       <span className="font-body-sm text-[13px] font-medium text-on-surface">Rolls</span>
                     </div>
                     {/* Ice Creams */}
-                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/foodlistclient?category=IceCream')}>
+                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/category/icecream')}>
                       <div className="w-16 h-16 rounded-full p-1 bg-surface-container-lowest shadow-sm border border-surface-dim/60 group-hover:border-secondary transition-colors">
                         <div className="w-full h-full rounded-full overflow-hidden bg-surface-container flex items-center justify-center">
                           <span className="material-symbols-outlined text-raw-ochre text-[26px]">icecream</span>
@@ -544,7 +544,7 @@ function Home() {
                       <span className="font-body-sm text-[13px] font-medium text-on-surface">Ice Cream</span>
                     </div>
                     {/* Momos */}
-                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/foodlistclient?category=Momos')}>
+                    <div className="shrink-0 flex flex-col items-center gap-1.5 cursor-pointer group active:scale-95 transition-transform" onClick={() => navigate('/category/momos')}>
                       <div className="w-16 h-16 rounded-full p-1 bg-surface-container-lowest shadow-sm border border-surface-dim/60 group-hover:border-secondary transition-colors">
                         <div className="w-full h-full rounded-full overflow-hidden bg-surface-container flex items-center justify-center">
                           <span className="material-symbols-outlined text-botanical-sage text-[26px]">ramen_dining</span>
@@ -571,11 +571,14 @@ function Home() {
                   {/* Horizontal Restaurant Cards Carousel */}
                   <div className="flex items-start gap-space-md overflow-x-auto px-margin pt-1 pb-4 no-scrollbar">
                     {/* Card 1: Toscano Artisan Pizzeria */}
-                    <div className="shrink-0 w-64 bg-surface-container-lowest rounded-2xl border border-surface-dim/60 shadow-[0_4px_16px_rgba(30,27,21,0.05)] overflow-hidden flex flex-col group">
+                    <div 
+                      className="shrink-0 w-64 bg-surface-container-lowest rounded-2xl border border-surface-dim/60 shadow-[0_4px_16px_rgba(30,27,21,0.05)] overflow-hidden flex flex-col group cursor-pointer"
+                      onClick={() => navigate('/restaurant/toscano/menu')}
+                    >
                       <div className="relative w-full h-36 overflow-hidden">
                         <img alt="Pepperoni artisan pizza" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1Ui_cOF5_kyu5jYWSYHLw0VHAGEQm019f7ZqZeJQhX9QF7PwcyobJB-LsMa7UqbXRvQ7qLgvE8vnRCeVV_bxErTPL1lL7_sAUmwze8qAMMwR79uGtOyjLELrsBqidP4n32kCmvoBDRoTNOckfcaew9_gBXu2O7p5vU6hOS0IvXjceDBq5tHYeyQqsKN67rxW_mw9ok56OwazEoqS3Lq8W8zeCVJ8EdNzofatZQnldM1zMBV7RcdDZQwPa4" />
                         <div className="absolute inset-0 bg-gradient-to-t from-charcoal-ink/75 via-transparent to-transparent"></div>
-                        <button aria-label="Add to favorites" className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors cursor-pointer" onClick={() => toggleFavorite('toscano')} type="button">
+                        <button aria-label="Add to favorites" className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors cursor-pointer" onClick={(e) => { e.stopPropagation(); toggleFavorite('toscano'); }} type="button">
                           <span className={`material-symbols-outlined text-[18px] ${favorites['toscano'] ? 'text-primary' : ''}`} style={{ fontVariationSettings: favorites['toscano'] ? "'FILL' 1" : "'FILL' 0" }}>favorite</span>
                         </button>
                         <div className="absolute bottom-2.5 left-2.5 bg-secondary text-surface-bright px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 border border-surface-bright/20">
@@ -583,35 +586,47 @@ function Home() {
                           <span className="font-label-sm text-[9px] uppercase tracking-wider font-bold">70% OFF UPTO ₹120</span>
                         </div>
                       </div>
-                      <div className="p-3 flex flex-col gap-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-headline-sm text-[15px] font-semibold text-on-surface truncate flex-1 cursor-pointer" onClick={() => navigate('/foodlistclient?restaurant=Toscano')}>Toscano Artisan Pizzeria</h4>
-                          <div className="flex items-center gap-1 bg-tertiary text-on-tertiary px-1.5 py-0.5 rounded-md shrink-0">
-                            <span className="font-label-sm text-[11px] font-bold">4.6</span>
-                            <span className="material-symbols-outlined text-[11px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                      <div className="p-3 flex flex-col gap-1.5 flex-1 justify-between">
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-headline-sm text-[15px] font-semibold text-on-surface truncate flex-1 group-hover:text-primary transition-colors">Toscano Artisan Pizzeria</h4>
+                            <div className="flex items-center gap-1 bg-tertiary text-on-tertiary px-1.5 py-0.5 rounded-md shrink-0">
+                              <span className="font-label-sm text-[11px] font-bold">4.6</span>
+                              <span className="material-symbols-outlined text-[11px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1.5 font-body-sm text-[12px] text-on-surface-variant">
+                            <span className="flex items-center gap-0.5 font-medium text-on-surface">
+                              <span className="material-symbols-outlined text-[14px] text-raw-ochre">schedule</span>
+                              25-30 mins
+                            </span>
+                            <span>•</span>
+                            <span className="truncate">Pizzas, Italian, Desserts</span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1.5 font-body-sm text-[12px] text-on-surface-variant">
-                          <span className="flex items-center gap-0.5 font-medium text-on-surface">
-                            <span className="material-symbols-outlined text-[14px] text-raw-ochre">schedule</span>
-                            25-30 mins
-                          </span>
-                          <span>•</span>
-                          <span className="truncate">Pizzas, Italian, Desserts</span>
-                        </div>
-                        <div className="mt-1 pt-1.5 border-t-0 bg-surface-container-low px-2 py-1 rounded-lg flex items-center justify-between text-on-surface-variant border border-surface-dim/40">
-                          <span className="font-body-sm text-[11px]">Free delivery with Bolt</span>
-                          <span className="font-label-sm text-[9px] text-tertiary uppercase font-bold">1.2k+ ratings</span>
-                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate('/restaurant/toscano/menu');
+                          }}
+                          className="w-full mt-1 py-1.5 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          <span>View Menu</span>
+                          <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
                       </div>
                     </div>
 
                     {/* Card 2: Meghana Foods */}
-                    <div className="shrink-0 w-64 bg-surface-container-lowest rounded-2xl border border-surface-dim/60 shadow-[0_4px_16px_rgba(30,27,21,0.05)] overflow-hidden flex flex-col group">
+                    <div 
+                      className="shrink-0 w-64 bg-surface-container-lowest rounded-2xl border border-surface-dim/60 shadow-[0_4px_16px_rgba(30,27,21,0.05)] overflow-hidden flex flex-col group cursor-pointer"
+                      onClick={() => navigate('/restaurant/meghana/menu')}
+                    >
                       <div className="relative w-full h-36 overflow-hidden">
                         <img alt="Spicy Dum Biryani" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1U4XGlam0qgUODevjdR-on30nyrJHlnQaZ2toPSPifUsEYDTxaBm47uBWuKP5WaD81SSPTyBdrvHspguUnesKEgXKjfXX3ZC_f6hZ4MsvMiiGZ5Nlpp9NtJmS4PbYtIVDO3yXdKC3Fd-LMPF6tPvX0vJEq2Jzb8p1kzyZCUCWXCNZrV3FSj_F8mKZRMVRwwcBGXzX1goUVubrcAKyyJu0gvHvezD5Fpky1a5YtFSflJnoMUYQ3-22cnER4" />
                         <div className="absolute inset-0 bg-gradient-to-t from-charcoal-ink/75 via-transparent to-transparent"></div>
-                        <button aria-label="Add to favorites" className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors cursor-pointer" onClick={() => toggleFavorite('meghana')} type="button">
+                        <button aria-label="Add to favorites" className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors cursor-pointer" onClick={(e) => { e.stopPropagation(); toggleFavorite('meghana'); }} type="button">
                           <span className={`material-symbols-outlined text-[18px] ${favorites['meghana'] ? 'text-primary' : ''}`} style={{ fontVariationSettings: favorites['meghana'] ? "'FILL' 1" : "'FILL' 0" }}>favorite</span>
                         </button>
                         <div className="absolute bottom-2.5 left-2.5 bg-secondary text-surface-bright px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 border border-surface-bright/20">
@@ -619,35 +634,47 @@ function Home() {
                           <span className="font-label-sm text-[9px] uppercase tracking-wider font-bold">50% OFF</span>
                         </div>
                       </div>
-                      <div className="p-3 flex flex-col gap-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-headline-sm text-[15px] font-semibold text-on-surface truncate flex-1 cursor-pointer" onClick={() => navigate('/foodlistclient?restaurant=Meghana')}>Meghana Foods</h4>
-                          <div className="flex items-center gap-1 bg-tertiary text-on-tertiary px-1.5 py-0.5 rounded-md shrink-0">
-                            <span className="font-label-sm text-[11px] font-bold">4.8</span>
-                            <span className="material-symbols-outlined text-[11px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                      <div className="p-3 flex flex-col gap-1.5 flex-1 justify-between">
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-headline-sm text-[15px] font-semibold text-on-surface truncate flex-1 group-hover:text-primary transition-colors">Meghana Foods</h4>
+                            <div className="flex items-center gap-1 bg-tertiary text-on-tertiary px-1.5 py-0.5 rounded-md shrink-0">
+                              <span className="font-label-sm text-[11px] font-bold">4.8</span>
+                              <span className="material-symbols-outlined text-[11px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1.5 font-body-sm text-[12px] text-on-surface-variant">
+                            <span className="flex items-center gap-0.5 font-medium text-on-surface">
+                              <span className="material-symbols-outlined text-[14px] text-raw-ochre">schedule</span>
+                              20-25 mins
+                            </span>
+                            <span>•</span>
+                            <span className="truncate">Biryani, Andhra, Spicy</span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1.5 font-body-sm text-[12px] text-on-surface-variant">
-                          <span className="flex items-center gap-0.5 font-medium text-on-surface">
-                            <span className="material-symbols-outlined text-[14px] text-raw-ochre">schedule</span>
-                            20-25 mins
-                          </span>
-                          <span>•</span>
-                          <span className="truncate">Biryani, Andhra, Spicy</span>
-                        </div>
-                        <div className="mt-1 pt-1.5 border-t-0 bg-surface-container-low px-2 py-1 rounded-lg flex items-center justify-between text-on-surface-variant border border-surface-dim/40">
-                          <span className="font-body-sm text-[11px]">Iconic Local Favorite</span>
-                          <span className="font-label-sm text-[9px] text-tertiary uppercase font-bold">5k+ ratings</span>
-                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate('/restaurant/meghana/menu');
+                          }}
+                          className="w-full mt-1 py-1.5 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          <span>View Menu</span>
+                          <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
                       </div>
                     </div>
 
                     {/* Card 3: Truffles */}
-                    <div className="shrink-0 w-64 bg-surface-container-lowest rounded-2xl border border-surface-dim/60 shadow-[0_4px_16px_rgba(30,27,21,0.05)] overflow-hidden flex flex-col group">
+                    <div 
+                      className="shrink-0 w-64 bg-surface-container-lowest rounded-2xl border border-surface-dim/60 shadow-[0_4px_16px_rgba(30,27,21,0.05)] overflow-hidden flex flex-col group cursor-pointer"
+                      onClick={() => navigate('/restaurant/truffles/menu')}
+                    >
                       <div className="relative w-full h-36 overflow-hidden">
                         <img alt="Smash burger with french fries" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1Uh8vPHaa957jH_ybx62VW-h30Efz_7c3x7elPRCfYYXU-iN6KyA07dSz8TuptMpSjqKBJiJTlhRFI1MzEWgwVZH4uX9tvXaNoZ6opw5wUJWaR0ZqTkoZzm0tKzr8vuuOqzSoxlya51Js7Or4Is5TPCcrYZkxYywfpe-lX_bjpXbjBTY1Hrrr3CJ4bVL1XQ2Yj8E3Wa9OFr6r5Pkc_KgvgnA1DRHrIGroa0aGHfGNWD1QhStwESVn9XVaE" />
                         <div className="absolute inset-0 bg-gradient-to-t from-charcoal-ink/75 via-transparent to-transparent"></div>
-                        <button aria-label="Add to favorites" className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors cursor-pointer" onClick={() => toggleFavorite('truffles')} type="button">
+                        <button aria-label="Add to favorites" className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors cursor-pointer" onClick={(e) => { e.stopPropagation(); toggleFavorite('truffles'); }} type="button">
                           <span className={`material-symbols-outlined text-[18px] ${favorites['truffles'] ? 'text-primary' : ''}`} style={{ fontVariationSettings: favorites['truffles'] ? "'FILL' 1" : "'FILL' 0" }}>favorite</span>
                         </button>
                         <div className="absolute bottom-2.5 left-2.5 bg-secondary text-surface-bright px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 border border-surface-bright/20">
@@ -655,35 +682,47 @@ function Home() {
                           <span className="font-label-sm text-[9px] uppercase tracking-wider font-bold">FLAT ₹150 OFF</span>
                         </div>
                       </div>
-                      <div className="p-3 flex flex-col gap-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-headline-sm text-[15px] font-semibold text-on-surface truncate flex-1 cursor-pointer" onClick={() => navigate('/foodlistclient?restaurant=Truffles')}>Truffles Gourmet Bistro</h4>
-                          <div className="flex items-center gap-1 bg-tertiary text-on-tertiary px-1.5 py-0.5 rounded-md shrink-0">
-                            <span className="font-label-sm text-[11px] font-bold">4.5</span>
-                            <span className="material-symbols-outlined text-[11px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                      <div className="p-3 flex flex-col gap-1.5 flex-1 justify-between">
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-headline-sm text-[15px] font-semibold text-on-surface truncate flex-1 group-hover:text-primary transition-colors">Truffles Gourmet Bistro</h4>
+                            <div className="flex items-center gap-1 bg-tertiary text-on-tertiary px-1.5 py-0.5 rounded-md shrink-0">
+                              <span className="font-label-sm text-[11px] font-bold">4.5</span>
+                              <span className="material-symbols-outlined text-[11px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1.5 font-body-sm text-[12px] text-on-surface-variant">
+                            <span className="flex items-center gap-0.5 font-medium text-on-surface">
+                              <span className="material-symbols-outlined text-[14px] text-raw-ochre">schedule</span>
+                              30 mins
+                            </span>
+                            <span>•</span>
+                            <span className="truncate">Burgers, Fast Food, Shakes</span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1.5 font-body-sm text-[12px] text-on-surface-variant">
-                          <span className="flex items-center gap-0.5 font-medium text-on-surface">
-                            <span className="material-symbols-outlined text-[14px] text-raw-ochre">schedule</span>
-                            30 mins
-                          </span>
-                          <span>•</span>
-                          <span className="truncate">Burgers, Fast Food, Shakes</span>
-                        </div>
-                        <div className="mt-1 pt-1.5 border-t-0 bg-surface-container-low px-2 py-1 rounded-lg flex items-center justify-between text-on-surface-variant border border-surface-dim/40">
-                          <span className="font-body-sm text-[11px]">Trending in Indiranagar</span>
-                          <span className="font-label-sm text-[9px] text-tertiary uppercase font-bold">4.1k+ orders</span>
-                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate('/restaurant/truffles/menu');
+                          }}
+                          className="w-full mt-1 py-1.5 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          <span>View Menu</span>
+                          <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
                       </div>
                     </div>
 
                     {/* Card 4: The Chocolate Room */}
-                    <div className="shrink-0 w-64 bg-surface-container-lowest rounded-2xl border border-surface-dim/60 shadow-[0_4px_16px_rgba(30,27,21,0.05)] overflow-hidden flex flex-col group">
+                    <div 
+                      className="shrink-0 w-64 bg-surface-container-lowest rounded-2xl border border-surface-dim/60 shadow-[0_4px_16px_rgba(30,27,21,0.05)] overflow-hidden flex flex-col group cursor-pointer"
+                      onClick={() => navigate('/restaurant/chocolateroom/menu')}
+                    >
                       <div className="relative w-full h-36 overflow-hidden">
                         <img alt="Warm chocolate lava cake" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1U48K4NkA9_YjeBZjEi6UUjsMpvAtAJ7JsbltRihM3EP5gQ__3OUJfGiKZtPFZC9vQ02UKkq7XeLiP1wULgEdWQfbIO6_Hj1FQqZ--8VmpgYnTdmSuD66BCZpeJUMuzhoax3HHSd1K_-_z3VwJNyiOQcsoBGDrV7uVXfI7WUI-Nbnu4-i2hL4mAElbXOVU3ys6S5uixJoUSj5CYPwOUwxY3hgVvyvuSU9sOt3bXU3BqbX7K7anXXZyDuwU" />
                         <div className="absolute inset-0 bg-gradient-to-t from-charcoal-ink/75 via-transparent to-transparent"></div>
-                        <button aria-label="Add to favorites" className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors cursor-pointer" onClick={() => toggleFavorite('chocolateroom')} type="button">
+                        <button aria-label="Add to favorites" className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors cursor-pointer" onClick={(e) => { e.stopPropagation(); toggleFavorite('chocolateroom'); }} type="button">
                           <span className={`material-symbols-outlined text-[18px] ${favorites['chocolateroom'] ? 'text-primary' : ''}`} style={{ fontVariationSettings: favorites['chocolateroom'] ? "'FILL' 1" : "'FILL' 0" }}>favorite</span>
                         </button>
                         <div className="absolute bottom-2.5 left-2.5 bg-secondary text-surface-bright px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 border border-surface-bright/20">
@@ -691,26 +730,35 @@ function Home() {
                           <span className="font-label-sm text-[9px] uppercase tracking-wider font-bold">BUY 1 GET 1</span>
                         </div>
                       </div>
-                      <div className="p-3 flex flex-col gap-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-headline-sm text-[15px] font-semibold text-on-surface truncate flex-1 cursor-pointer" onClick={() => navigate('/foodlistclient?restaurant=ChocolateRoom')}>The Chocolate Room</h4>
-                          <div className="flex items-center gap-1 bg-tertiary text-on-tertiary px-1.5 py-0.5 rounded-md shrink-0">
-                            <span className="font-label-sm text-[11px] font-bold">4.7</span>
-                            <span className="material-symbols-outlined text-[11px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                      <div className="p-3 flex flex-col gap-1.5 flex-1 justify-between">
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-headline-sm text-[15px] font-semibold text-on-surface truncate flex-1 group-hover:text-primary transition-colors">The Chocolate Room</h4>
+                            <div className="flex items-center gap-1 bg-tertiary text-on-tertiary px-1.5 py-0.5 rounded-md shrink-0">
+                              <span className="font-label-sm text-[11px] font-bold">4.7</span>
+                              <span className="material-symbols-outlined text-[11px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1.5 font-body-sm text-[12px] text-on-surface-variant">
+                            <span className="flex items-center gap-0.5 font-medium text-on-surface">
+                              <span className="material-symbols-outlined text-[14px] text-raw-ochre">schedule</span>
+                              20 mins
+                            </span>
+                            <span>•</span>
+                            <span className="truncate">Bakery, Desserts, Shakes</span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1.5 font-body-sm text-[12px] text-on-surface-variant">
-                          <span className="flex items-center gap-0.5 font-medium text-on-surface">
-                            <span className="material-symbols-outlined text-[14px] text-raw-ochre">schedule</span>
-                            20 mins
-                          </span>
-                          <span>•</span>
-                          <span className="truncate">Bakery, Desserts, Shakes</span>
-                        </div>
-                        <div className="mt-1 pt-1.5 border-t-0 bg-surface-container-low px-2 py-1 rounded-lg flex items-center justify-between text-on-surface-variant border border-surface-dim/40">
-                          <span className="font-body-sm text-[11px]">Midnight Sweet Tooth</span>
-                          <span className="font-label-sm text-[9px] text-tertiary uppercase font-bold">Top Pick</span>
-                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate('/restaurant/chocolateroom/menu');
+                          }}
+                          className="w-full mt-1 py-1.5 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          <span>View Menu</span>
+                          <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
                       </div>
                     </div>
                   </div>

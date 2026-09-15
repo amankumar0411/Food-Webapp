@@ -88,7 +88,7 @@ function DriverLogin({ syncAuth }) {
                     <input 
                         type="text" 
                         className="form-control" 
-                        style={{ height: '55px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
+                        style={{ height: '55px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)', color: 'var(--text-color)' }}
                         placeholder="e.g. driver_ramesh" 
                         value={creds.uname}
                         onChange={(e) => setCreds({...creds, uname: e.target.value})} 
@@ -99,7 +99,7 @@ function DriverLogin({ syncAuth }) {
                     <input 
                         type="password" 
                         className="form-control" 
-                        style={{ height: '55px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)' }}
+                        style={{ height: '55px', borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--input-bg)', color: 'var(--text-color)' }}
                         placeholder="********" 
                         value={creds.pass}
                         onChange={(e) => setCreds({...creds, pass: e.target.value})} 

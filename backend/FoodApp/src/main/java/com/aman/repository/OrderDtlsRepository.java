@@ -19,4 +19,6 @@ public interface OrderDtlsRepository extends JpaRepository<OrderDtls, Integer> {
 
     @Query(value = "SELECT * FROM order_dtls WHERE uname = ?1 ORDER BY payment_date DESC", nativeQuery = true)
     List<java.util.Map<String, Object>> findByUnameNative(String uname);
+
+    long countByUnameAndCouponCodeIgnoreCase(String uname, String couponCode);
 }

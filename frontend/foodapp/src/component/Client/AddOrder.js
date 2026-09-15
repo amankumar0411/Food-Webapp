@@ -17,8 +17,9 @@ function AddOrder() {
 
   // Coupon state
   const [couponInput, setCouponInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState("BOTANICAL50");
-  const [discountAmount, setDiscountAmount] = useState(120);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [isCouponApplying, setIsCouponApplying] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
@@ -180,22 +181,35 @@ function AddOrder() {
   const packagingFee = itemSubtotal > 0 ? 58 : 0;
   const deliveryFee = 0; // Complimentary
 
-  // Handle Coupon Logic
-  const handleApplyCoupon = (codeToApply) => {
+  // Dynamic Server-Side Coupon Verification
+  const handleApplyCoupon = async (codeToApply) => {
     const code = (codeToApply || couponInput).trim().toUpperCase();
     if (!code) {
       toast.error("Please enter a voucher code.");
       return;
     }
-    if (code === "BOTANICAL50" || code === "SWIGGY50") {
-      const disc = Math.min(120, Math.round(itemSubtotal * 0.5));
-      setDiscountAmount(disc || 120);
-      setAppliedCoupon(code);
-      toast.success(`Voucher ${code} applied! ₹${disc || 120} saved 🌿`);
-    } else {
-      setDiscountAmount(50);
-      setAppliedCoupon(code);
-      toast.success(`Voucher ${code} applied! ₹50 saved 🌿`);
+    if (isCouponApplying) return;
+
+    setIsCouponApplying(true);
+    try {
+      const res = await axiosInstance.post('/coupons/validate', {
+        code,
+        orderAmount: itemSubtotal,
+        uname: currentUserName || ''
+      });
+
+      if (res.data && res.data.valid) {
+        setAppliedCoupon(res.data.couponCode);
+        setDiscountAmount(Number(res.data.discountAmount || 0));
+        toast.success(res.data.message || `Voucher ${res.data.couponCode} applied! Saved ₹${res.data.discountAmount} 🌿`);
+      } else {
+        toast.error(res.data?.message || "Invalid coupon code");
+      }
+    } catch (err) {
+      const errMsg = err.response?.data?.message || "Failed to validate coupon";
+      toast.error(errMsg);
+    } finally {
+      setIsCouponApplying(false);
     }
   };
 
@@ -235,6 +249,7 @@ function AddOrder() {
     onUpdateQty: handleQtyChange,
     onRemoveItem: handleRemoveItem,
     appliedCoupon,
+    isCouponApplying,
     couponInput,
     setCouponInput,
     onApplyCoupon: handleApplyCoupon,

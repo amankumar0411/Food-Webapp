@@ -14,9 +14,10 @@ function Billing() {
   const [selectedAddress, setSelectedAddress] = useState('home');
   const [instructions, setInstructions] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('gpay');
-  const [couponCode, setCouponCode] = useState('BOTANICAL50');
-  const [appliedCoupon, setAppliedCoupon] = useState('BOTANICAL50');
-  const [discountAmount, setDiscountAmount] = useState(120);
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [isCouponApplying, setIsCouponApplying] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -36,77 +37,92 @@ function Billing() {
       axiosInstance.get(`/orders/user/details/${uname}`)
         .then(res => {
           if (Array.isArray(res.data) && res.data.length > 0) {
-            setCartItems(res.data.map(item => ({
-              ...item,
-              currentQty: Number(item.qty || item.QTY) || 1
-            })));
+            setCartItems(res.data);
           } else {
-            // Default sample items for visual completeness
+            // Fallback demo items for testing UI seamlessly
             setCartItems([
-              {
-                oid: 'demo-1',
-                fid: '1',
-                fname: 'Artisanal Sourdough Pizza',
-                subtext: '48h slow-ferment, buffalo mozzarella',
-                fprice: 399,
-                currentQty: 1
-              },
-              {
-                oid: 'demo-2',
-                fid: '2',
-                fname: 'Smoky BBQ Hearth Burger',
-                subtext: 'Smoked cheddar, espresso reduction bun',
-                fprice: 249,
-                currentQty: 1
-              },
-              {
-                oid: 'demo-3',
-                fid: '3',
-                fname: '72% Dark Lava Cake',
-                subtext: 'Single-origin Idukki cocoa, sea salt crystals',
-                fprice: 189,
-                currentQty: 1
-              }
+              { fid: '1', fname: 'Artisanal Pepperoni Pizza', fprice: 399, currentQty: 1, subtext: 'Medium • Stuffed Crust' },
+              { fid: '2', fname: 'Smoky BBQ Brioche Burger', fprice: 249, currentQty: 1, subtext: 'Woodfired • Double Glaze' },
+              { fid: '3', fname: 'Belgian Molten Lava Cake', fprice: 189, currentQty: 1, subtext: 'Warm Molten • Wild Berries' }
             ]);
           }
-          setLoading(false);
         })
         .catch(() => {
           setCartItems([
-            { oid: 'demo-1', fid: '1', fname: 'Artisanal Sourdough Pizza', subtext: '48h slow-ferment, buffalo mozzarella', fprice: 399, currentQty: 1 },
-            { oid: 'demo-2', fid: '2', fname: 'Smoky BBQ Hearth Burger', subtext: 'Smoked cheddar, espresso reduction bun', fprice: 249, currentQty: 1 },
-            { oid: 'demo-3', fid: '3', fname: '72% Dark Lava Cake', subtext: 'Single-origin Idukki cocoa, sea salt crystals', fprice: 189, currentQty: 1 }
+            { fid: '1', fname: 'Artisanal Pepperoni Pizza', fprice: 399, currentQty: 1, subtext: 'Medium • Stuffed Crust' },
+            { fid: '2', fname: 'Smoky BBQ Brioche Burger', fprice: 249, currentQty: 1, subtext: 'Woodfired • Double Glaze' },
+            { fid: '3', fname: 'Belgian Molten Lava Cake', fprice: 189, currentQty: 1, subtext: 'Warm Molten • Wild Berries' }
           ]);
-          setLoading(false);
-        });
+        })
+        .finally(() => setLoading(false));
 
       // 2. Saved addresses
-      axiosInstance.get(`/api/addresses/${uname}`)
+      axiosInstance.get(`/addresses/user/${uname}`)
         .then(res => {
           if (Array.isArray(res.data) && res.data.length > 0) {
             setAddresses(res.data);
           } else {
             setAddresses([
-              { tag: 'home', title: 'Home Sanctuary', streetAddress: 'Penthouse 402, Casa Botanica, 12th Main, Indiranagar', isDefault: true },
-              { tag: 'office', title: 'Creative Atelier', streetAddress: 'Tower 4B, 6th Floor, RMZ Ecoworld, Bellandur Outer Ring', isDefault: false }
+              {
+                id: '1',
+                tag: 'home',
+                label: 'Casa Botanica (Home)',
+                streetAddress: 'Penthouse 402, Casa Botanica, 12th Main, Indiranagar',
+                locality: 'Indiranagar',
+                city: 'Bengaluru',
+                pincode: '560038'
+              },
+              {
+                id: '2',
+                tag: 'office',
+                label: 'Atelier Studio (Office)',
+                streetAddress: 'Tower 4B, 6th Floor, RMZ Ecoworld, Bellandur Outer Ring',
+                locality: 'Bellandur',
+                city: 'Bengaluru',
+                pincode: '560103'
+              }
             ]);
           }
         })
         .catch(() => {
           setAddresses([
-            { tag: 'home', title: 'Home Sanctuary', streetAddress: 'Penthouse 402, Casa Botanica, 12th Main, Indiranagar', isDefault: true },
-            { tag: 'office', title: 'Creative Atelier', streetAddress: 'Tower 4B, 6th Floor, RMZ Ecoworld, Bellandur Outer Ring', isDefault: false }
+            {
+              id: '1',
+              tag: 'home',
+              label: 'Casa Botanica (Home)',
+              streetAddress: 'Penthouse 402, Casa Botanica, 12th Main, Indiranagar',
+              locality: 'Indiranagar',
+              city: 'Bengaluru',
+              pincode: '560038'
+            },
+            {
+              id: '2',
+              tag: 'office',
+              label: 'Atelier Studio (Office)',
+              streetAddress: 'Tower 4B, 6th Floor, RMZ Ecoworld, Bellandur Outer Ring',
+              locality: 'Bellandur',
+              city: 'Bengaluru',
+              pincode: '560103'
+            }
           ]);
         });
     } else {
+      // Anonymous/Demo items
       setCartItems([
-        { oid: 'demo-1', fid: '1', fname: 'Artisanal Sourdough Pizza', subtext: '48h slow-ferment, buffalo mozzarella', fprice: 399, currentQty: 1 },
-        { oid: 'demo-2', fid: '2', fname: 'Smoky BBQ Hearth Burger', subtext: 'Smoked cheddar, espresso reduction bun', fprice: 249, currentQty: 1 },
-        { oid: 'demo-3', fid: '3', fname: '72% Dark Lava Cake', subtext: 'Single-origin Idukki cocoa, sea salt crystals', fprice: 189, currentQty: 1 }
+        { fid: '1', fname: 'Artisanal Pepperoni Pizza', fprice: 399, currentQty: 1, subtext: 'Medium • Stuffed Crust' },
+        { fid: '2', fname: 'Smoky BBQ Brioche Burger', fprice: 249, currentQty: 1, subtext: 'Woodfired • Double Glaze' },
+        { fid: '3', fname: 'Belgian Molten Lava Cake', fprice: 189, currentQty: 1, subtext: 'Warm Molten • Wild Berries' }
       ]);
       setAddresses([
-        { tag: 'home', title: 'Home Sanctuary', streetAddress: 'Penthouse 402, Casa Botanica, 12th Main, Indiranagar', isDefault: true },
-        { tag: 'office', title: 'Creative Atelier', streetAddress: 'Tower 4B, 6th Floor, RMZ Ecoworld, Bellandur Outer Ring', isDefault: false }
+        {
+          id: '1',
+          tag: 'home',
+          label: 'Casa Botanica (Home)',
+          streetAddress: 'Penthouse 402, Casa Botanica, 12th Main, Indiranagar',
+          locality: 'Indiranagar',
+          city: 'Bengaluru',
+          pincode: '560038'
+        }
       ]);
       setLoading(false);
     }
@@ -121,21 +137,35 @@ function Billing() {
   const taxFee = 58;
   const grandTotal = Math.max(0, itemSubtotal + taxFee - (appliedCoupon ? discountAmount : 0));
 
-  // Coupon handling
-  const handleApplyCoupon = (code) => {
+  // Dynamic Server-Side Coupon Verification
+  const handleApplyCoupon = async (code) => {
     const cleanCode = (code || couponCode).trim().toUpperCase();
     if (!cleanCode) {
       toast.error("Please enter a voucher code");
       return;
     }
-    if (cleanCode === 'BOTANICAL50' || cleanCode === 'BOTANICA120' || cleanCode === 'SWIGGY50') {
-      setAppliedCoupon(cleanCode);
-      setDiscountAmount(120);
-      toast.success(`Voucher ${cleanCode} applied! Saved ₹120 🌿`);
-    } else {
-      setAppliedCoupon(cleanCode);
-      setDiscountAmount(60);
-      toast.success(`Voucher ${cleanCode} applied! Saved ₹60 🌿`);
+    if (isCouponApplying) return;
+
+    setIsCouponApplying(true);
+    try {
+      const res = await axiosInstance.post('/coupons/validate', {
+        code: cleanCode,
+        orderAmount: itemSubtotal,
+        uname: uname || ''
+      });
+
+      if (res.data && res.data.valid) {
+        setAppliedCoupon(res.data.couponCode);
+        setDiscountAmount(Number(res.data.discountAmount || 0));
+        toast.success(res.data.message || `Coupon ${res.data.couponCode} applied! Saved ₹${res.data.discountAmount} 🌿`);
+      } else {
+        toast.error(res.data?.message || "Invalid coupon code");
+      }
+    } catch (err) {
+      const errMsg = err.response?.data?.message || "Failed to validate coupon";
+      toast.error(errMsg);
+    } finally {
+      setIsCouponApplying(false);
     }
   };
 
@@ -247,6 +277,7 @@ function Billing() {
     couponCode,
     setCouponCode,
     appliedCoupon,
+    isCouponApplying,
     onApplyCoupon: handleApplyCoupon,
     onRemoveCoupon: handleRemoveCoupon,
     discountAmount,

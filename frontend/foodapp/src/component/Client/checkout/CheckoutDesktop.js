@@ -12,6 +12,7 @@ function CheckoutDesktop({
   couponCode,
   setCouponCode,
   appliedCoupon,
+  isCouponApplying,
   onApplyCoupon,
   onRemoveCoupon,
   discountAmount,
@@ -450,13 +451,23 @@ function CheckoutDesktop({
                           className="flex-1 bg-surface-container-low px-3 py-2 rounded-xl font-label-sm text-label-sm uppercase tracking-wider text-charcoal-ink outline-none"
                           value={couponCode}
                           onChange={(e) => setCouponCode(e.target.value)}
+                          onKeyDown={(e) => e.key === 'Enter' && onApplyCoupon(couponCode)}
+                          disabled={isCouponApplying}
                         />
                         <button 
-                          className="px-4 py-2 bg-charcoal-ink text-surface rounded-xl font-label-sm uppercase font-bold hover:bg-primary transition-colors cursor-pointer"
-                          onClick={() => onApplyCoupon(couponCode || 'BOTANICAL50')}
+                          className="px-4 py-2 bg-charcoal-ink text-surface rounded-xl font-label-sm uppercase font-bold hover:bg-primary transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+                          onClick={() => onApplyCoupon(couponCode)}
+                          disabled={isCouponApplying || !couponCode?.trim()}
                           type="button"
                         >
-                          Apply
+                          {isCouponApplying ? (
+                            <>
+                              <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                              <span>Checking...</span>
+                            </>
+                          ) : (
+                            <span>Apply</span>
+                          )}
                         </button>
                       </div>
                     )}

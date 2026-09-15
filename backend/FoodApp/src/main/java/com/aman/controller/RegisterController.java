@@ -79,6 +79,45 @@ public class RegisterController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid or expired verification code"));
     }
 
+    @PostMapping("/otp/verify-phone")
+    public ResponseEntity<?> verifyPhoneOtp(@RequestBody Map<String, String> payload) {
+        String identifier = payload.get("identifier");
+        String otpCode = payload.get("otpCode");
+        if (identifier == null || otpCode == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Phone number and OTP code are required"));
+        }
+
+        boolean valid = rservice.verifyOtpOnly(identifier, otpCode);
+        if (valid) {
+            return ResponseEntity.ok(Map.of(
+                "verified", true,
+                "message", "Phone number successfully verified with cryptographic code"
+            ));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+            "verified", false,
+            "error", "Invalid or expired verification code"
+        ));
+    }
+
+    @GetMapping("/fssai/check/{fssai}")
+    public ResponseEntity<?> checkFssai(@PathVariable String fssai) {
+        String clean = fssai.replaceAll("\\D", "");
+        if (clean.length() != 14) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "valid", false,
+                "error", "FSSAI License must be exactly 14 digits"
+            ));
+        }
+        boolean available = rservice.checkFssaiAvailable(clean);
+        return ResponseEntity.ok(Map.of(
+            "valid", true,
+            "available", available,
+            "fssai", clean,
+            "message", available ? "14-digit FSSAI format valid & available for registration" : "FSSAI License is already registered"
+        ));
+    }
+
     // ── LOGIN ─────────────────────────────────────────────────────────────────
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> checkLogin(
