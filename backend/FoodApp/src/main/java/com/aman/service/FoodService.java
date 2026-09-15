@@ -35,15 +35,32 @@ public class FoodService {
         Food f = frepo.findById(fid).orElse(null);
         
         if (f != null) {
-            // Update only the specific fields
             f.setFname(fs.getFname());
             f.setPrice(fs.getPrice());
             if (fs.getImageUrl() != null) f.setImageUrl(fs.getImageUrl());
+            if (fs.getCategory() != null) f.setCategory(fs.getCategory());
+            if (fs.getIsVeg() != null) f.setIsVeg(fs.getIsVeg());
+            if (fs.getInStock() != null) f.setInStock(fs.getInStock());
+            if (fs.getPortions() != null) f.setPortions(fs.getPortions());
+            if (fs.getPrepTime() != null) f.setPrepTime(fs.getPrepTime());
+            if (fs.getDiscountPrice() != null) f.setDiscountPrice(fs.getDiscountPrice());
+            if (fs.getTags() != null) f.setTags(fs.getTags());
             
             // Save the updated record back to the database
             frepo.save(f);
         }
         return f; // Returns the updated object or null if not found
+    }
+
+    // TOGGLE STOCK (86-ing / Restocking)
+    public Food toggleStock(String fid) {
+        Food f = frepo.findById(fid).orElse(null);
+        if (f != null) {
+            boolean current = f.getInStock() != null ? f.getInStock() : true;
+            f.setInStock(!current);
+            return frepo.save(f);
+        }
+        return null;
     }
 
     // DELETE FOOD

@@ -7,7 +7,7 @@ import Grainient from './component/common/Grainient';
 // ADMIN COMPONENTS
 import Nav from './component/Admin/Nav';
 import Addfood from './component/Admin/Addfood';
-import Foodlist from './component/Admin/Foodlist';
+import RestaurantDashboard from './component/Admin/RestaurantDashboard';
 import UpdateFood from './component/Admin/UpdateFood';
 import DeleteFood from './component/Admin/DeleteFood';
 import AdminOrders from './component/Admin/AdminOrders';
@@ -94,8 +94,9 @@ function App() {
     "/tracking", "/live-order-tracking"
   ].includes(location.pathname);
   const isMenuPage = location.pathname.startsWith("/category/") || location.pathname.startsWith("/restaurant/");
+  const isMerchantDashboard = location.pathname === "/foodlist" || location.pathname === "/merchant/dashboard";
 
-  const showGrainient = auth && !isHomePage && !isAuthPage && !isAccountPage && !isCartOrCheckoutPage && !isMenuPage;
+  const showGrainient = auth && !isHomePage && !isAuthPage && !isAccountPage && !isCartOrCheckoutPage && !isMenuPage && !isMerchantDashboard;
 
   // THEME STATE LOGIC (Default to Light Mode, Check LocalStorage)
   const [isDarkTheme, setIsDarkTheme] = useState(() => {
@@ -149,19 +150,19 @@ function App() {
         </div>
       )}
 
-      {/* 2. DYNAMIC NAVIGATION SELECTION (Inner pages only, excluding Home, Account, Cart, Checkout, and dedicated Menus) */}
-      {(auth && !isHomePage && !isAccountPage && !isCartOrCheckoutPage && !isMenuPage) && (isMerchantOrAdmin ?
+      {/* 2. DYNAMIC NAVIGATION SELECTION (Inner pages only, excluding Home, Account, Cart, Checkout, Menus, and Merchant Dashboard) */}
+      {(auth && !isHomePage && !isAccountPage && !isCartOrCheckoutPage && !isMenuPage && !isMerchantDashboard) && (isMerchantOrAdmin ?
         <Nav toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} /> :
         <NavClient toggleTheme={toggleTheme} isDark={isDarkTheme} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isHomePage={isHomePage} />
       )}
 
       <div className="container-fluid main-content-area" style={{ 
-        paddingTop: auth ? ((isHomePage || isAccountPage || isCartOrCheckoutPage || isMenuPage) ? '0' : '180px') : '0', 
-        paddingLeft: (isHomePage || isAuthPage || isAccountPage || isCartOrCheckoutPage || isMenuPage) ? '0' : '15px',
-        paddingRight: (isHomePage || isAuthPage || isAccountPage || isCartOrCheckoutPage || isMenuPage) ? '0' : '15px',
+        paddingTop: auth ? ((isHomePage || isAccountPage || isCartOrCheckoutPage || isMenuPage || isMerchantDashboard) ? '0' : '180px') : '0', 
+        paddingLeft: (isHomePage || isAuthPage || isAccountPage || isCartOrCheckoutPage || isMenuPage || isMerchantDashboard) ? '0' : '15px',
+        paddingRight: (isHomePage || isAuthPage || isAccountPage || isCartOrCheckoutPage || isMenuPage || isMerchantDashboard) ? '0' : '15px',
         position: 'relative', 
         zIndex: 1, 
-        minHeight: (isHomePage || isAccountPage || isCartOrCheckoutPage || isMenuPage) ? '100vh' : 'auto' 
+        minHeight: (isHomePage || isAccountPage || isCartOrCheckoutPage || isMenuPage || isMerchantDashboard) ? '100vh' : 'auto' 
       }}>
         <Routes>
           {/* PUBLIC ROUTES */}
@@ -194,10 +195,11 @@ function App() {
 
           {/* 2. MERCHANT / ADMIN ROUTES */}
           <Route path="/admin/coupons" element={<ProtectedRoute allowedRoles={['admin', 'merchant']}><AdminCoupons /></ProtectedRoute>} />
+          <Route path="/merchant/dashboard" element={<ProtectedRoute allowedRoles={['admin', 'merchant']}><RestaurantDashboard searchQuery={searchQuery} /></ProtectedRoute>} />
           {isMerchantOrAdmin && (
             <>
               <Route path="/addfood" element={<Addfood />} />
-              <Route path="/foodlist" element={<Foodlist searchQuery={searchQuery} />} />
+              <Route path="/foodlist" element={<RestaurantDashboard searchQuery={searchQuery} />} />
               <Route path="/updatefood" element={<UpdateFood />} />
               <Route path="/deletefood" element={<DeleteFood />} />
               <Route path="/adminorders" element={<AdminOrders />} />

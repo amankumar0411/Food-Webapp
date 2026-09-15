@@ -58,6 +58,15 @@ private FoodService fservice;
 		return new ResponseEntity<String>(msg,HttpStatus.OK);
 	}
 
+	@PutMapping("/stock/{fid}")
+	public ResponseEntity<Food> toggleStock(@PathVariable String fid) {
+		Food updated = fservice.toggleStock(fid);
+		if (updated != null) {
+			return ResponseEntity.ok(updated);
+		}
+		return ResponseEntity.notFound().build();
+	}
+
 	@GetMapping("/category/{categoryId}")
 	public ResponseEntity<List<Food>> getByCategory(@PathVariable String categoryId) {
 		List<Food> list = fservice.getByCategory(categoryId);

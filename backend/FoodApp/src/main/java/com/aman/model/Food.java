@@ -91,8 +91,34 @@ public class Food {
     public Boolean getIsVeg() { return isVeg; }
     public void setIsVeg(Boolean isVeg) { this.isVeg = isVeg; }
 
+    private Boolean inStock = true; // Default in stock
+
+    private Integer portions = 40; // Default daily portions
+
+    private Integer prepTime = 15; // Default prep time in minutes
+
+    private Double discountPrice; // Optional discount price
+
+    @Column(length = 200)
+    private String tags; // e.g. "Woodfired,Sourdough,Chef Signature"
+
+    public Boolean getInStock() { return inStock != null ? inStock : true; }
+    public void setInStock(Boolean inStock) { this.inStock = inStock; }
+
+    public Integer getPortions() { return portions != null ? portions : 40; }
+    public void setPortions(Integer portions) { this.portions = portions; }
+
+    public Integer getPrepTime() { return prepTime != null ? prepTime : 15; }
+    public void setPrepTime(Integer prepTime) { this.prepTime = prepTime; }
+
+    public Double getDiscountPrice() { return discountPrice; }
+    public void setDiscountPrice(Double discountPrice) { this.discountPrice = discountPrice; }
+
+    public String getTags() { return tags; }
+    public void setTags(String tags) { this.tags = tags; }
+
     @Override
     public String toString() {
-        return "Food [fid=" + fid + ", fname=" + fname + ", price=" + price + ", imageUrl=" + imageUrl + ", category=" + category + ", isVeg=" + isVeg + "]";
+        return "Food [fid=" + fid + ", fname=" + fname + ", price=" + price + ", imageUrl=" + imageUrl + ", category=" + category + ", isVeg=" + isVeg + ", inStock=" + inStock + "]";
     }
 }
