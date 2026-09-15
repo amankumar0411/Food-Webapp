@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import toast from 'react-hot-toast';
@@ -22,7 +22,7 @@ export default function CategoryMenu() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const fetchCategoryDishes = () => {
+  const fetchCategoryDishes = useCallback(() => {
     setLoading(true);
     setError(null);
     axiosInstance.get(`/food/category/${encodeURIComponent(categoryId)}`)
@@ -36,9 +36,9 @@ export default function CategoryMenu() {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [categoryId]);
 
-  const fetchCartCount = () => {
+  const fetchCartCount = useCallback(() => {
     if (currentUser) {
       axiosInstance.get(`/orders/user/details/${currentUser}`)
         .then(res => {
@@ -48,12 +48,12 @@ export default function CategoryMenu() {
         })
         .catch(() => {});
     }
-  };
+  }, [currentUser]);
 
   useEffect(() => {
     fetchCategoryDishes();
     fetchCartCount();
-  }, [categoryId]);
+  }, [fetchCategoryDishes, fetchCartCount]);
 
   // Clean formatting for header (e.g. "pizzas" -> "Pizzas", "biryani" -> "Biryani")
   const displayName = categoryId
